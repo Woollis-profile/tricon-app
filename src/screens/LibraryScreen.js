@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, ScrollView, TextInput, TouchableOpacity, StyleSheet, Linking } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { C, WORKOUT_DEFS, ALL_EX, CAT_COLOR, CAT_LABEL, PROG, TRICON_PHASES } from '../constants';
 import { useAppContext } from '../context';
 
@@ -17,7 +18,7 @@ export default function LibraryScreen() {
   );
 
   return (
-    <View style={s.screen}>
+    <SafeAreaView style={s.screen} edges={['top']}>
       <View style={s.headerArea}>
         <Text style={s.pageTitle}>LIBRARY</Text>
         <View style={s.tabRow}>
@@ -195,7 +196,7 @@ export default function LibraryScreen() {
           </ScrollView>
         </View>
       )}
-    </View>
+    </SafeAreaView>
   );
 }
 

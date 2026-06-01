@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { C, WORKOUT_DEFS, FRIDAY_WORKOUTS, SCHEDULE, DN, getWeekDates, getWeekStart, PROG } from '../constants';
 import { useAppContext } from '../context';
@@ -18,7 +19,8 @@ export default function HomeScreen() {
   const startWorkout = (type) => navigation.navigate('Workout', { type });
 
   return (
-    <ScrollView style={s.scroll} contentContainerStyle={s.content}>
+    <SafeAreaView style={s.scroll} edges={['top']}>
+    <ScrollView contentContainerStyle={s.content}>
       <HomeHero sessions={sessions} />
 
       {/* Mini week strip */}
@@ -107,6 +109,7 @@ export default function HomeScreen() {
         </View>
       </View>
     </ScrollView>
+    </SafeAreaView>
   );
 }
 

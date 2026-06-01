@@ -4,7 +4,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   useFonts,
   Oswald_400Regular,
@@ -47,11 +47,12 @@ function TabIcon({ icon, label, focused }) {
 }
 
 function MainTabs() {
+  const insets = useSafeAreaInsets();
   return (
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarStyle: tb.bar,
+        tabBarStyle: [tb.bar, { position: 'absolute', paddingBottom: insets.bottom }],
         tabBarShowLabel: false,
       }}
     >

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { C, ALL_EX, CAT_COLOR, CAT_LABEL, buildExHistory, weekWeightFromHistory, weekChangeFromHistory, getWeekStart } from '../constants';
 import { useAppContext } from '../context';
 import TopBar from '../components/TopBar';
@@ -57,7 +58,7 @@ export default function StatsScreen() {
   }
 
   return (
-    <View style={s.screen}>
+    <SafeAreaView style={s.screen} edges={['top']}>
       <View style={s.headerArea}>
         <Text style={s.pageTitle}>STATISTICS</Text>
         <View style={s.tabRow}>
@@ -139,7 +140,7 @@ export default function StatsScreen() {
           </>
         )}
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 }
 

@@ -289,7 +289,7 @@ export default function WorkoutScreen() {
       />
       <ScrollView
         style={s.activeScroll}
-        contentContainerStyle={[s.activeContent, { paddingBottom: rest ? SCREEN_H * 0.52 : 80 }]}
+        contentContainerStyle={[s.activeContent, { paddingBottom: rest ? SCREEN_H * 0.52 : 100 }]}
       >
         <View style={s.activeBanner}>
           <Text style={s.activeBannerLeft}>
@@ -345,7 +345,7 @@ export default function WorkoutScreen() {
 const s = StyleSheet.create({
   screen: { flex: 1, backgroundColor: C.bg },
   // DONE
-  doneContent: { flexGrow: 1, alignItems: 'center', justifyContent: 'center', padding: 24 },
+  doneContent: { flexGrow: 1, alignItems: 'center', justifyContent: 'center', padding: 24, paddingBottom: 100 },
   doneIcon: { fontSize: 54, lineHeight: 54 },
   doneTitle: { fontFamily: 'Oswald_700Bold', fontSize: 25, color: C.text, marginTop: 12, textAlign: 'center', letterSpacing: 0.5 },
   doneMeta: { color: C.muted, fontSize: 12, marginTop: 7 },
@@ -367,7 +367,7 @@ const s = StyleSheet.create({
   saveBtn: { width: '100%', marginTop: 18, borderRadius: 10, padding: 14, alignItems: 'center' },
   saveBtnText: { fontFamily: 'Oswald_700Bold', fontSize: 15, color: '#fff', letterSpacing: 1 },
   // WARMUP
-  warmupContent: { paddingHorizontal: 14, paddingTop: 12, paddingBottom: 20, gap: 10 },
+  warmupContent: { paddingHorizontal: 14, paddingTop: 12, paddingBottom: 100, gap: 10 },
   warmupCard: { backgroundColor: C.card, borderRadius: 12, overflow: 'hidden', borderWidth: 1, borderColor: C.border },
   warmupCardHeader: { paddingVertical: 11, paddingHorizontal: 14, borderBottomWidth: 1, borderBottomColor: C.border },
   warmupCardTitle: { fontSize: 12, letterSpacing: 1 },

@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, ScrollView, TextInput, TouchableOpacity, StyleSheet, Alert, KeyboardAvoidingView, Platform } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { C, PROG } from '../constants';
 import { useAppContext } from '../context';
 import { save } from '../storage';
@@ -16,6 +17,7 @@ export default function SettingsScreen() {
   };
 
   return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: C.bg }} edges={['top']}>
     <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <ScrollView style={s.scroll} contentContainerStyle={s.content}>
         <Text style={s.pageTitle}>SETTINGS</Text>
@@ -125,6 +127,7 @@ export default function SettingsScreen() {
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
 
