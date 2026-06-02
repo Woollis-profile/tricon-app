@@ -22,8 +22,10 @@ export default function StatsScreen() {
     const lw = weekWeightFromHistory(history, ex.id, -1);
     const chg = weekChangeFromHistory(history, ex.id);
     const exHist = (history[ex.id] || []).sort((a, b) => new Date(b.date) - new Date(a.date));
-    const chgStr = chg !== null ? `${chg > 0 ? '+' : ''}${chg.toFixed(1)}%` : '—';
-    const chgCol = chg === null ? C.muted : chg > 0 ? C.green : chg < 0 ? C.red : C.muted;
+    const absChg = (tw !== null && lw !== null) ? tw - lw : null;
+    const absChgStr = absChg !== null ? `${absChg > 0 ? '+' : ''}${absChg.toFixed(1)} ${unit}` : '—';
+    const pctChgStr = chg !== null ? `${chg > 0 ? '+' : ''}${chg.toFixed(1)}%` : '';
+    const chgCol = absChg === null ? C.muted : absChg > 0 ? C.green : absChg < 0 ? C.red : C.muted;
 
     return (
       <View style={s.screen}>
@@ -32,12 +34,13 @@ export default function StatsScreen() {
         <ScrollView style={s.scroll} contentContainerStyle={{ paddingBottom: 80 }}>
           <View style={s.drillStats}>
             {[
-              { val: tw !== null ? tw : '—', lbl: `THIS WK\n${unit}`, col: C.text, bg: C.card, bdr: C.border },
-              { val: lw !== null ? lw : '—', lbl: `LAST WK\n${unit}`, col: C.muted, bg: C.card, bdr: C.border },
-              { val: chgStr, lbl: 'WK CHANGE', col: chgCol, bg: col + '12', bdr: col + '30' },
+              { val: tw !== null ? tw : '—', val2: null, lbl: `THIS WK\n${unit}`, col: C.text, bg: C.card, bdr: C.border },
+              { val: lw !== null ? lw : '—', val2: null, lbl: `LAST WK\n${unit}`, col: C.muted, bg: C.card, bdr: C.border },
+              { val: absChgStr, val2: pctChgStr, lbl: 'WK CHANGE', col: chgCol, bg: col + '12', bdr: col + '30' },
             ].map((st, i) => (
               <View key={i} style={[s.drillStat, { backgroundColor: st.bg, borderColor: st.bdr }]}>
                 <Text style={[s.drillStatNum, { color: st.col }]}>{st.val}</Text>
+                {st.val2 ? <Text style={[s.drillStatPct, { color: st.col }]}>{st.val2}</Text> : null}
                 <Text style={s.drillStatLbl}>{st.lbl}</Text>
               </View>
             ))}
@@ -158,7 +161,8 @@ const s = StyleSheet.create({
   catBadgeText: { fontSize: 10, fontWeight: '700', letterSpacing: 1 },
   drillStats: { flexDirection: 'row', gap: 7, paddingHorizontal: 14, paddingTop: 12 },
   drillStat: { flex: 1, borderWidth: 1, borderRadius: 9, paddingVertical: 11, paddingHorizontal: 8, alignItems: 'center' },
-  drillStatNum: { fontFamily: 'Oswald_700Bold', fontSize: 22, lineHeight: 22 },
+  drillStatNum: { fontFamily: 'Oswald_700Bold', fontSize: 18, lineHeight: 18 },
+  drillStatPct: { fontFamily: 'Oswald_400Regular', fontSize: 11, marginTop: 2 },
   drillStatLbl: { fontSize: 8, color: C.muted, marginTop: 4, letterSpacing: 1, lineHeight: 12, textAlign: 'center' },
   histArea: { paddingHorizontal: 14, paddingTop: 12 },
   histLabel: { fontSize: 10, color: C.muted, letterSpacing: 1, marginBottom: 8 },

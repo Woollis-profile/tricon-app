@@ -11,6 +11,11 @@ export default function ExCard({ ex, exData: d, exIdx, isOpen, onToggle, onDone,
   const col = CAT_COLOR[wkType] || C.accent;
 
   const borderColor = allDone ? 'rgba(76,175,125,0.45)' : isStarted ? col + '55' : C.border;
+  const weightLabel = doneCount === 0
+    ? `SET WEIGHT FOR ALL ${d.sets.length} SETS`
+    : doneCount < d.sets.length
+      ? `UPDATE WEIGHT FOR REMAINING ${d.sets.length - doneCount} SETS`
+      : 'ALL SETS COMPLETE';
 
   return (
     <View style={[s.card, { borderColor }]}>
@@ -35,27 +40,22 @@ export default function ExCard({ ex, exData: d, exIdx, isOpen, onToggle, onDone,
 
       {isOpen && (
         <>
-          {!d.locked ? (
-            <View style={s.weightRow}>
-              <Text style={s.weightLabel}>SET WEIGHT FOR ALL {d.sets.length} SETS</Text>
-              <View style={s.weightInput}>
-                <TextInput
-                  keyboardType="decimal-pad"
-                  placeholder="0"
-                  placeholderTextColor={C.muted}
-                  defaultValue={String(d.weight || '')}
-                  onChangeText={onWeightChange}
-                  style={[s.weightField, { borderColor: col + '55' }]}
-                />
-                <Text style={s.weightUnit}>{unit}</Text>
-              </View>
+          {/* Weight always editable — affects current and future sets only */}
+          <View style={s.weightRow}>
+            <Text style={s.weightLabel}>{weightLabel}</Text>
+            <View style={s.weightInput}>
+              <TextInput
+                keyboardType="decimal-pad"
+                placeholder="0"
+                placeholderTextColor={C.muted}
+                value={String(d.weight || '')}
+                onChangeText={onWeightChange}
+                style={[s.weightField, { borderColor: col + '55' }]}
+                editable={!allDone}
+              />
+              <Text style={s.weightUnit}>{unit}</Text>
             </View>
-          ) : (
-            <View style={[s.lockedRow, { backgroundColor: col + '08' }]}>
-              <Text style={s.lockIcon}>🔒</Text>
-              <Text style={s.lockText}>WEIGHT LOCKED AT {d.weight || '—'} {unit}</Text>
-            </View>
-          )}
+          </View>
 
           {ex.injury && (
             <View style={s.injuryBox}>
@@ -83,7 +83,9 @@ export default function ExCard({ ex, exData: d, exIdx, isOpen, onToggle, onDone,
           </View>
 
           {d.sets.map((sData, si) => (
-            <SetRow key={si} setNum={si + 1} weight={d.weight} reps={sData.reps} unit={unit}
+            <SetRow key={si} setNum={si + 1}
+              weight={sData.done ? (sData.weight || d.weight) : d.weight}
+              reps={sData.reps} unit={unit}
               status={sData.done ? 'done' : si === nextSi ? 'active' : 'pending'}
               onDone={() => onDone(si)} onRepsChange={val => onRepsChange(si, val)} />
           ))}
@@ -120,15 +122,12 @@ const s = StyleSheet.create({
   weightInput: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   weightField: { flex: 1, backgroundColor: C.card, borderWidth: 1, borderRadius: 8, color: C.text, paddingVertical: 10, paddingHorizontal: 12, fontSize: 20, fontFamily: 'Oswald_700Bold', textAlign: 'center' },
   weightUnit: { fontSize: 11, color: C.muted },
-  lockedRow: { paddingVertical: 8, paddingHorizontal: 14, borderTopWidth: 1, borderTopColor: C.border, flexDirection: 'row', alignItems: 'center', gap: 7 },
-  lockIcon: { fontSize: 14 },
-  lockText: { fontSize: 10, color: C.dim },
   injuryBox: { backgroundColor: 'rgba(224,82,82,0.08)', borderWidth: 1, borderColor: 'rgba(224,82,82,0.2)', borderRadius: 6, paddingVertical: 7, paddingHorizontal: 10, marginHorizontal: 14, marginTop: 8 },
   injuryText: { fontSize: 11, color: C.red },
   phaseRow: { flexDirection: 'row', gap: 4, paddingHorizontal: 14, paddingVertical: 8, backgroundColor: '#0a0c0f', borderTopWidth: 1, borderTopColor: C.border },
   phaseCell: { flex: 1, borderWidth: 1, borderRadius: 5, paddingVertical: 5, paddingHorizontal: 4, alignItems: 'center' },
-  phaseReps: { fontSize: 9, fontFamily: 'Oswald_700Bold', letterSpacing: 1 },
-  phaseTiming: { fontSize: 8, color: C.sub, marginTop: 2 },
+  phaseReps: { fontSize: 13, fontFamily: 'Oswald_700Bold', letterSpacing: 1 },
+  phaseTiming: { fontSize: 10, color: C.sub, marginTop: 2 },
   colHeader: { flexDirection: 'row', paddingVertical: 8, paddingHorizontal: 14, borderTopWidth: 1, borderTopColor: C.border },
   colHeaderText: { flex: 1, fontSize: 9, color: C.muted, letterSpacing: 1, fontWeight: '700' },
   colHeaderCenter: { textAlign: 'center' },

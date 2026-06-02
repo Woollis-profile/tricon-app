@@ -30,13 +30,13 @@ export default function WorkoutScreen() {
   const [exData, setExData] = useState(() =>
     list.map(ex => ({
       weight: lastWeights[ex.id] || '',
-      locked: false,
       sets: Array.from({ length: prog.sets }, () => ({ reps: '9', done: false })),
     }))
   );
   const [rest, setRest] = useState(null);
   const [roundTimes, setRoundTimes] = useState([]);
   const [amrapRounds, setAmrapRounds] = useState(0);
+  const [amrapPartial, setAmrapPartial] = useState(null);
   const elRef = useRef(null);
   const currentRound = roundTimes.length;
   const halfPushups = Math.max(1, Math.floor((pushupMax || 10) / 2));
@@ -56,7 +56,11 @@ export default function WorkoutScreen() {
   }, [phase, isAMRAP]);
 
   const handleWeightChange = (ei, val) =>
-    setExData(prev => prev.map((ex, i) => i !== ei ? ex : { ...ex, weight: val }));
+    setExData(prev => prev.map((ex, i) => i !== ei ? ex : {
+      ...ex,
+      weight: val,
+      sets: ex.sets.map(s => s.done ? s : { ...s }),
+    }));
 
   const handleRepsChange = (ei, si, val) =>
     setExData(prev => prev.map((ex, i) => i !== ei ? ex : { ...ex, sets: ex.sets.map((s, j) => j !== si ? s : { ...s, reps: val }) }));
@@ -64,8 +68,8 @@ export default function WorkoutScreen() {
   const handleDone = (ei, si) => {
     setExData(prev => {
       const updated = prev.map((ex, i) => i !== ei ? ex : {
-        ...ex, locked: true,
-        sets: ex.sets.map((s, j) => j !== si ? s : { ...s, done: true }),
+        ...ex,
+        sets: ex.sets.map((s, j) => j !== si ? s : { ...s, done: true, weight: ex.weight }),
       });
       if (updated[ei].sets.every(s => s.done)) {
         const next = ei + 1;
@@ -84,6 +88,7 @@ export default function WorkoutScreen() {
   };
 
   const handleAmrapRoundComplete = () => setAmrapRounds(r => r + 1);
+  const handleAmrapPartial = (data) => setAmrapPartial(data);
 
   const totalVol = exData.reduce((acc, ex) =>
     acc + ex.sets.reduce((a, s) => a + (parseFloat(ex.weight) || 0) * (parseInt(s.reps) || 0), 0), 0);
@@ -95,7 +100,7 @@ export default function WorkoutScreen() {
     setSessions(prev => [...prev, {
       type, date: new Date().toISOString(), duration: elapsed,
       volume: isAMRAP ? amrapRounds : isFlow ? roundTimes.length : totalVol,
-      exData, roundTimes, amrapRounds,
+      exData, roundTimes, amrapRounds, amrapPartial,
     }]);
     navigation.navigate('Main');
   };
@@ -124,8 +129,8 @@ export default function WorkoutScreen() {
         <Text style={s.doneMeta}>{wkDef.name} · {fmt(elapsed)}</Text>
         {isAMRAP && (
           <View style={[s.amrapResult, { backgroundColor: C.purple + '12', borderColor: C.purple + '30' }]}>
-            <Text style={[s.amrapResultNum, { color: C.purple }]}>{amrapRounds}</Text>
-            <Text style={s.amrapResultLbl}>ROUNDS IN 30 MINUTES</Text>
+            <Text style={[s.amrapResultNum, { color: C.purple }]}>{amrapRounds + (amrapPartial ? 1 : 0)}</Text>
+            <Text style={s.amrapResultLbl}>{amrapPartial ? `ROUNDS (${amrapRounds} FULL + 1 PARTIAL)` : 'ROUNDS IN 30 MINUTES'}</Text>
             <Text style={s.amrapResultDetail}>{kbWeight} {unit} · {halfPushups} push-ups per round (½ of {pushupMax})</Text>
           </View>
         )}
@@ -303,6 +308,7 @@ export default function WorkoutScreen() {
             exercises={list} elapsed={elapsed}
             pushupMax={pushupMax || 10} kbWeight={kbWeight}
             unit={unit} onRoundComplete={handleAmrapRoundComplete}
+            onPartialRound={handleAmrapPartial}
             roundCount={amrapRounds}
           />
         ) : isFlow ? (

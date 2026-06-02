@@ -2,14 +2,16 @@ import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { C } from '../constants';
 
 export default function FridayPickerScreen() {
   const navigation = useNavigation();
+  const insets = useSafeAreaInsets();
   const onSelect = (type) => navigation.navigate('Workout', { type });
 
   return (
-    <ScrollView style={s.scroll} contentContainerStyle={s.content}>
+    <ScrollView style={s.scroll} contentContainerStyle={[s.content, { paddingTop: insets.top + 14 }]}>
       <Text style={s.hint}>Choose your session for today</Text>
 
       {/* AMRAP card */}
@@ -74,10 +76,10 @@ const s = StyleSheet.create({
   card: { borderWidth: 1, borderRadius: 14, padding: 18 },
   cardTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 },
   cardSub: { fontSize: 9, letterSpacing: 2, fontWeight: '700', marginBottom: 5 },
-  cardTitle: { fontFamily: 'Oswald_700Bold', fontSize: 22, color: C.text, lineHeight: 22 },
+  cardTitle: { fontFamily: 'Oswald_700Bold', fontSize: 20, color: C.text, lineHeight: 20 },
   cardMeta: { fontSize: 11, color: C.muted, marginTop: 5 },
   cardRight: { alignItems: 'flex-end' },
-  cardNum: { fontFamily: 'Oswald_700Bold', fontSize: 32, lineHeight: 32 },
+  cardNum: { fontFamily: 'Oswald_700Bold', fontSize: 20, lineHeight: 20 },
   cardNumLabel: { fontSize: 9, color: C.muted, letterSpacing: 1 },
   bullets: { marginBottom: 12 },
   bullet: { fontSize: 11, color: C.sub, lineHeight: 21 },

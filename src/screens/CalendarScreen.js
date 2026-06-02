@@ -9,8 +9,11 @@ import { useAppContext } from '../context';
 export default function CalendarScreen() {
   const navigation = useNavigation();
   const { sessions, weekIdx } = useAppContext();
-  const [selectedDay, setSelectedDay] = useState(null);
   const weekDates = getWeekDates();
+  // Default to today's index in the MON-SUN week array (JS 0=Sun → array 6=Sun)
+  const jsDay = new Date().getDay();
+  const todayIdx = jsDay === 0 ? 6 : jsDay - 1;
+  const [selectedDay, setSelectedDay] = useState(todayIdx);
   const prog = PROG[weekIdx];
 
   const startWorkout = (type) => {
@@ -148,40 +151,42 @@ export default function CalendarScreen() {
       </View>
 
       <ScrollView style={s.scroll} contentContainerStyle={s.scrollContent}>
-        {selectedDay !== null ? (
+        {selectedDay !== null && (
           <View style={s.dayCardWrap}>{renderDayCard(selectedDay)}</View>
-        ) : (
-          <View style={s.quickList}>
-            {[['upper', 0], ['lower', 2]].map(([type, dayIdx]) => {
-              const wk = WORKOUT_DEFS[type];
-              const done = sessions.some(s => new Date(s.date).toDateString() === getWeekDates()[dayIdx].toDateString());
-              return (
-                <TouchableOpacity key={type} onPress={() => setSelectedDay(dayIdx)}
-                  style={[s.quickItem, { borderColor: wk.color + '30' }]}>
-                  <View style={[s.quickIcon, { backgroundColor: wk.color + '18' }]}>
-                    <Text style={[s.quickIconText, { color: wk.color }]}>{DN[dayIdx].slice(0, 3)}</Text>
-                  </View>
-                  <View style={s.quickInfo}>
-                    <Text style={s.quickName}>{wk.name}</Text>
-                    <Text style={s.quickMeta}>{wk.dayName} · {wk.duration}</Text>
-                  </View>
-                  {done ? <Text style={s.quickDone}>DONE ✓</Text> : <Text style={s.quickChevron}>›</Text>}
-                </TouchableOpacity>
-              );
-            })}
-            <TouchableOpacity onPress={() => setSelectedDay(4)}
-              style={[s.quickItem, { borderColor: C.purple + '30' }]}>
-              <View style={[s.quickIcon, { backgroundColor: C.purple + '18' }]}>
-                <Text style={[s.quickIconText, { color: C.purple }]}>FRI</Text>
-              </View>
-              <View style={s.quickInfo}>
-                <Text style={s.quickName}>Friday Kettlebell</Text>
-                <Text style={s.quickMeta}>KB Benchmark AMRAP · Kettlebell Flow</Text>
-              </View>
-              <Text style={s.quickChevron}>›</Text>
-            </TouchableOpacity>
-          </View>
         )}
+
+        {/* Weekly schedule — always visible */}
+        <View style={s.scheduleCard}>
+          <Text style={s.scheduleTitle}>THIS WEEK</Text>
+          {[
+            { type: 'upper', dayIdx: 0, label: 'Monday' },
+            { type: 'lower', dayIdx: 2, label: 'Wednesday' },
+            { type: 'friday', dayIdx: 4, label: 'Friday' },
+          ].map(({ type, dayIdx, label }) => {
+            const isFri = type === 'friday';
+            const wk = isFri ? null : WORKOUT_DEFS[type];
+            const col = isFri ? C.purple : wk.color;
+            const done = sessions.some(s => new Date(s.date).toDateString() === weekDates[dayIdx].toDateString());
+            const isSelected = selectedDay === dayIdx;
+            return (
+              <TouchableOpacity key={type} onPress={() => setSelectedDay(prev => prev === dayIdx ? null : dayIdx)}
+                style={[s.scheduleRow, isSelected && { backgroundColor: col + '10' }]}>
+                <View style={[s.scheduleIcon, { backgroundColor: col + '18' }]}>
+                  <Text style={[s.scheduleIconText, { color: col }]}>{label.slice(0, 3).toUpperCase()}</Text>
+                </View>
+                <View style={s.scheduleInfo}>
+                  <Text style={s.scheduleName}>{isFri ? 'Friday Kettlebell' : wk.name}</Text>
+                  <Text style={s.scheduleMeta}>
+                    {isFri ? 'KB Benchmark AMRAP · Kettlebell Flow' : `${wk.duration} · ${wk.method}`}
+                  </Text>
+                </View>
+                {done
+                  ? <Text style={s.scheduleDone}>DONE ✓</Text>
+                  : <Text style={[s.scheduleChevron, isSelected && { color: col }]}>›</Text>}
+              </TouchableOpacity>
+            );
+          })}
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -246,4 +251,14 @@ const s = StyleSheet.create({
   quickMeta: { fontSize: 10, color: C.muted, marginTop: 2 },
   quickDone: { fontSize: 10, color: C.green, fontWeight: '700' },
   quickChevron: { color: C.muted, fontSize: 13 },
+  scheduleCard: { backgroundColor: C.card, borderWidth: 1, borderColor: C.border, borderRadius: 12, overflow: 'hidden', marginTop: 14 },
+  scheduleTitle: { fontSize: 9, color: C.muted, letterSpacing: 2, fontWeight: '700', paddingHorizontal: 14, paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: C.border },
+  scheduleRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 11, paddingHorizontal: 14, gap: 12, borderBottomWidth: 1, borderBottomColor: C.border },
+  scheduleIcon: { width: 36, height: 36, borderRadius: 8, alignItems: 'center', justifyContent: 'center' },
+  scheduleIconText: { fontSize: 9, fontFamily: 'Oswald_700Bold' },
+  scheduleInfo: { flex: 1 },
+  scheduleName: { fontSize: 13, color: C.text, fontWeight: '600' },
+  scheduleMeta: { fontSize: 10, color: C.muted, marginTop: 2 },
+  scheduleDone: { fontSize: 10, color: C.green, fontWeight: '700' },
+  scheduleChevron: { color: C.muted, fontSize: 13 },
 });

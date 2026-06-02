@@ -19,7 +19,7 @@ export default function HomeScreen() {
   const startWorkout = (type) => navigation.navigate('Workout', { type });
 
   return (
-    <SafeAreaView style={s.scroll} edges={['top']}>
+    <SafeAreaView style={s.scroll} edges={[]}>
     <ScrollView contentContainerStyle={s.content}>
       <HomeHero sessions={sessions} />
 
