@@ -38,7 +38,7 @@ export default function AuthScreen() {
     <KeyboardAvoidingView style={s.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <ScrollView contentContainerStyle={s.scroll} keyboardShouldPersistTaps="handled">
         <View style={s.hero}>
-          <Text style={s.heroSub}>GARY WALKER METHOD · OVER 50s</Text>
+          <Text style={s.heroSub}>TRAINING METHOD FOR THE OLDER AND WISER ATHLETES</Text>
           <Text style={s.heroTitle}>TRICON</Text>
           <Text style={s.heroSub2}>WORKOUT</Text>
         </View>

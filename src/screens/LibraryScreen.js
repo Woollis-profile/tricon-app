@@ -36,7 +36,7 @@ export default function LibraryScreen() {
           {/* TRICON */}
           <View style={s.methodCard}>
             <View style={s.methodCardHeader}>
-              <Text style={s.methodCardAuthor}>GARY WALKER</Text>
+              <Text style={s.methodCardAuthor}>OLDER AND WISER ATHLETES</Text>
               <Text style={s.methodCardTitle}>TRICON LIFTING METHOD</Text>
               <Text style={s.methodCardSub}>Monday & Wednesday · 9 reps per set</Text>
             </View>
@@ -184,7 +184,7 @@ export default function LibraryScreen() {
                         </>
                       )}
                       <TouchableOpacity
-                        onPress={() => Linking.openURL(`https://www.youtube.com/results?search_query=${encodeURIComponent(ex.name + (isKB ? ' kettlebell trevorsinstinct' : ' tricon Gary Walker'))}`)}
+                        onPress={() => Linking.openURL(`https://www.youtube.com/results?search_query=${encodeURIComponent(ex.name + (isKB ? ' kettlebell trevorsinstinct' : ' tricon lifting technique'))}`)}
                         style={s.ytBtn}>
                         <Text style={s.ytText}>▶ Watch on YouTube</Text>
                       </TouchableOpacity>

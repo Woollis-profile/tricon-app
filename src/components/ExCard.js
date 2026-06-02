@@ -92,7 +92,7 @@ export default function ExCard({ ex, exData: d, exIdx, isOpen, onToggle, onDone,
 
           <View style={s.footer}>
             <TouchableOpacity
-              onPress={() => Linking.openURL(`https://www.youtube.com/results?search_query=${encodeURIComponent(ex.name + ' tricon Gary Walker')}`)}
+              onPress={() => Linking.openURL(`https://www.youtube.com/results?search_query=${encodeURIComponent(ex.name + ' tricon lifting technique')}`)}
               style={s.ytBtn}
             >
               <Text style={s.ytText}>▶ Watch technique</Text>

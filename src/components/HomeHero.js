@@ -29,7 +29,7 @@ export default function HomeHero({ sessions }) {
         style={s.accentBar}
       />
       <View style={[s.content, { paddingTop: insets.top + 12 }]}>
-        <Text style={s.subtitle}>GARY WALKER METHOD · OVER 50s</Text>
+        <Text style={s.subtitle}>TRAINING METHOD FOR THE OLDER AND WISER ATHLETES</Text>
         <Text style={s.title1}>TRICON</Text>
         <Text style={s.title2}><Text style={{ color: C.accent }}>WORKOUT</Text></Text>
         <View style={s.statsRow}>
