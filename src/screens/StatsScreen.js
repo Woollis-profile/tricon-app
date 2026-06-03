@@ -24,7 +24,7 @@ export default function StatsScreen() {
     const exHist = (history[ex.id] || []).sort((a, b) => new Date(b.date) - new Date(a.date));
     const absChg = (tw !== null && lw !== null) ? tw - lw : null;
     const absChgStr = absChg !== null ? `${absChg > 0 ? '+' : ''}${absChg.toFixed(1)} ${unit}` : '—';
-    const pctChgStr = chg !== null ? `${chg > 0 ? '+' : ''}${chg.toFixed(1)}%` : '';
+    const pctChgStr = chg !== null ? `${chg > 0 ? '+' : ''}${chg.toFixed(1)}%` : '—';
     const chgCol = absChg === null ? C.muted : absChg > 0 ? C.green : absChg < 0 ? C.red : C.muted;
 
     return (
@@ -98,6 +98,9 @@ export default function StatsScreen() {
                   </View>
                   {exList.map(ex => {
                     const tw2 = weekWeightFromHistory(history, ex.id, 0);
+                    const lw2 = weekWeightFromHistory(history, ex.id, -1);
+                    const absChg2 = (tw2 !== null && lw2 !== null) ? tw2 - lw2 : null;
+                    const chgCol2 = absChg2 === null ? C.muted : absChg2 > 0 ? C.green : absChg2 < 0 ? C.red : C.muted;
                     return (
                       <TouchableOpacity key={ex.id} onPress={() => setDrillEx(ex.id)} style={s.exRow}>
                         <View style={[s.exDot, { backgroundColor: col }]} />
@@ -106,9 +109,18 @@ export default function StatsScreen() {
                           <Text style={s.exMuscle}>{ex.muscle}</Text>
                         </View>
                         <View style={s.exWeight}>
-                          {tw2 !== null
-                            ? <Text style={s.exWeightNum}>{tw2}<Text style={s.exWeightUnit}> {unit}</Text></Text>
-                            : <Text style={s.exNoData}>NO DATA</Text>}
+                          {tw2 !== null ? (
+                            <>
+                              <Text style={s.exWeightNum}>{tw2}<Text style={s.exWeightUnit}> {unit}</Text></Text>
+                              {absChg2 !== null && (
+                                <Text style={[s.exChgText, { color: chgCol2 }]}>
+                                  {absChg2 > 0 ? '+' : ''}{absChg2.toFixed(1)}
+                                </Text>
+                              )}
+                            </>
+                          ) : (
+                            <Text style={s.exNoData}>NO DATA</Text>
+                          )}
                         </View>
                         <Text style={s.exChevron}>›</Text>
                       </TouchableOpacity>
@@ -162,7 +174,7 @@ const s = StyleSheet.create({
   drillStats: { flexDirection: 'row', gap: 7, paddingHorizontal: 14, paddingTop: 12 },
   drillStat: { flex: 1, borderWidth: 1, borderRadius: 9, paddingVertical: 11, paddingHorizontal: 8, alignItems: 'center' },
   drillStatNum: { fontFamily: 'Oswald_700Bold', fontSize: 18, lineHeight: 18 },
-  drillStatPct: { fontFamily: 'Oswald_400Regular', fontSize: 11, marginTop: 2 },
+  drillStatPct: { fontFamily: 'Oswald_400Regular', fontSize: 12, marginTop: 2 },
   drillStatLbl: { fontSize: 8, color: C.muted, marginTop: 4, letterSpacing: 1, lineHeight: 12, textAlign: 'center' },
   histArea: { paddingHorizontal: 14, paddingTop: 12 },
   histLabel: { fontSize: 10, color: C.muted, letterSpacing: 1, marginBottom: 8 },
@@ -185,6 +197,7 @@ const s = StyleSheet.create({
   exWeightNum: { fontFamily: 'Oswald_700Bold', fontSize: 16, color: C.text },
   exWeightUnit: { fontFamily: 'Oswald_400Regular', fontSize: 10, color: C.muted },
   exNoData: { fontSize: 11, color: C.border },
+  exChgText: { fontSize: 10, fontWeight: '600', textAlign: 'right', marginTop: 1 },
   exChevron: { color: C.muted, fontSize: 11 },
   overviewCard: { marginHorizontal: 14, marginTop: 10, backgroundColor: C.card, borderWidth: 1, borderColor: C.border, borderRadius: 10, padding: 13 },
   overviewLabel: { fontSize: 10, color: C.muted, letterSpacing: 1, marginBottom: 10 },

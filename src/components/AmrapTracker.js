@@ -6,13 +6,16 @@ import { beepRound } from '../audio';
 
 const R = 54, cx = 64, cy = 64, circ = 2 * Math.PI * R;
 
-export default function AmrapTracker({ exercises, elapsed, pushupMax, kbWeight, unit, onRoundComplete, onPartialRound, roundCount }) {
+export default function AmrapTracker({ exercises, elapsed, pushupMax, kbWeight, unit, onRoundComplete, onPartialRound, onFinishSession, onKbWeightChange, roundCount }) {
   const halfPushups = Math.max(1, Math.floor(pushupMax / 2));
   const resolvedExercises = exercises.map(ex => ({ ...ex, resolvedReps: ex.id === 'amrap_pushup' ? halfPushups : ex.reps }));
   const [checkedEx, setCheckedEx] = useState(Array(exercises.length).fill(false));
+  const [showFinalLog, setShowFinalLog] = useState(false);
   const [finalChecked, setFinalChecked] = useState(Array(exercises.length).fill(false));
   const [finalPushupReps, setFinalPushupReps] = useState(String(halfPushups));
   const [finalSaved, setFinalSaved] = useState(false);
+  const [editingKb, setEditingKb] = useState(false);
+  const [kbDraft, setKbDraft] = useState(kbWeight || '');
 
   const allChecked = checkedEx.every(Boolean);
   const remaining = AMRAP_TOTAL - elapsed;
@@ -32,26 +35,32 @@ export default function AmrapTracker({ exercises, elapsed, pushupMax, kbWeight, 
     onRoundComplete();
   };
 
+  const handleSaveKb = () => {
+    setEditingKb(false);
+    if (onKbWeightChange) onKbWeightChange(kbDraft);
+  };
+
   const handleSaveFinal = () => {
     if (finalSaved) return;
-    const anyChecked = finalChecked.some(Boolean);
-    if (!anyChecked) return;
-    const pushupEx = exercises.find(e => e.id === 'amrap_pushup');
-    const pushupIdx = exercises.indexOf(pushupEx);
+    const pushupReps = parseInt(finalPushupReps) || 0;
     const data = {
       partial: true,
-      checkedExercises: finalChecked,
-      pushupReps: pushupEx ? (parseInt(finalPushupReps) || 0) : 0,
-      exercises: exercises.map((ex, i) => ({
-        id: ex.id,
-        name: ex.name,
-        completed: finalChecked[i],
-        reps: ex.id === 'amrap_pushup' ? (parseInt(finalPushupReps) || 0) : (finalChecked[i] ? ex.reps : 0),
-      })),
+      exercises: exercises.map((ex, i) => {
+        const isPushup = ex.id === 'amrap_pushup';
+        return {
+          id: ex.id,
+          name: ex.name,
+          completed: isPushup ? pushupReps > 0 : finalChecked[i],
+          reps: isPushup ? pushupReps : (finalChecked[i] ? ex.reps : 0),
+        };
+      }),
     };
     setFinalSaved(true);
     onPartialRound(data);
+    onFinishSession();
   };
+
+  const canSaveFinal = finalChecked.some(Boolean) || (parseInt(finalPushupReps) || 0) > 0;
 
   return (
     <View style={s.wrap}>
@@ -77,7 +86,29 @@ export default function AmrapTracker({ exercises, elapsed, pushupMax, kbWeight, 
           </View>
           <View style={s.kbBox}>
             <Text style={s.kbLabel}>KB</Text>
-            <Text style={s.kbVal}>{kbWeight || '—'} <Text style={s.kbUnit}>{unit}</Text></Text>
+            {editingKb ? (
+              <View style={s.kbEditRow}>
+                <TextInput
+                  keyboardType="decimal-pad"
+                  value={kbDraft}
+                  onChangeText={setKbDraft}
+                  style={s.kbInput}
+                  maxLength={6}
+                  autoFocus
+                />
+                <Text style={s.kbUnit}> {unit}</Text>
+                <TouchableOpacity onPress={handleSaveKb} style={s.kbSaveBtn}>
+                  <Text style={s.kbSaveBtnText}>✓</Text>
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <View style={s.kbValRow}>
+                <Text style={s.kbVal}>{kbWeight || '—'}<Text style={s.kbUnit}> {unit}</Text></Text>
+                <TouchableOpacity onPress={() => { setKbDraft(kbWeight || ''); setEditingKb(true); }} style={s.kbEditBtn}>
+                  <Text style={s.kbEditBtnText}>✎</Text>
+                </TouchableOpacity>
+              </View>
+            )}
           </View>
         </View>
       </View>
@@ -130,26 +161,33 @@ export default function AmrapTracker({ exercises, elapsed, pushupMax, kbWeight, 
             <Text style={s.endSub}>FULL ROUNDS COMPLETED</Text>
           </View>
 
-          {/* Log final incomplete round */}
-          {!finalSaved ? (
+          {!showFinalLog && !finalSaved && (
+            <View style={s.finishGroup}>
+              <TouchableOpacity onPress={() => setShowFinalLog(true)} style={[s.doneBtn, s.doneBtnFinal]}>
+                <Text style={[s.doneBtnText, { color: '#fff' }]}>FINISH WORKOUT → LOG FINAL ROUND</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={onFinishSession} style={s.skipBtn}>
+                <Text style={s.skipBtnText}>SKIP — NO PARTIAL ROUND</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+
+          {showFinalLog && !finalSaved && (
             <View style={s.finalCard}>
               <View style={s.finalHeader}>
                 <Text style={s.finalHeaderText}>LOG FINAL ROUND</Text>
                 <Text style={s.finalHeaderSub}>Tick what you completed before time ran out</Text>
               </View>
               {resolvedExercises.map((ex, i) => {
-                const checked = finalChecked[i];
                 const isPushup = ex.id === 'amrap_pushup';
-                return (
-                  <View key={ex.id} style={[s.exRow, checked && s.exRowCheckedFinal, i < exercises.length - 1 && s.exRowBorder]}>
-                    <TouchableOpacity onPress={() => toggleFinal(i)} style={[s.checkbox, checked && s.checkboxCheckedFinal]}>
-                      {checked && <Text style={[s.checkMark, { color: C.orange }]}>✓</Text>}
-                    </TouchableOpacity>
-                    <View style={s.exInfo}>
-                      <Text style={[s.exName, checked && { color: C.orange, textDecorationLine: 'line-through' }]}>{ex.name}</Text>
-                      {isPushup && checked ? (
+                const checked = finalChecked[i];
+                if (isPushup) {
+                  return (
+                    <View key={ex.id} style={[s.exRow, i < exercises.length - 1 && s.exRowBorder]}>
+                      <View style={s.exInfo}>
+                        <Text style={s.exName}>{ex.name}</Text>
                         <View style={s.pushupInputRow}>
-                          <Text style={s.pushupInputLabel}>Actual reps: </Text>
+                          <Text style={s.pushupInputLabel}>Reps done: </Text>
                           <TextInput
                             keyboardType="number-pad"
                             value={finalPushupReps}
@@ -157,33 +195,44 @@ export default function AmrapTracker({ exercises, elapsed, pushupMax, kbWeight, 
                             style={s.pushupInput}
                             maxLength={3}
                           />
-                          <Text style={s.pushupInputLabel}> (half max = {halfPushups})</Text>
+                          <Text style={s.pushupInputLabel}> (½ max = {halfPushups})</Text>
                         </View>
-                      ) : (
-                        <Text style={s.exDetail}>
-                          {isPushup ? `${ex.resolvedReps} reps (½ of ${pushupMax} max)` : `${ex.resolvedReps} reps · ${ex.muscle}`}
-                        </Text>
-                      )}
+                      </View>
+                      <Text style={[s.exReps, { color: C.orange }]}>×{finalPushupReps || halfPushups}</Text>
                     </View>
-                    <Text style={[s.exReps, { color: checked ? C.orange : C.muted }]}>×{isPushup ? (finalPushupReps || ex.resolvedReps) : ex.resolvedReps}</Text>
-                  </View>
+                  );
+                }
+                return (
+                  <TouchableOpacity key={ex.id} onPress={() => toggleFinal(i)}
+                    style={[s.exRow, checked && s.exRowCheckedFinal, i < exercises.length - 1 && s.exRowBorder]}>
+                    <View style={[s.checkbox, checked && s.checkboxCheckedFinal]}>
+                      {checked && <Text style={[s.checkMark, { color: C.orange }]}>✓</Text>}
+                    </View>
+                    <View style={s.exInfo}>
+                      <Text style={[s.exName, checked && { color: C.orange, textDecorationLine: 'line-through' }]}>{ex.name}</Text>
+                      <Text style={s.exDetail}>{ex.resolvedReps} reps · {ex.muscle}</Text>
+                    </View>
+                    <Text style={[s.exReps, { color: checked ? C.orange : C.muted }]}>×{ex.resolvedReps}</Text>
+                  </TouchableOpacity>
                 );
               })}
               <TouchableOpacity
                 onPress={handleSaveFinal}
-                disabled={!finalChecked.some(Boolean)}
-                style={[s.doneBtn, finalChecked.some(Boolean) ? s.doneBtnFinal : s.doneBtnInactive]}
+                disabled={!canSaveFinal}
+                style={[s.doneBtn, canSaveFinal ? s.doneBtnFinal : s.doneBtnInactive]}
               >
-                <Text style={[s.doneBtnText, { color: finalChecked.some(Boolean) ? '#fff' : C.muted }]}>
-                  {finalChecked.some(Boolean) ? '✓ SAVE PARTIAL ROUND' : 'TICK AT LEAST ONE EXERCISE'}
+                <Text style={[s.doneBtnText, { color: canSaveFinal ? '#fff' : C.muted }]}>
+                  {canSaveFinal ? '✓ SAVE FINAL ROUND' : 'TICK EXERCISES OR ENTER REPS'}
                 </Text>
               </TouchableOpacity>
             </View>
-          ) : (
+          )}
+
+          {finalSaved && (
             <View style={s.finalSavedCard}>
               <Text style={s.finalSavedText}>✓ Partial round saved</Text>
               <Text style={s.finalSavedSub}>
-                {finalChecked.filter(Boolean).length} of {exercises.length} exercises completed
+                {finalChecked.filter(Boolean).length} of {exercises.length - 1} exercises + {finalPushupReps} push-ups
               </Text>
             </View>
           )}
@@ -204,10 +253,17 @@ const s = StyleSheet.create({
   roundBox: { backgroundColor: C.purple + '18', borderWidth: 1, borderColor: C.purple + '30', borderRadius: 10, paddingVertical: 10, paddingHorizontal: 12, flex: 1, justifyContent: 'center' },
   roundNum: { fontFamily: 'Oswald_700Bold', fontSize: 36, color: C.purple, lineHeight: 36 },
   roundLbl: { fontSize: 9, color: C.muted, letterSpacing: 1, marginTop: 2 },
-  kbBox: { backgroundColor: C.card, borderWidth: 1, borderColor: C.border, borderRadius: 10, paddingVertical: 8, paddingHorizontal: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  kbLabel: { fontSize: 10, color: C.muted },
+  kbBox: { backgroundColor: C.card, borderWidth: 1, borderColor: C.border, borderRadius: 10, paddingVertical: 8, paddingHorizontal: 12 },
+  kbLabel: { fontSize: 9, color: C.muted, letterSpacing: 1, marginBottom: 3 },
+  kbValRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   kbVal: { fontFamily: 'Oswald_700Bold', fontSize: 16, color: C.text },
   kbUnit: { fontFamily: 'Oswald_400Regular', fontSize: 10, color: C.muted },
+  kbEditBtn: { paddingHorizontal: 6, paddingVertical: 2 },
+  kbEditBtnText: { fontSize: 14, color: C.muted },
+  kbEditRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+  kbInput: { backgroundColor: C.surface, borderWidth: 1, borderColor: C.purple + '50', borderRadius: 5, color: C.text, paddingVertical: 2, paddingHorizontal: 6, fontSize: 14, fontFamily: 'Oswald_700Bold', textAlign: 'center', minWidth: 44 },
+  kbSaveBtn: { backgroundColor: C.purple + '30', borderRadius: 5, paddingHorizontal: 8, paddingVertical: 3 },
+  kbSaveBtnText: { color: C.purple, fontSize: 13 },
   listCard: { backgroundColor: C.card, borderWidth: 1, borderColor: C.purple + '30', borderRadius: 12, overflow: 'hidden', marginBottom: 10 },
   listHeader: { paddingVertical: 9, paddingHorizontal: 14, backgroundColor: C.purple + '12', borderBottomWidth: 1, borderBottomColor: C.border, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   listHeaderText: { fontSize: 11, color: C.purple, letterSpacing: 1, fontFamily: 'Oswald_700Bold' },
@@ -234,6 +290,9 @@ const s = StyleSheet.create({
   endTitle: { fontFamily: 'Oswald_400Regular', fontSize: 20, color: C.purple, letterSpacing: 1 },
   endRounds: { fontFamily: 'Oswald_700Bold', fontSize: 40, color: C.text, marginTop: 4 },
   endSub: { fontSize: 11, color: C.muted, marginTop: 2 },
+  finishGroup: { gap: 8, marginBottom: 10 },
+  skipBtn: { alignItems: 'center', paddingVertical: 8 },
+  skipBtnText: { fontSize: 11, color: C.muted, letterSpacing: 1 },
   finalCard: { backgroundColor: C.card, borderWidth: 1, borderColor: C.orange + '40', borderRadius: 12, overflow: 'hidden', marginBottom: 10 },
   finalHeader: { paddingVertical: 9, paddingHorizontal: 14, backgroundColor: C.orange + '12', borderBottomWidth: 1, borderBottomColor: C.border },
   finalHeaderText: { fontSize: 11, color: C.orange, letterSpacing: 1, fontFamily: 'Oswald_700Bold' },

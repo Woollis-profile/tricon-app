@@ -11,7 +11,7 @@ export default function FridayPickerScreen() {
   const onSelect = (type) => navigation.navigate('Workout', { type });
 
   return (
-    <ScrollView style={s.scroll} contentContainerStyle={[s.content, { paddingTop: insets.top + 14 }]}>
+    <ScrollView style={s.scroll} contentContainerStyle={[s.content, { paddingTop: insets.top + 16 }]}>
       <Text style={s.hint}>Choose your session for today</Text>
 
       {/* AMRAP card */}

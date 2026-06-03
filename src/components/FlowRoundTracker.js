@@ -1,18 +1,21 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { C, WORKOUT_DEFS, fmt } from '../constants';
 import { beepDone } from '../audio';
 
 const wk = WORKOUT_DEFS.circuit;
 
-export default function FlowRoundTracker({ exercises, roundTimes, currentRound, onCompleteRound, elapsed }) {
+export default function FlowRoundTracker({ exercises, roundTimes, currentRound, onCompleteRound, elapsed, kbWeight, unit, onKbWeightChange }) {
   const [checkedEx, setCheckedEx] = useState(Array(exercises.length).fill(false));
+  const [editingKb, setEditingKb] = useState(false);
+  const [kbDraft, setKbDraft] = useState(kbWeight || '');
   const allChecked = checkedEx.every(Boolean);
 
   const toggleEx = (i) => {
     if (currentRound >= wk.rounds) return;
     setCheckedEx(prev => prev.map((v, idx) => idx === i ? !v : v));
   };
+
   const handleRoundDone = () => {
     if (!allChecked) return;
     beepDone();
@@ -20,8 +23,40 @@ export default function FlowRoundTracker({ exercises, roundTimes, currentRound, 
     onCompleteRound(elapsed);
   };
 
+  const handleSaveKb = () => {
+    setEditingKb(false);
+    if (onKbWeightChange) onKbWeightChange(kbDraft);
+  };
+
   return (
     <View style={s.wrap}>
+      <View style={s.kbBanner}>
+        <Text style={s.kbBannerLabel}>KETTLEBELL</Text>
+        {editingKb ? (
+          <View style={s.kbEditRow}>
+            <TextInput
+              keyboardType="decimal-pad"
+              value={kbDraft}
+              onChangeText={setKbDraft}
+              style={s.kbInput}
+              maxLength={6}
+              autoFocus
+            />
+            <Text style={s.kbUnit}>{unit}</Text>
+            <TouchableOpacity onPress={handleSaveKb} style={s.kbSaveBtn}>
+              <Text style={s.kbSaveBtnText}>✓</Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View style={s.kbValRow}>
+            <Text style={s.kbVal}>{kbWeight || '—'}<Text style={s.kbUnit}> {unit}</Text></Text>
+            <TouchableOpacity onPress={() => { setKbDraft(kbWeight || ''); setEditingKb(true); }} style={s.kbEditBtn}>
+              <Text style={s.kbEditBtnText}>✎</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      </View>
+
       <View style={s.roundStrip}>
         {Array.from({ length: wk.rounds }, (_, i) => {
           const done = i < roundTimes.length;
@@ -93,6 +128,17 @@ export default function FlowRoundTracker({ exercises, roundTimes, currentRound, 
 
 const s = StyleSheet.create({
   wrap: { marginHorizontal: 14, marginBottom: 12 },
+  kbBanner: { backgroundColor: C.card, borderWidth: 1, borderColor: C.green + '30', borderRadius: 10, paddingVertical: 8, paddingHorizontal: 12, marginBottom: 10 },
+  kbBannerLabel: { fontSize: 9, color: C.muted, letterSpacing: 1, marginBottom: 3 },
+  kbValRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  kbVal: { fontFamily: 'Oswald_700Bold', fontSize: 16, color: C.text },
+  kbUnit: { fontFamily: 'Oswald_400Regular', fontSize: 10, color: C.muted },
+  kbEditBtn: { paddingHorizontal: 6, paddingVertical: 2 },
+  kbEditBtnText: { fontSize: 14, color: C.muted },
+  kbEditRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+  kbInput: { backgroundColor: C.surface, borderWidth: 1, borderColor: C.green + '50', borderRadius: 5, color: C.text, paddingVertical: 2, paddingHorizontal: 6, fontSize: 14, fontFamily: 'Oswald_700Bold', textAlign: 'center', minWidth: 44 },
+  kbSaveBtn: { backgroundColor: C.green + '30', borderRadius: 5, paddingHorizontal: 8, paddingVertical: 3 },
+  kbSaveBtnText: { color: C.green, fontSize: 13 },
   roundStrip: { flexDirection: 'row', gap: 6, marginBottom: 12 },
   stripItem: { flex: 1, borderRadius: 8, paddingVertical: 9, paddingHorizontal: 6, alignItems: 'center', backgroundColor: C.card, borderWidth: 1, borderColor: C.border },
   stripDone: { backgroundColor: 'rgba(76,175,125,0.15)', borderColor: 'rgba(76,175,125,0.4)' },

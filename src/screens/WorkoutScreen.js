@@ -16,7 +16,7 @@ export default function WorkoutScreen() {
   const navigation = useNavigation();
   const route = useRoute();
   const { type } = route.params;
-  const { weekIdx, unit, pushupMax, kbWeight, lastWeights, setSessions, setLastWeights } = useAppContext();
+  const { weekIdx, unit, pushupMax, kbWeight, setKbWeight, lastWeights, setSessions, setLastWeights } = useAppContext();
 
   const prog = { ...PROG[weekIdx], useTricon: WORKOUT_DEFS[type]?.useTricon || false };
   const wkDef = WORKOUT_DEFS[type];
@@ -48,7 +48,6 @@ export default function WorkoutScreen() {
       if (isAMRAP && next >= AMRAP_TOTAL) {
         clearInterval(elRef.current);
         beepDone();
-        setTimeout(() => setPhase('done'), 600);
       }
       return next;
     }), 1000);
@@ -89,6 +88,7 @@ export default function WorkoutScreen() {
 
   const handleAmrapRoundComplete = () => setAmrapRounds(r => r + 1);
   const handleAmrapPartial = (data) => setAmrapPartial(data);
+  const handleAmrapFinish = () => setPhase('done');
 
   const totalVol = exData.reduce((acc, ex) =>
     acc + ex.sets.reduce((a, s) => a + (parseFloat(ex.weight) || 0) * (parseInt(s.reps) || 0), 0), 0);
@@ -309,6 +309,8 @@ export default function WorkoutScreen() {
             pushupMax={pushupMax || 10} kbWeight={kbWeight}
             unit={unit} onRoundComplete={handleAmrapRoundComplete}
             onPartialRound={handleAmrapPartial}
+            onFinishSession={handleAmrapFinish}
+            onKbWeightChange={(v) => setKbWeight(v)}
             roundCount={amrapRounds}
           />
         ) : isFlow ? (
@@ -317,6 +319,8 @@ export default function WorkoutScreen() {
             currentRound={currentRound}
             onCompleteRound={handleCompleteFlowRound}
             elapsed={elapsed}
+            kbWeight={kbWeight} unit={unit}
+            onKbWeightChange={(v) => setKbWeight(v)}
           />
         ) : (
           list.map((ex, ei) => (
