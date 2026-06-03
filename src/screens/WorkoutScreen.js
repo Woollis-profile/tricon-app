@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Linking, Dimensions } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Linking, Dimensions, Modal, TextInput } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { C, WORKOUT_DEFS, PROG, getList, fmt, AMRAP_TOTAL } from '../constants';
 import { useAppContext } from '../context';
@@ -37,6 +37,9 @@ export default function WorkoutScreen() {
   const [roundTimes, setRoundTimes] = useState([]);
   const [amrapRounds, setAmrapRounds] = useState(0);
   const [amrapPartial, setAmrapPartial] = useState(null);
+  const [showAmrapModal, setShowAmrapModal] = useState(false);
+  const [finalChecked, setFinalChecked] = useState(() => Array(list.length).fill(false));
+  const [finalPushupReps, setFinalPushupReps] = useState(() => String(Math.max(1, Math.floor((pushupMax || 10) / 2))));
   const elRef = useRef(null);
   const currentRound = roundTimes.length;
   const halfPushups = Math.max(1, Math.floor((pushupMax || 10) / 2));
@@ -88,7 +91,28 @@ export default function WorkoutScreen() {
 
   const handleAmrapRoundComplete = () => setAmrapRounds(r => r + 1);
   const handleAmrapPartial = (data) => setAmrapPartial(data);
-  const handleAmrapFinish = () => setPhase('done');
+
+  const handleSavePartial = () => {
+    const pushupReps = parseInt(finalPushupReps) || 0;
+    handleAmrapPartial({
+      partial: true,
+      exercises: list.map((ex, i) => {
+        const isPushup = ex.id === 'amrap_pushup';
+        return {
+          id: ex.id, name: ex.name,
+          completed: isPushup ? pushupReps > 0 : finalChecked[i],
+          reps: isPushup ? pushupReps : (finalChecked[i] ? ex.reps : 0),
+        };
+      }),
+    });
+    setShowAmrapModal(false);
+    setPhase('done');
+  };
+
+  const handleSkipPartial = () => {
+    setShowAmrapModal(false);
+    setPhase('done');
+  };
 
   const totalVol = exData.reduce((acc, ex) =>
     acc + ex.sets.reduce((a, s) => a + (parseFloat(ex.weight) || 0) * (parseInt(s.reps) || 0), 0), 0);
@@ -129,8 +153,10 @@ export default function WorkoutScreen() {
         <Text style={s.doneMeta}>{wkDef.name} · {fmt(elapsed)}</Text>
         {isAMRAP && (
           <View style={[s.amrapResult, { backgroundColor: C.purple + '12', borderColor: C.purple + '30' }]}>
-            <Text style={[s.amrapResultNum, { color: C.purple }]}>{amrapRounds + (amrapPartial ? 1 : 0)}</Text>
-            <Text style={s.amrapResultLbl}>{amrapPartial ? `ROUNDS (${amrapRounds} FULL + 1 PARTIAL)` : 'ROUNDS IN 30 MINUTES'}</Text>
+            <Text style={[s.amrapResultNum, { color: C.purple }]}>
+              {amrapRounds}{amrapPartial ? <Text style={s.amrapPartialSuffix}> + partial</Text> : null}
+            </Text>
+            <Text style={s.amrapResultLbl}>{amrapPartial ? `${amrapRounds} FULL ROUNDS + 1 PARTIAL` : 'ROUNDS IN 30 MINUTES'}</Text>
             <Text style={s.amrapResultDetail}>{kbWeight} {unit} · {halfPushups} push-ups per round (½ of {pushupMax})</Text>
           </View>
         )}
@@ -286,7 +312,7 @@ export default function WorkoutScreen() {
         title={isAMRAP ? `${fmt(AMRAP_TOTAL - elapsed)} LEFT` : fmt(elapsed)}
         onBack={() => navigation.goBack()}
         right={
-          <TouchableOpacity onPress={() => setPhase('done')}
+          <TouchableOpacity onPress={() => isAMRAP ? setShowAmrapModal(true) : setPhase('done')}
             style={[s.finishBtn, { backgroundColor: isAMRAP ? C.purple + '20' : 'rgba(76,175,125,0.15)', borderColor: isAMRAP ? C.purple + '40' : 'rgba(76,175,125,0.3)' }]}>
             <Text style={[s.finishBtnText, { color: isAMRAP ? C.purple : C.green }]}>FINISH</Text>
           </TouchableOpacity>
@@ -308,8 +334,6 @@ export default function WorkoutScreen() {
             exercises={list} elapsed={elapsed}
             pushupMax={pushupMax || 10} kbWeight={kbWeight}
             unit={unit} onRoundComplete={handleAmrapRoundComplete}
-            onPartialRound={handleAmrapPartial}
-            onFinishSession={handleAmrapFinish}
             onKbWeightChange={(v) => setKbWeight(v)}
             roundCount={amrapRounds}
           />
@@ -347,6 +371,62 @@ export default function WorkoutScreen() {
           onDone={() => setRest(null)}
           onSkip={() => setRest(null)}
         />
+      )}
+      {isAMRAP && (
+        <Modal visible={showAmrapModal} transparent animationType="fade" onRequestClose={() => setShowAmrapModal(false)}>
+          <View style={s.modalOverlay}>
+            <View style={s.modalCard}>
+              <Text style={s.modalTitle}>LOG FINAL ROUND?</Text>
+              <Text style={s.modalSub}>Tick what you completed before time ran out</Text>
+              {list.map((ex, i) => {
+                const isPushup = ex.id === 'amrap_pushup';
+                const checked = finalChecked[i];
+                const reps = isPushup ? halfPushups : ex.reps;
+                if (isPushup) {
+                  return (
+                    <View key={ex.id} style={[s.modalExRow, s.modalExRowLast]}>
+                      <View style={s.modalExInfo}>
+                        <Text style={s.modalExName}>{ex.name}</Text>
+                        <View style={s.modalPushupRow}>
+                          <Text style={s.modalPushupLabel}>Reps: </Text>
+                          <TextInput
+                            keyboardType="number-pad"
+                            value={finalPushupReps}
+                            onChangeText={setFinalPushupReps}
+                            style={s.modalPushupInput}
+                            maxLength={3}
+                          />
+                          <Text style={s.modalPushupLabel}> (½ max = {halfPushups})</Text>
+                        </View>
+                      </View>
+                    </View>
+                  );
+                }
+                return (
+                  <TouchableOpacity key={ex.id}
+                    onPress={() => setFinalChecked(prev => prev.map((v, idx) => idx === i ? !v : v))}
+                    style={[s.modalExRow, checked && s.modalExRowChecked, i < list.length - 1 && s.modalExRowBorder]}>
+                    <View style={[s.modalCheckbox, checked && s.modalCheckboxChecked]}>
+                      {checked && <Text style={s.modalCheckMark}>✓</Text>}
+                    </View>
+                    <View style={s.modalExInfo}>
+                      <Text style={[s.modalExName, checked && s.modalExNameDone]}>{ex.name}</Text>
+                      <Text style={s.modalExDetail}>×{reps} · {ex.muscle}</Text>
+                    </View>
+                  </TouchableOpacity>
+                );
+              })}
+              <View style={s.modalActions}>
+                <TouchableOpacity onPress={handleSavePartial} style={[s.modalBtn, s.modalBtnSave]}>
+                  <Text style={s.modalBtnSaveText}>SAVE</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={handleSkipPartial} style={[s.modalBtn, s.modalBtnSkip]}>
+                  <Text style={s.modalBtnSkipText}>SKIP</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
       )}
     </View>
   );
@@ -441,4 +521,30 @@ const s = StyleSheet.create({
   coolDown: { marginHorizontal: 14, marginBottom: 10, backgroundColor: C.card, borderWidth: 1, borderColor: C.blue + '33', borderRadius: 12, padding: 14 },
   coolDownTitle: { fontSize: 11, color: C.blue, letterSpacing: 1, marginBottom: 5 },
   coolDownText: { fontSize: 11, color: C.sub, lineHeight: 19 },
+  amrapPartialSuffix: { fontFamily: 'Oswald_400Regular', fontSize: 28, color: C.purple + 'aa' },
+  // MODAL
+  modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.75)', justifyContent: 'center', alignItems: 'center', padding: 20 },
+  modalCard: { backgroundColor: C.card, borderRadius: 16, borderWidth: 1, borderColor: C.purple + '40', width: '100%', overflow: 'hidden' },
+  modalTitle: { fontFamily: 'Oswald_700Bold', fontSize: 18, color: C.purple, letterSpacing: 1, paddingTop: 18, paddingHorizontal: 16, paddingBottom: 4 },
+  modalSub: { fontSize: 11, color: C.muted, paddingHorizontal: 16, paddingBottom: 10 },
+  modalExRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 11, paddingHorizontal: 16, gap: 12 },
+  modalExRowChecked: { backgroundColor: C.purple + '10' },
+  modalExRowBorder: { borderBottomWidth: 1, borderBottomColor: C.border },
+  modalExRowLast: { borderTopWidth: 1, borderTopColor: C.border, backgroundColor: C.surface },
+  modalCheckbox: { width: 26, height: 26, borderRadius: 7, backgroundColor: '#0d1117', borderWidth: 1, borderColor: C.border, alignItems: 'center', justifyContent: 'center' },
+  modalCheckboxChecked: { backgroundColor: C.purple + '30', borderColor: C.purple },
+  modalCheckMark: { fontSize: 13, color: C.purple },
+  modalExInfo: { flex: 1 },
+  modalExName: { fontSize: 13, color: C.text, fontWeight: '600' },
+  modalExNameDone: { color: C.purple, textDecorationLine: 'line-through' },
+  modalExDetail: { fontSize: 10, color: C.muted, marginTop: 1 },
+  modalPushupRow: { flexDirection: 'row', alignItems: 'center', marginTop: 5 },
+  modalPushupLabel: { fontSize: 10, color: C.muted },
+  modalPushupInput: { backgroundColor: C.bg, borderWidth: 1, borderColor: C.purple + '60', borderRadius: 6, color: C.text, paddingVertical: 4, paddingHorizontal: 10, fontSize: 15, fontFamily: 'Oswald_700Bold', textAlign: 'center', minWidth: 48 },
+  modalActions: { flexDirection: 'row', gap: 10, padding: 14, borderTopWidth: 1, borderTopColor: C.border },
+  modalBtn: { flex: 1, borderRadius: 8, padding: 12, alignItems: 'center', borderWidth: 1 },
+  modalBtnSave: { backgroundColor: C.purple, borderColor: C.purple + '80' },
+  modalBtnSaveText: { fontFamily: 'Oswald_700Bold', fontSize: 14, color: '#fff', letterSpacing: 1 },
+  modalBtnSkip: { backgroundColor: C.card, borderColor: C.border },
+  modalBtnSkipText: { fontFamily: 'Oswald_700Bold', fontSize: 14, color: C.muted, letterSpacing: 1 },
 });

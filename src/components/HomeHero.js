@@ -2,7 +2,6 @@ import React from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import Svg, { Line } from 'react-native-svg';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { C, getWeekStart } from '../constants';
 
 const { width: SW } = Dimensions.get('window');
@@ -10,10 +9,9 @@ const VH = 200;
 
 export default function HomeHero({ sessions }) {
   const tw = sessions.filter(s => new Date(s.date) >= getWeekStart(0));
-  const insets = useSafeAreaInsets();
 
   return (
-    <View style={[s.hero, { paddingTop: insets.top + 16 }]}>
+    <View style={[s.hero, { paddingTop: 60 }]}>
       <Svg style={StyleSheet.absoluteFill} opacity={0.04} viewBox={`0 0 375 ${VH}`} preserveAspectRatio="none">
         {Array.from({ length: 20 }, (_, i) => (
           <Line key={`v${i}`} x1={i * 20} y1="0" x2={i * 20} y2={VH} stroke={C.accent} strokeWidth="0.5" />
@@ -53,8 +51,8 @@ const s = StyleSheet.create({
   accentBar: { position: 'absolute', left: 0, top: 0, bottom: 0, width: 3 },
   content: { paddingTop: 16, paddingBottom: 20, paddingLeft: 22, paddingRight: 18, position: 'relative', zIndex: 1 },
   subtitle: { fontSize: 10, color: C.dim, letterSpacing: 2, marginBottom: 6, fontFamily: 'Oswald_400Regular' },
-  title1: { fontFamily: 'Oswald_700Bold', fontSize: 24, color: C.text, lineHeight: 24, letterSpacing: 1, marginBottom: 2 },
-  title2: { fontFamily: 'Oswald_700Bold', fontSize: 24, lineHeight: 24, letterSpacing: 1, marginBottom: 14 },
+  title1: { fontFamily: 'Oswald_700Bold', fontSize: 22, color: C.text, lineHeight: 22, letterSpacing: 1, marginBottom: 2 },
+  title2: { fontFamily: 'Oswald_700Bold', fontSize: 22, lineHeight: 22, letterSpacing: 1, marginBottom: 14 },
   statsRow: { flexDirection: 'row', marginTop: 4 },
   statItem: { flexDirection: 'row', alignItems: 'center' },
   divider: { width: 1, height: 28, backgroundColor: C.border, marginHorizontal: 10 },

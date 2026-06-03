@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { C, WORKOUT_DEFS, SCHEDULE, FRIDAY_WORKOUTS, DN, PROG, getWeekDates } from '../constants';
@@ -111,7 +110,7 @@ export default function CalendarScreen() {
   };
 
   return (
-    <SafeAreaView style={s.screen} edges={['top']}>
+    <View style={s.screen}>
       <View style={s.headerArea}>
         <Text style={s.pageTitle}>PLAN</Text>
         <Text style={s.pageHint}>Tap a day to preview and start your workout</Text>
@@ -188,12 +187,12 @@ export default function CalendarScreen() {
           })}
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
 const s = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: C.bg },
+  screen: { flex: 1, backgroundColor: C.bg, paddingTop: 50 },
   headerArea: { paddingTop: 16, paddingHorizontal: 14, paddingBottom: 10 },
   pageTitle: { fontFamily: 'Oswald_700Bold', fontSize: 20, color: C.text, letterSpacing: 1, marginBottom: 4 },
   pageHint: { fontSize: 11, color: C.muted },
