@@ -102,7 +102,7 @@ export const PROG = [
 
 export const TRICON_PHASES = (hold = 5) => [
   { repRange: '1 TO 3 REPS', name: 'EXPLOSIVE REPS', color: C.orange, bg: 'rgba(232,136,58,0.1)', steps: [{ time: 'EXP↑', desc: 'Drive up as fast as possible — maximum intent, full control' }, { time: '3s↓', desc: '3 second controlled eccentric descent' }], why: 'Recruits fast-twitch motor units. Fires the nervous system without joint stress.' },
-  { repRange: '3 TO 6 REPS', name: 'ISOMETRIC HOLDS', color: C.accent, bg: 'rgba(200,169,110,0.1)', steps: [{ time: '3s↓', desc: '3 second controlled eccentric descent' }, { time: `${hold}s⏸`, desc: `${hold}s isometric hold at bottom — squeeze hard, no bounce${hold === 10 ? ' (advanced)' : ''}` }], why: 'Builds tendon strength and joint stability. Critical for older athletes' injury prevention.' },
+  { repRange: '3 TO 6 REPS', name: 'ISOMETRIC HOLDS', color: C.accent, bg: 'rgba(200,169,110,0.1)', steps: [{ time: '3s↓', desc: '3 second controlled eccentric descent' }, { time: `${hold}s⏸`, desc: `${hold}s isometric hold at bottom — squeeze hard, no bounce${hold === 10 ? ' (advanced)' : ''}` }], why: "Builds tendon strength and joint stability. Critical for older athletes' injury prevention." },
   { repRange: '6 TO 9 REPS', name: 'FULL RANGE OF MOTION', color: C.green, bg: 'rgba(76,175,125,0.1)', steps: [{ time: '3s↓', desc: '3 second controlled eccentric descent' }, { time: '3s↑', desc: '3 second controlled concentric lift — full range of motion' }], why: 'Maximises time under tension for hypertrophy through complete ROM.' },
 ];
 
