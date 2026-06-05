@@ -1,5 +1,6 @@
 import 'react-native-url-polyfill/auto';
 import React, { useState, useEffect } from 'react';
+import * as Updates from 'expo-updates';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -121,8 +122,24 @@ function AuthGate({ children }) {
   return children;
 }
 
+async function checkForUpdates() {
+  try {
+    const update = await Updates.checkForUpdateAsync();
+    if (update.isAvailable) {
+      await Updates.fetchUpdateAsync();
+      await Updates.reloadAsync();
+    }
+  } catch (e) {
+    // silently fail — never block the user
+  }
+}
+
 export default function App() {
   const [fontsLoaded] = useFonts({ Oswald_400Regular, Oswald_600SemiBold, Oswald_700Bold });
+
+  useEffect(() => {
+    checkForUpdates();
+  }, []);
 
   if (!fontsLoaded) {
     return (
