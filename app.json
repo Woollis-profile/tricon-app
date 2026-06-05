@@ -24,10 +24,16 @@
       "enabled": true,
       "checkAutomatically": "ON_LOAD",
       "fallbackToCacheTimeout": 3000,
-      "url": "https://u.expo.dev/YOUR_PROJECT_ID"
+      "url": "https://u.expo.dev/acb0370f-661a-46db-b2cd-5c32ddac9d08"
     },
     "runtimeVersion": {
       "policy": "appVersion"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "acb0370f-661a-46db-b2cd-5c32ddac9d08"
+      }
+    },
+    "owner": "gharvz"
   }
 }
