@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { C, WORKOUT_DEFS, SCHEDULE, FRIDAY_WORKOUTS, DN, PROG, getWeekDates } from '../constants';
 import { useAppContext } from '../context';
 
 export default function CalendarScreen() {
+  const insets = useSafeAreaInsets();
   const navigation = useNavigation();
   const { sessions, weekIdx } = useAppContext();
   const weekDates = getWeekDates();
@@ -110,7 +112,7 @@ export default function CalendarScreen() {
   };
 
   return (
-    <View style={s.screen}>
+    <View style={[s.screen, { paddingTop: insets.top }]}>
       <View style={s.headerArea}>
         <Text style={s.pageTitle}>PLAN</Text>
         <Text style={s.pageHint}>Tap a day to preview and start your workout</Text>
@@ -182,7 +184,7 @@ export default function CalendarScreen() {
 }
 
 const s = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: C.bg, paddingTop: 50 },
+  screen: { flex: 1, backgroundColor: C.bg },
   headerArea: { paddingTop: 16, paddingHorizontal: 14, paddingBottom: 10 },
   pageTitle: { fontFamily: 'Oswald_700Bold', fontSize: 20, color: C.text, letterSpacing: 1, marginBottom: 4 },
   pageHint: { fontSize: 11, color: C.muted },

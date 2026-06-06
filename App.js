@@ -170,7 +170,7 @@ const tb = StyleSheet.create({
     borderTopColor: C.border,
     height: 70,
     paddingBottom: 12,
-    paddingTop: 4,
+    paddingTop: 0,
     paddingHorizontal: 0,
   },
 });
