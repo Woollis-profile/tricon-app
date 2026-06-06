@@ -41,6 +41,9 @@ export default function WorkoutScreen() {
   const [showAmrapModal, setShowAmrapModal] = useState(false);
   const [finalChecked, setFinalChecked] = useState(() => Array(list.length).fill(false));
   const [finalPushupReps, setFinalPushupReps] = useState(() => String(Math.max(1, Math.floor((pushupMax || 10) / 2))));
+  const [showFlowModal, setShowFlowModal] = useState(false);
+  const [flowPartial, setFlowPartial] = useState(null);
+  const [flowPartialChecked, setFlowPartialChecked] = useState(() => Array(list.length).fill(false));
   const elRef = useRef(null);
   const currentRound = roundTimes.length;
   const halfPushups = Math.max(1, Math.floor((pushupMax || 10) / 2));
@@ -85,9 +88,7 @@ export default function WorkoutScreen() {
   };
 
   const handleCompleteFlowRound = (time) => {
-    const newRounds = [...roundTimes, time];
-    setRoundTimes(newRounds);
-    if (newRounds.length >= wkDef.rounds) setTimeout(() => setPhase('done'), 600);
+    setRoundTimes(prev => [...prev, time]);
   };
 
   const handleAmrapRoundComplete = () => setAmrapRounds(r => r + 1);
@@ -115,6 +116,23 @@ export default function WorkoutScreen() {
     setPhase('done');
   };
 
+  const handleSaveFlowPartial = () => {
+    setFlowPartial({
+      exercises: list.map((ex, i) => ({
+        id: ex.id, name: ex.name,
+        completed: flowPartialChecked[i],
+        reps: flowPartialChecked[i] ? ex.reps : 0,
+      })),
+    });
+    setShowFlowModal(false);
+    setPhase('done');
+  };
+
+  const handleSkipFlowPartial = () => {
+    setShowFlowModal(false);
+    setPhase('done');
+  };
+
   const totalVol = exData.reduce((acc, ex) =>
     acc + ex.sets.reduce((a, s) => a + (parseFloat(ex.weight) || 0) * (parseInt(s.reps) || 0), 0), 0);
 
@@ -125,7 +143,7 @@ export default function WorkoutScreen() {
     setSessions(prev => [...prev, {
       type, date: new Date().toISOString(), duration: elapsed,
       volume: isAMRAP ? amrapRounds : isFlow ? roundTimes.length : totalVol,
-      exData, roundTimes, amrapRounds, amrapPartial,
+      exData, roundTimes, amrapRounds, amrapPartial, flowPartial,
     }]);
     navigation.navigate('Main');
   };
@@ -327,7 +345,7 @@ export default function WorkoutScreen() {
         title={isAMRAP ? `${fmt(AMRAP_TOTAL - elapsed)} LEFT` : fmt(elapsed)}
         onBack={() => navigation.goBack()}
         right={
-          <TouchableOpacity onPress={() => isAMRAP ? setShowAmrapModal(true) : setPhase('done')}
+          <TouchableOpacity onPress={() => isAMRAP ? setShowAmrapModal(true) : isFlow ? setShowFlowModal(true) : setPhase('done')}
             style={[s.finishBtn, { backgroundColor: isAMRAP ? C.purple + '20' : 'rgba(76,175,125,0.15)', borderColor: isAMRAP ? C.purple + '40' : 'rgba(76,175,125,0.3)' }]}>
             <Text style={[s.finishBtnText, { color: isAMRAP ? C.purple : C.green }]}>FINISH</Text>
           </TouchableOpacity>
@@ -386,6 +404,40 @@ export default function WorkoutScreen() {
           onDone={() => setRest(null)}
           onSkip={() => setRest(null)}
         />
+      )}
+      {isFlow && (
+        <Modal visible={showFlowModal} transparent animationType="fade" onRequestClose={() => setShowFlowModal(false)}>
+          <View style={s.modalOverlay}>
+            <View style={s.modalCard}>
+              <Text style={s.modalTitle}>LOG PARTIAL ROUND?</Text>
+              <Text style={s.modalSub}>Tick the exercises you completed in the partial round</Text>
+              {list.map((ex, i) => {
+                const checked = flowPartialChecked[i];
+                return (
+                  <TouchableOpacity key={ex.id}
+                    onPress={() => setFlowPartialChecked(prev => prev.map((v, idx) => idx === i ? !v : v))}
+                    style={[s.modalExRow, checked && s.modalExRowChecked, i < list.length - 1 && s.modalExRowBorder]}>
+                    <View style={[s.modalCheckbox, checked && s.modalCheckboxChecked]}>
+                      {checked && <Text style={s.modalCheckMark}>✓</Text>}
+                    </View>
+                    <View style={s.modalExInfo}>
+                      <Text style={[s.modalExName, checked && s.modalExNameDone]}>{ex.name}</Text>
+                      <Text style={s.modalExDetail}>×{ex.reps} · {ex.muscle}</Text>
+                    </View>
+                  </TouchableOpacity>
+                );
+              })}
+              <View style={s.modalActions}>
+                <TouchableOpacity onPress={handleSaveFlowPartial} style={[s.modalBtn, s.modalBtnSave]}>
+                  <Text style={s.modalBtnSaveText}>SAVE PARTIAL</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={handleSkipFlowPartial} style={[s.modalBtn, s.modalBtnSkip]}>
+                  <Text style={s.modalBtnSkipText}>SKIP</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
       )}
       {isAMRAP && (
         <Modal visible={showAmrapModal} transparent animationType="fade" onRequestClose={() => setShowAmrapModal(false)}>
