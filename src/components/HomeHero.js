@@ -48,6 +48,7 @@ const s = StyleSheet.create({
     letterSpacing: 4,
     textAlign: 'center',
     lineHeight: 52,
+    marginBottom: 6,
   },
   title2: {
     fontFamily: 'Oswald_700Bold',
@@ -56,6 +57,7 @@ const s = StyleSheet.create({
     letterSpacing: 4,
     textAlign: 'center',
     lineHeight: 52,
+    marginTop: 6,
     marginBottom: 0,
   },
   statsRow: {
