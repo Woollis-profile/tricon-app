@@ -31,7 +31,7 @@ export default function StatsScreen() {
       <View style={s.screen}>
         <TopBar title={ex.name} onBack={() => setDrillEx(null)}
           right={<View style={[s.catBadge, { backgroundColor: col + '18' }]}><Text style={[s.catBadgeText, { color: col }]}>{CAT_LABEL[ex.cat]}</Text></View>} />
-        <ScrollView style={s.scroll} contentContainerStyle={{ paddingBottom: 80 }}>
+        <ScrollView style={s.scroll} contentContainerStyle={{ paddingBottom: 100 }}>
           <View style={s.drillStats}>
             {[
               { val: tw !== null ? tw : '—', val2: null, lbl: `THIS WK\n${unit}`, col: C.text, bg: C.card, bdr: C.border },
@@ -74,7 +74,7 @@ export default function StatsScreen() {
         </View>
       </View>
 
-      <ScrollView style={s.scroll} contentContainerStyle={{ paddingBottom: 80, backgroundColor: C.bg }}>
+      <ScrollView style={s.scroll} contentContainerStyle={{ paddingBottom: 100, backgroundColor: C.bg }}>
         {statsTab === 'exercises' ? (
           <>
             <View style={s.filterRow}>
