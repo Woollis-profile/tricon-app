@@ -41,7 +41,7 @@ function TabIcon({ icon, label, focused }) {
   return (
     <View style={tb.iconWrap}>
       <Text style={[tb.icon, focused && { color: C.accent }]}>{icon}</Text>
-      <Text style={[tb.label, focused && { color: C.accent }]}>{label}</Text>
+      <Text style={[tb.label, focused && { color: C.accent }]} numberOfLines={1}>{label}</Text>
       {focused && <View style={tb.indicator} />}
     </View>
   );
@@ -55,7 +55,6 @@ function MainTabs() {
         headerShown: false,
         tabBarStyle: [tb.bar, { position: 'absolute', paddingBottom: insets.bottom }],
         tabBarShowLabel: false,
-        tabBarLabelStyle: { fontSize: 9, letterSpacing: 0.5 },
       }}
     >
       {TABS.map(({ id, icon, label, component }) => (
@@ -178,6 +177,6 @@ const tb = StyleSheet.create({
   },
   iconWrap: { alignItems: 'center', justifyContent: 'center', gap: 2 },
   icon: { fontSize: 18, lineHeight: 20, color: C.muted },
-  label: { fontSize: 9, fontFamily: 'Oswald_700Bold', letterSpacing: 1, color: C.muted },
+  label: { fontSize: 9, fontFamily: 'Oswald_700Bold', letterSpacing: 0, color: C.muted },
   indicator: { width: 16, height: 2, backgroundColor: C.accent, borderRadius: 1, marginTop: 1 },
 });
