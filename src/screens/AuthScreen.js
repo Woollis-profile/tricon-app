@@ -1,27 +1,43 @@
 import React, { useState } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity, StyleSheet,
-  KeyboardAvoidingView, Platform, ScrollView, ActivityIndicator,
+  ActivityIndicator, Modal, ImageBackground,
+  KeyboardAvoidingView, Platform,
 } from 'react-native';
+import Svg, { G, Rect } from 'react-native-svg';
 import { supabase } from '../../lib/supabase';
-import { C } from '../constants';
+
+const GOLD  = '#c8a96e';
+const CREAM = '#f5f0e8';
+const DARK  = '#1b1a18';
+const BADGE = 280;
 
 export default function AuthScreen() {
-  const [mode, setMode] = useState('login'); // 'login' | 'signup'
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [info, setInfo] = useState(null);
+  const [modal,      setModal]      = useState(null); // null | 'signup' | 'login'
+  const [email,      setEmail]      = useState('');
+  const [password,   setPassword]   = useState('');
+  const [loading,    setLoading]    = useState(false);
+  const [error,      setError]      = useState(null);
+  const [info,       setInfo]       = useState(null);
+  const [restoreMsg, setRestoreMsg] = useState(false);
 
-  const isLogin = mode === 'login';
+  const openModal = (mode) => {
+    setEmail(''); setPassword('');
+    setError(null); setInfo(null);
+    setModal(mode);
+  };
+
+  const closeModal = () => setModal(null);
 
   const handleSubmit = async () => {
-    setError(null);
-    setInfo(null);
+    if (!email.trim() || !password.trim()) {
+      setError('Please enter your email and password');
+      return;
+    }
+    setError(null); setInfo(null);
     setLoading(true);
     try {
-      if (isLogin) {
+      if (modal === 'login') {
         const { error: err } = await supabase.auth.signInWithPassword({ email, password });
         if (err) setError(err.message);
       } else {
@@ -35,100 +51,371 @@ export default function AuthScreen() {
   };
 
   return (
-    <KeyboardAvoidingView style={s.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <ScrollView contentContainerStyle={s.scroll} keyboardShouldPersistTaps="handled">
-        <View style={s.hero}>
-          <Text style={s.heroSub}>TRAINING METHOD FOR THE OLDER AND WISER ATHLETES</Text>
-          <Text style={s.heroTitle}>TRICON</Text>
-          <Text style={s.heroSub2}>WORKOUT</Text>
+    <ImageBackground
+      source={require('../../assets/gym-bg.png')}
+      style={s.bg}
+      resizeMode="cover"
+    >
+      <View style={s.overlay} />
+
+      {/* ── Badge + tagline ─────────────────────────────────────────── */}
+      <View style={s.center}>
+        <View style={s.badge}>
+          {/* Barbell triangle mark */}
+          <Svg
+            viewBox="0 0 440 440"
+            width={BADGE}
+            height={BADGE}
+            style={{ position: 'absolute' }}
+          >
+            <G transform="translate(220 220) scale(1.2) translate(-220 -220)">
+              <G transform="translate(220 305) rotate(0)" fill={DARK}>
+                <Rect x="-147.224" y="-3.5" width="294.448" height="7" rx="3.5"/>
+                <Rect x="77"      y="-9"  width="5"   height="18" rx="2"/>
+                <Rect x="88"      y="-27" width="9.5" height="54" rx="3"/>
+                <Rect x="101"     y="-22" width="9"   height="44" rx="3"/>
+                <Rect x="114"     y="-17" width="8.5" height="34" rx="2.5"/>
+                <Rect x="-82"     y="-9"  width="5"   height="18" rx="2"/>
+                <Rect x="-97.5"   y="-27" width="9.5" height="54" rx="3"/>
+                <Rect x="-110"    y="-22" width="9"   height="44" rx="3"/>
+                <Rect x="-122.5"  y="-17" width="8.5" height="34" rx="2.5"/>
+              </G>
+              <G transform="translate(146.388 177.5) rotate(-60)" fill={DARK}>
+                <Rect x="-147.224" y="-3.5" width="294.448" height="7" rx="3.5"/>
+                <Rect x="77"      y="-9"  width="5"   height="18" rx="2"/>
+                <Rect x="88"      y="-27" width="9.5" height="54" rx="3"/>
+                <Rect x="101"     y="-22" width="9"   height="44" rx="3"/>
+                <Rect x="114"     y="-17" width="8.5" height="34" rx="2.5"/>
+                <Rect x="-82"     y="-9"  width="5"   height="18" rx="2"/>
+                <Rect x="-97.5"   y="-27" width="9.5" height="54" rx="3"/>
+                <Rect x="-110"    y="-22" width="9"   height="44" rx="3"/>
+                <Rect x="-122.5"  y="-17" width="8.5" height="34" rx="2.5"/>
+              </G>
+              <G transform="translate(293.612 177.5) rotate(60)" fill={DARK}>
+                <Rect x="-147.224" y="-3.5" width="294.448" height="7" rx="3.5"/>
+                <Rect x="77"      y="-9"  width="5"   height="18" rx="2"/>
+                <Rect x="88"      y="-27" width="9.5" height="54" rx="3"/>
+                <Rect x="101"     y="-22" width="9"   height="44" rx="3"/>
+                <Rect x="114"     y="-17" width="8.5" height="34" rx="2.5"/>
+                <Rect x="-82"     y="-9"  width="5"   height="18" rx="2"/>
+                <Rect x="-97.5"   y="-27" width="9.5" height="54" rx="3"/>
+                <Rect x="-110"    y="-22" width="9"   height="44" rx="3"/>
+                <Rect x="-122.5"  y="-17" width="8.5" height="34" rx="2.5"/>
+              </G>
+            </G>
+          </Svg>
+
+          {/* Cream cut — hides barbell bars behind TRICON wordmark */}
+          <View style={s.cut} />
+
+          {/* Wordlock */}
+          <View style={s.wordlock}>
+            <Text style={s.tricon}>TRICON</Text>
+            <Text style={s.training}>TRAINING</Text>
+          </View>
         </View>
 
-        <View style={s.card}>
-          <Text style={s.cardTitle}>{isLogin ? 'SIGN IN' : 'CREATE ACCOUNT'}</Text>
+        <Text style={s.tagline}>TRAINING METHOD FOR THE OLDER AND WISER ATHLETE</Text>
+      </View>
 
-          {error && (
-            <View style={s.errorBox}>
-              <Text style={s.errorText}>{error}</Text>
-            </View>
-          )}
-          {info && (
-            <View style={s.infoBox}>
-              <Text style={s.infoText}>{info}</Text>
-            </View>
-          )}
+      {/* ── Buttons ─────────────────────────────────────────────────── */}
+      <View style={s.actions}>
+        <TouchableOpacity
+          style={s.btnCream}
+          onPress={() => openModal('signup')}
+          activeOpacity={0.85}
+        >
+          <Text style={s.btnCreamText}>CREATE ACCOUNT</Text>
+        </TouchableOpacity>
 
-          <Text style={s.label}>EMAIL</Text>
-          <TextInput
-            style={s.input}
-            placeholder="you@example.com"
-            placeholderTextColor={C.muted}
-            value={email}
-            onChangeText={setEmail}
-            autoCapitalize="none"
-            keyboardType="email-address"
-            autoComplete="email"
-          />
+        <TouchableOpacity
+          style={s.btnGold}
+          onPress={() => openModal('login')}
+          activeOpacity={0.85}
+        >
+          <Text style={s.btnGoldText}>LOG IN</Text>
+        </TouchableOpacity>
 
-          <Text style={s.label}>PASSWORD</Text>
-          <TextInput
-            style={s.input}
-            placeholder="••••••••"
-            placeholderTextColor={C.muted}
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-            autoComplete={isLogin ? 'password' : 'new-password'}
-          />
-
-          <TouchableOpacity
-            style={[s.submitBtn, loading && s.submitBtnDisabled]}
-            onPress={handleSubmit}
-            disabled={loading}
-          >
-            {loading
-              ? <ActivityIndicator color="#0a0c0f" />
-              : <Text style={s.submitBtnText}>{isLogin ? 'SIGN IN →' : 'CREATE ACCOUNT →'}</Text>
-            }
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => { setMode(isLogin ? 'signup' : 'login'); setError(null); setInfo(null); }} style={s.switchRow}>
-            <Text style={s.switchText}>
-              {isLogin ? "Don't have an account? " : 'Already have an account? '}
-              <Text style={s.switchLink}>{isLogin ? 'Sign up' : 'Sign in'}</Text>
+        {restoreMsg ? (
+          <Text style={s.restoreInfo}>
+            Restore purchase will be available when the app launches on the App Store
+          </Text>
+        ) : (
+          <TouchableOpacity onPress={() => setRestoreMsg(true)} activeOpacity={0.7}>
+            <Text style={s.restoreLink}>
+              {'MEMBER ALREADY?  '}
+              <Text style={s.restoreLinkGold}>RESTORE PURCHASE</Text>
             </Text>
           </TouchableOpacity>
-        </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+        )}
+      </View>
+
+      {/* ── Auth modal (slides up from bottom) ──────────────────────── */}
+      <Modal
+        visible={modal !== null}
+        animationType="slide"
+        transparent
+        onRequestClose={closeModal}
+      >
+        <KeyboardAvoidingView
+          style={s.modalWrap}
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        >
+          <TouchableOpacity style={s.modalBackdrop} onPress={closeModal} activeOpacity={1} />
+
+          <View style={s.sheet}>
+            <View style={s.sheetHeader}>
+              <Text style={s.sheetTitle}>
+                {modal === 'login' ? 'SIGN IN' : 'CREATE ACCOUNT'}
+              </Text>
+              <TouchableOpacity
+                onPress={closeModal}
+                hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+              >
+                <Text style={s.closeBtn}>✕</Text>
+              </TouchableOpacity>
+            </View>
+
+            {error && (
+              <View style={s.errorBox}>
+                <Text style={s.errorText}>{error}</Text>
+              </View>
+            )}
+            {info && (
+              <View style={s.infoBox}>
+                <Text style={s.infoText}>{info}</Text>
+              </View>
+            )}
+
+            <Text style={s.label}>EMAIL</Text>
+            <TextInput
+              style={s.input}
+              placeholder="you@example.com"
+              placeholderTextColor="rgba(255,255,255,0.3)"
+              value={email}
+              onChangeText={setEmail}
+              autoCapitalize="none"
+              keyboardType="email-address"
+              autoComplete="email"
+            />
+
+            <Text style={s.label}>PASSWORD</Text>
+            <TextInput
+              style={s.input}
+              placeholder="••••••••"
+              placeholderTextColor="rgba(255,255,255,0.3)"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+              autoComplete={modal === 'login' ? 'password' : 'new-password'}
+            />
+
+            <TouchableOpacity
+              style={[s.submitBtn, loading && s.submitBtnDisabled]}
+              onPress={handleSubmit}
+              disabled={loading}
+              activeOpacity={0.85}
+            >
+              {loading ? (
+                <ActivityIndicator color={DARK} />
+              ) : (
+                <Text style={s.submitBtnText}>
+                  {modal === 'login' ? 'SIGN IN →' : 'CREATE ACCOUNT →'}
+                </Text>
+              )}
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
+    </ImageBackground>
   );
 }
 
 const s = StyleSheet.create({
-  flex: { flex: 1, backgroundColor: C.bg },
-  scroll: { flexGrow: 1, justifyContent: 'center', paddingHorizontal: 24, paddingVertical: 40 },
-  hero: { alignItems: 'center', marginBottom: 36 },
-  heroSub: { fontSize: 10, color: C.dim, letterSpacing: 2, fontFamily: 'Oswald_400Regular', marginBottom: 4 },
-  heroTitle: { fontFamily: 'Oswald_700Bold', fontSize: 52, color: C.text, lineHeight: 48, letterSpacing: 2 },
-  heroSub2: { fontFamily: 'Oswald_700Bold', fontSize: 52, color: C.accent, lineHeight: 48, letterSpacing: 2 },
-  card: { backgroundColor: C.card, borderWidth: 1, borderColor: C.border, borderRadius: 16, padding: 24 },
-  cardTitle: { fontFamily: 'Oswald_700Bold', fontSize: 20, color: C.text, letterSpacing: 1, marginBottom: 20 },
-  errorBox: { backgroundColor: 'rgba(224,82,82,0.1)', borderWidth: 1, borderColor: 'rgba(224,82,82,0.3)', borderRadius: 8, padding: 12, marginBottom: 16 },
-  errorText: { fontSize: 13, color: C.red, lineHeight: 18 },
-  infoBox: { backgroundColor: 'rgba(76,175,125,0.1)', borderWidth: 1, borderColor: 'rgba(76,175,125,0.3)', borderRadius: 8, padding: 12, marginBottom: 16 },
-  infoText: { fontSize: 13, color: C.green, lineHeight: 18 },
-  label: { fontSize: 10, color: C.muted, letterSpacing: 1, fontFamily: 'Oswald_400Regular', marginBottom: 6 },
+  bg:      { flex: 1 },
+  overlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0,0,0,0.55)' },
+
+  // ── Badge area ────────────────────────────────────────────────────
+  center: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  badge: {
+    width:           BADGE,
+    height:          BADGE,
+    borderRadius:    BADGE / 2,
+    backgroundColor: CREAM,
+    borderWidth:     3,
+    borderColor:     GOLD,
+    overflow:        'hidden',
+    alignItems:      'center',
+    justifyContent:  'center',
+  },
+  // Cream rectangle that hides barbell bars sitting behind TRICON text
+  // Mirrors web clip-path: inset(31% 5% 49% 5%) on a 280px circle
+  cut: {
+    position:        'absolute',
+    top:             Math.round(BADGE * 0.31),
+    left:            Math.round(BADGE * 0.05),
+    width:           Math.round(BADGE * 0.90),
+    height:          Math.round(BADGE * 0.20),
+    backgroundColor: CREAM,
+  },
+  wordlock: {
+    alignItems: 'center',
+    transform:  [{ translateY: -16 }],
+  },
+  tricon: {
+    fontFamily:    'Oswald_700Bold',
+    fontSize:      48,
+    color:         GOLD,
+    lineHeight:    48,
+    letterSpacing: 0.5,
+  },
+  training: {
+    fontFamily:    'Oswald_600SemiBold',
+    fontSize:      14,
+    letterSpacing: 6,
+    color:         DARK,
+    marginTop:     3,
+  },
+  tagline: {
+    marginTop:     24,
+    fontSize:      10,
+    color:         'rgba(255,255,255,0.7)',
+    letterSpacing: 2,
+    textAlign:     'center',
+    paddingHorizontal: 40,
+    lineHeight:    16,
+  },
+
+  // ── Buttons ───────────────────────────────────────────────────────
+  actions: {
+    paddingHorizontal: 32,
+    paddingBottom:     48,
+  },
+  btnCream: {
+    backgroundColor: CREAM,
+    borderRadius:    4,
+    paddingVertical: 16,
+    alignItems:      'center',
+  },
+  btnCreamText: {
+    fontFamily:    'Oswald_700Bold',
+    fontSize:      14,
+    letterSpacing: 2,
+    color:         DARK,
+  },
+  btnGold: {
+    backgroundColor: GOLD,
+    borderRadius:    4,
+    paddingVertical: 16,
+    alignItems:      'center',
+    marginTop:       12,
+  },
+  btnGoldText: {
+    fontFamily:    'Oswald_700Bold',
+    fontSize:      14,
+    letterSpacing: 2,
+    color:         DARK,
+  },
+  restoreLink: {
+    marginTop:     16,
+    fontSize:      11,
+    color:         'rgba(255,255,255,0.5)',
+    letterSpacing: 1,
+    textAlign:     'center',
+  },
+  restoreLinkGold: { color: GOLD },
+  restoreInfo: {
+    marginTop:     16,
+    fontSize:      11,
+    color:         'rgba(255,255,255,0.5)',
+    letterSpacing: 1,
+    textAlign:     'center',
+    lineHeight:    16,
+  },
+
+  // ── Modal sheet ───────────────────────────────────────────────────
+  modalWrap: {
+    flex:           1,
+    justifyContent: 'flex-end',
+  },
+  modalBackdrop: { flex: 1 },
+  sheet: {
+    backgroundColor:     '#0d1117',
+    borderTopLeftRadius:  20,
+    borderTopRightRadius: 20,
+    padding:              28,
+    paddingBottom:        48,
+    borderTopWidth:       1,
+    borderTopColor:       'rgba(200,169,110,0.2)',
+  },
+  sheetHeader: {
+    flexDirection:  'row',
+    justifyContent: 'space-between',
+    alignItems:     'center',
+    marginBottom:   24,
+  },
+  sheetTitle: {
+    fontFamily:    'Oswald_700Bold',
+    fontSize:      20,
+    color:         '#fff',
+    letterSpacing: 1,
+  },
+  closeBtn: {
+    fontSize: 18,
+    color:    'rgba(255,255,255,0.5)',
+  },
+  errorBox: {
+    backgroundColor: 'rgba(224,82,82,0.1)',
+    borderWidth:     1,
+    borderColor:     'rgba(224,82,82,0.3)',
+    borderRadius:    8,
+    padding:         12,
+    marginBottom:    16,
+  },
+  errorText: { fontSize: 13, color: '#e05252', lineHeight: 18 },
+  infoBox: {
+    backgroundColor: 'rgba(76,175,125,0.1)',
+    borderWidth:     1,
+    borderColor:     'rgba(76,175,125,0.3)',
+    borderRadius:    8,
+    padding:         12,
+    marginBottom:    16,
+  },
+  infoText: { fontSize: 13, color: '#4caf7d', lineHeight: 18 },
+  label: {
+    fontSize:      10,
+    color:         'rgba(255,255,255,0.5)',
+    letterSpacing: 1,
+    fontFamily:    'Oswald_400Regular',
+    marginBottom:  6,
+  },
   input: {
-    backgroundColor: '#0d1117', borderWidth: 1, borderColor: C.border,
-    borderRadius: 10, color: C.text, paddingVertical: 13, paddingHorizontal: 14,
-    fontSize: 15, marginBottom: 16,
+    backgroundColor: '#161b22',
+    borderWidth:     1,
+    borderColor:     'rgba(255,255,255,0.1)',
+    borderRadius:    8,
+    color:           '#fff',
+    paddingVertical:   13,
+    paddingHorizontal: 14,
+    fontSize:        15,
+    marginBottom:    16,
   },
   submitBtn: {
-    backgroundColor: C.accent, borderRadius: 10, paddingVertical: 14,
-    alignItems: 'center', marginTop: 4,
+    backgroundColor: GOLD,
+    borderRadius:    8,
+    paddingVertical: 14,
+    alignItems:      'center',
+    marginTop:       4,
   },
   submitBtnDisabled: { opacity: 0.6 },
-  submitBtnText: { fontFamily: 'Oswald_700Bold', fontSize: 15, color: '#0a0c0f', letterSpacing: 1 },
-  switchRow: { marginTop: 20, alignItems: 'center' },
-  switchText: { fontSize: 13, color: C.muted },
-  switchLink: { color: C.accent, fontWeight: '700' },
+  submitBtnText: {
+    fontFamily:    'Oswald_700Bold',
+    fontSize:      15,
+    color:         DARK,
+    letterSpacing: 1,
+  },
 });
