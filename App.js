@@ -33,8 +33,8 @@ const TABS = [
   { id: 'Home', icon: '⌂', label: 'HOME', component: HomeScreen },
   { id: 'Plan', icon: '▦', label: 'PLAN', component: CalendarScreen },
   { id: 'Stats', icon: '◎', label: 'STATS', component: StatsScreen },
-  { id: 'Library', icon: '≡', label: 'LIBRARY', component: LibraryScreen },
-  { id: 'Settings', icon: '⚙', label: 'SETTINGS', component: SettingsScreen },
+  { id: 'Library', icon: '≡', label: 'LIB', component: LibraryScreen },
+  { id: 'Settings', icon: '⚙', label: 'CONFIG', component: SettingsScreen },
 ];
 
 function TabIcon({ icon, label, focused }) {
@@ -173,10 +173,12 @@ const tb = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: C.border,
     height: 60,
-    paddingBottom: 0,
+    paddingBottom: 8,
+    paddingTop: 4,
+    paddingHorizontal: 0,
   },
-  iconWrap: { alignItems: 'center', justifyContent: 'center', gap: 2 },
-  icon: { fontSize: 18, lineHeight: 20, color: C.muted },
+  iconWrap: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 2 },
+  icon: { fontSize: 16, lineHeight: 18, color: C.muted },
   label: { fontSize: 9, fontFamily: 'Oswald_700Bold', letterSpacing: 0, color: C.muted },
   indicator: { width: 16, height: 2, backgroundColor: C.accent, borderRadius: 1, marginTop: 1 },
 });
