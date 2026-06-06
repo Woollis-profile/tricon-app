@@ -5,6 +5,41 @@ import { C, ALL_EX, CAT_COLOR, CAT_LABEL, buildExHistory, weekWeightFromHistory,
 import { useAppContext } from '../context';
 import TopBar from '../components/TopBar';
 
+function WeightChart({ data, col, unit }) {
+  const [chartW, setChartW] = useState(0);
+  const CHART_H = 80, PAD_X = 10, PAD_Y = 10;
+  if (data.length < 2) return null;
+  const pts = [...data].reverse().slice(-10);
+  const weights = pts.map(d => d.weight);
+  const minW = Math.min(...weights), maxW = Math.max(...weights);
+  const range = maxW - minW || 1;
+  const points = chartW > 0 ? pts.map((d, i) => ({
+    x: PAD_X + (i / (pts.length - 1)) * (chartW - 2 * PAD_X),
+    y: PAD_Y + (1 - (d.weight - minW) / range) * (CHART_H - 2 * PAD_Y),
+  })) : [];
+  const segments = points.slice(0, -1).map((a, i) => {
+    const b = points[i + 1];
+    const dx = b.x - a.x, dy = b.y - a.y;
+    return { len: Math.sqrt(dx * dx + dy * dy), angle: Math.atan2(dy, dx) * 180 / Math.PI, cx: (a.x + b.x) / 2, cy: (a.y + b.y) / 2 };
+  });
+  return (
+    <View style={s.chartWrap}>
+      <View style={{ height: CHART_H, position: 'relative' }} onLayout={e => setChartW(e.nativeEvent.layout.width)}>
+        {chartW > 0 && (<>
+          {segments.map((seg, i) => (
+            <View key={i} style={{ position: 'absolute', left: seg.cx - seg.len / 2, top: seg.cy - 1, width: seg.len, height: 2, backgroundColor: col, opacity: 0.75, transform: [{ rotate: `${seg.angle}deg` }] }} />
+          ))}
+          {points.map((p, i) => (
+            <View key={i} style={{ position: 'absolute', left: p.x - 3, top: p.y - 3, width: 6, height: 6, borderRadius: 3, backgroundColor: i === points.length - 1 ? col : col + 'aa' }} />
+          ))}
+          <Text style={{ position: 'absolute', right: 0, top: 0, fontSize: 8, color: C.muted }}>{maxW} {unit}</Text>
+          <Text style={{ position: 'absolute', right: 0, bottom: 0, fontSize: 8, color: C.muted }}>{minW} {unit}</Text>
+        </>)}
+      </View>
+    </View>
+  );
+}
+
 export default function StatsScreen() {
   const { sessions, unit } = useAppContext();
   const [statsTab, setStatsTab] = useState('exercises');
@@ -18,13 +53,13 @@ export default function StatsScreen() {
   if (drillEx) {
     const ex = ALL_EX.find(e => e.id === drillEx);
     const col = CAT_COLOR[ex.cat];
-    const tw = weekWeightFromHistory(history, ex.id, 0);
-    const lw = weekWeightFromHistory(history, ex.id, -1);
-    const chg = weekChangeFromHistory(history, ex.id);
     const exHist = (history[ex.id] || []).sort((a, b) => new Date(b.date) - new Date(a.date));
-    const absChg = (tw !== null && lw !== null) ? tw - lw : null;
+    const currentW = exHist[0]?.weight ?? null;
+    const prevW = exHist[1]?.weight ?? null;
+    const absChg = (currentW !== null && prevW !== null) ? currentW - prevW : null;
+    const pctChg = (absChg !== null && prevW !== 0) ? (absChg / prevW) * 100 : null;
     const absChgStr = absChg !== null ? `${absChg > 0 ? '+' : ''}${absChg.toFixed(1)} ${unit}` : '—';
-    const pctChgStr = chg !== null ? `${chg > 0 ? '+' : ''}${chg.toFixed(1)}%` : '—';
+    const pctChgStr = pctChg !== null ? `${pctChg > 0 ? '+' : ''}${pctChg.toFixed(1)}%` : '—';
     const chgCol = absChg === null ? C.muted : absChg > 0 ? C.green : absChg < 0 ? C.red : C.muted;
 
     return (
@@ -34,9 +69,9 @@ export default function StatsScreen() {
         <ScrollView style={s.scroll} contentContainerStyle={{ paddingBottom: 100 }}>
           <View style={s.drillStats}>
             {[
-              { val: tw !== null ? tw : '—', val2: null, lbl: `THIS WK\n${unit}`, col: C.text, bg: C.card, bdr: C.border },
-              { val: lw !== null ? lw : '—', val2: null, lbl: `LAST WK\n${unit}`, col: C.muted, bg: C.card, bdr: C.border },
-              { val: absChgStr, val2: pctChgStr, lbl: 'WK CHANGE', col: chgCol, bg: col + '12', bdr: col + '30' },
+              { val: currentW !== null ? currentW : '—', val2: null, lbl: `LATEST\n${unit}`, col: C.text, bg: C.card, bdr: C.border },
+              { val: prevW !== null ? prevW : '—', val2: null, lbl: `PREV SESSION\n${unit}`, col: C.muted, bg: C.card, bdr: C.border },
+              { val: absChgStr, val2: pctChgStr, lbl: 'CHANGE', col: chgCol, bg: col + '12', bdr: col + '30' },
             ].map((st, i) => (
               <View key={i} style={[s.drillStat, { backgroundColor: st.bg, borderColor: st.bdr }]}>
                 <Text style={[s.drillStatNum, { color: st.col }]}>{st.val}</Text>
@@ -45,6 +80,7 @@ export default function StatsScreen() {
               </View>
             ))}
           </View>
+          <WeightChart data={exHist} col={col} unit={unit} />
           <View style={s.histArea}>
             <Text style={s.histLabel}>SESSION LOG</Text>
             {exHist.length === 0 && <Text style={s.noData}>No sessions logged yet.</Text>}
@@ -176,6 +212,7 @@ const s = StyleSheet.create({
   drillStatNum: { fontFamily: 'Oswald_700Bold', fontSize: 18, lineHeight: 18 },
   drillStatPct: { fontFamily: 'Oswald_400Regular', fontSize: 12, marginTop: 2 },
   drillStatLbl: { fontSize: 8, color: C.muted, marginTop: 4, letterSpacing: 1, lineHeight: 12, textAlign: 'center' },
+  chartWrap: { marginHorizontal: 14, marginTop: 10, backgroundColor: C.card, borderWidth: 1, borderColor: C.border, borderRadius: 10, padding: 10 },
   histArea: { paddingHorizontal: 14, paddingTop: 12 },
   histLabel: { fontSize: 10, color: C.muted, letterSpacing: 1, marginBottom: 8 },
   noData: { fontSize: 12, color: C.muted, paddingVertical: 12 },
