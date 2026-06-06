@@ -918,20 +918,23 @@ function StatsScreen({sessions,unit}){
 // ── HomeHero ──────────────────────────────────────────────────────────────────
 function HomeHero({sessions}){
   const tw=sessions.filter(s=>new Date(s.date)>=getWeekStart(0));
-  return(<div style={{position:"relative",overflow:"hidden",background:C.bg}}>
-    <svg style={{position:"absolute",top:0,left:0,width:"100%",height:"100%",opacity:0.04,pointerEvents:"none"}} viewBox="0 0 375 200" preserveAspectRatio="none">
-      {Array.from({length:20},(_,i)=><line key={`v${i}`} x1={i*20} y1="0" x2={i*20} y2="200" stroke={C.accent} strokeWidth="0.5"/>)}
-      {Array.from({length:11},(_,i)=><line key={`h${i}`} x1="0" y1={i*20} x2="375" y2={i*20} stroke={C.accent} strokeWidth="0.5"/>)}
+  return(<div style={{position:"relative",background:C.bg}}>
+    <svg style={{position:"absolute",top:0,left:0,width:"100%",height:"100%",opacity:0.04,pointerEvents:"none"}} viewBox="0 0 375 240" preserveAspectRatio="none">
+      {Array.from({length:20},(_,i)=><line key={`v${i}`} x1={i*20} y1="0" x2={i*20} y2="240" stroke={C.accent} strokeWidth="0.5"/>)}
+      {Array.from({length:13},(_,i)=><line key={`h${i}`} x1="0" y1={i*20} x2="375" y2={i*20} stroke={C.accent} strokeWidth="0.5"/>)}
     </svg>
-    <div style={{position:"absolute",left:0,top:0,bottom:0,width:3,background:`linear-gradient(180deg,${C.accent} 0%,${C.orange} 50%,transparent 100%)`}}/>
-    <div style={{padding:"26px 18px 20px 22px",position:"relative",zIndex:1}}>
-      <div style={{fontSize:10,color:C.dim,letterSpacing:"0.2em",marginBottom:6,fontFamily:"'Oswald',sans-serif"}}>GARY WALKER METHOD · OVER 50s</div>
-      <div style={{fontFamily:"'Oswald',sans-serif",fontSize:42,fontWeight:700,color:C.text,lineHeight:0.9,letterSpacing:"0.02em",marginBottom:2}}>TRICON</div>
-      <div style={{fontFamily:"'Oswald',sans-serif",fontSize:42,fontWeight:700,lineHeight:0.9,letterSpacing:"0.02em",marginBottom:14}}><span style={{color:C.accent}}>WORKOUT</span></div>
-      <div style={{display:"flex",gap:16,marginTop:4}}>
-        {[[sessions.length,"SESSIONS",C.accent],[tw.length,"THIS WEEK",C.text],[9,"REPS/SET",C.text]].map(([v,l,col],i)=>(<div key={l} style={{display:"flex",alignItems:"center",gap:i>0?10:0}}>
-          {i>0&&<div style={{width:1,height:28,background:C.border,marginRight:10}}/>}
-          <div><div style={{fontFamily:"'Oswald',sans-serif",fontSize:26,fontWeight:700,color:col,lineHeight:1}}>{v}</div><div style={{fontSize:9,color:C.muted,letterSpacing:"0.1em"}}>{l}</div></div>
+    <div style={{position:"absolute",left:0,top:0,right:0,height:3,background:`linear-gradient(90deg,${C.accent} 0%,${C.orange} 50%,transparent 100%)`}}/>
+    <div style={{padding:"32px 18px 28px",position:"relative",zIndex:1,textAlign:"center"}}>
+      <div style={{fontSize:10,color:C.dim,letterSpacing:"0.18em",marginBottom:10,fontFamily:"'Oswald',sans-serif"}}>TRAINING METHOD FOR THE OLDER AND WISER ATHLETE</div>
+      <div style={{fontFamily:"'Oswald',sans-serif",fontSize:52,fontWeight:700,color:C.text,lineHeight:1.05,letterSpacing:"0.02em"}}>TRICON</div>
+      <div style={{fontFamily:"'Oswald',sans-serif",fontSize:52,fontWeight:700,lineHeight:1.05,letterSpacing:"0.02em",marginBottom:24}}><span style={{color:C.accent}}>WORKOUT</span></div>
+      <div style={{display:"flex",justifyContent:"center",alignItems:"center"}}>
+        {[[sessions.length,"SESSIONS",C.accent],[tw.length,"THIS WEEK",C.text],[9,"REPS/SET",C.text]].map(([v,l,col],i)=>(<div key={l} style={{display:"flex",alignItems:"center"}}>
+          {i>0&&<div style={{width:1,height:36,background:C.border,margin:"0 20px"}}/>}
+          <div style={{textAlign:"center"}}>
+            <div style={{fontFamily:"'Oswald',sans-serif",fontSize:32,fontWeight:700,color:col,lineHeight:1.1}}>{v}</div>
+            <div style={{fontSize:9,color:C.muted,letterSpacing:"0.12em",marginTop:3}}>{l}</div>
+          </div>
         </div>))}
       </div>
     </div>
