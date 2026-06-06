@@ -2,6 +2,7 @@ import 'react-native-url-polyfill/auto';
 import React, { useState, useEffect } from 'react';
 import * as Updates from 'expo-updates';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -30,17 +31,21 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const TABS = [
-  { id: 'Home', icon: '⌂', label: 'HOME', component: HomeScreen },
-  { id: 'Plan', icon: '▦', label: 'PLAN', component: CalendarScreen },
-  { id: 'Stats', icon: '◎', label: 'STATS', component: StatsScreen },
-  { id: 'Library', icon: '≡', label: 'LIBRARY', component: LibraryScreen },
-  { id: 'Settings', icon: '⚙', label: 'SETTINGS', component: SettingsScreen },
+  { id: 'Home', icon: 'home-outline', iconActive: 'home', label: 'HOME', component: HomeScreen },
+  { id: 'Plan', icon: 'calendar-outline', iconActive: 'calendar', label: 'PLAN', component: CalendarScreen },
+  { id: 'Stats', icon: 'bar-chart-outline', iconActive: 'bar-chart', label: 'STATS', component: StatsScreen },
+  { id: 'Library', icon: 'book-outline', iconActive: 'book', label: 'LIBRARY', component: LibraryScreen },
+  { id: 'Settings', icon: 'settings-outline', iconActive: 'settings', label: 'SETTINGS', component: SettingsScreen },
 ];
 
-function TabIcon({ icon, focused }) {
+function TabIcon({ icon, iconActive, focused }) {
   return (
     <View style={tb.iconWrap}>
-      <Text style={[tb.icon, focused && { color: C.accent }]}>{icon}</Text>
+      <Ionicons
+        name={focused ? iconActive : icon}
+        size={22}
+        color={focused ? C.accent : C.muted}
+      />
       {focused && <View style={tb.indicator} />}
     </View>
   );
@@ -65,7 +70,7 @@ function MainTabs() {
           options={{
             tabBarLabel: label,
             tabBarIcon: ({ focused }) => (
-              <TabIcon icon={icon} focused={focused} />
+              <TabIcon icon={icon} iconActive={iconActive} focused={focused} />
             ),
           }}
         />

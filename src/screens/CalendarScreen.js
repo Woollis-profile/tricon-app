@@ -205,7 +205,7 @@ const s = StyleSheet.create({
   stripRest: { fontSize: 8, color: C.border, marginTop: 4 },
   stripUnderline: { width: 14, height: 2, borderRadius: 1, marginTop: 4 },
   scroll: { flex: 1 },
-  scrollContent: { paddingVertical: 12, paddingHorizontal: 14, paddingBottom: 80 },
+  scrollContent: { paddingVertical: 12, paddingHorizontal: 14, paddingBottom: 80, flexGrow: 1 },
   dayCardWrap: { marginTop: 4 },
   restCard: { backgroundColor: C.card, borderWidth: 1, borderColor: C.border, borderRadius: 12, padding: 18, alignItems: 'center', marginTop: 4 },
   restIcon: { fontSize: 28, marginBottom: 8 },

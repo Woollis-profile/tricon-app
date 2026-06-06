@@ -116,7 +116,7 @@ export default function HomeScreen() {
 const s = StyleSheet.create({
   safe: { flex: 1, backgroundColor: '#0a0c0f' },
   scroll: { flex: 1, backgroundColor: C.bg },
-  content: { paddingBottom: 20, minHeight: Dimensions.get('window').height },
+  content: { paddingBottom: 20, minHeight: Dimensions.get('window').height, flexGrow: 1 },
   weekStrip: { flexDirection: 'row', gap: 4, paddingHorizontal: 14, paddingVertical: 10 },
   dayCell: { flex: 1, borderRadius: 7, paddingVertical: 7, alignItems: 'center' },
   dayCellToday: { backgroundColor: 'rgba(200,169,110,0.13)', borderWidth: 1, borderColor: 'rgba(200,169,110,0.42)' },
