@@ -28,10 +28,11 @@ export default function HomeHero({ sessions }) {
 const s = StyleSheet.create({
   hero: {
     backgroundColor: '#0a0c0f',
-    paddingTop: 0,
+    paddingTop: 14,
     paddingBottom: 32,
     paddingHorizontal: 24,
     alignItems: 'center',
+    overflow: 'visible',
   },
   tagline: {
     fontSize: 11,
@@ -47,7 +48,7 @@ const s = StyleSheet.create({
     color: '#e8e2d6',
     letterSpacing: 4,
     textAlign: 'center',
-    lineHeight: 52,
+    lineHeight: 62,
     marginBottom: 6,
   },
   title2: {
@@ -56,7 +57,7 @@ const s = StyleSheet.create({
     color: '#c8a96e',
     letterSpacing: 4,
     textAlign: 'center',
-    lineHeight: 52,
+    lineHeight: 62,
     marginTop: 6,
     marginBottom: 0,
   },
@@ -69,10 +70,12 @@ const s = StyleSheet.create({
   statItem: {
     flexDirection: 'row',
     alignItems: 'center',
+    overflow: 'visible',
   },
   statInner: {
     alignItems: 'center',
     paddingHorizontal: 16,
+    overflow: 'visible',
   },
   divider: {
     width: 1,
@@ -82,7 +85,7 @@ const s = StyleSheet.create({
   statNum: {
     fontFamily: 'Oswald_700Bold',
     fontSize: 26,
-    lineHeight: 26,
+    lineHeight: 34,
     textAlign: 'center',
   },
   statLbl: {

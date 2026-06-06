@@ -69,8 +69,8 @@ const s = StyleSheet.create({
   label: { fontSize: 10, color: C.muted, letterSpacing: 2, flexShrink: 0 },
   exName: { fontSize: 12, color: C.accent, marginTop: 4, marginBottom: 10, flexShrink: 0, textAlign: 'center' },
   svgWrap: { position: 'relative', alignItems: 'center', justifyContent: 'center' },
-  timeOverlay: { position: 'absolute', alignItems: 'center' },
-  timeNum: { fontFamily: 'Oswald_700Bold', fontSize: 42, color: C.text, lineHeight: 42 },
+  timeOverlay: { position: 'absolute', alignItems: 'center', overflow: 'visible' },
+  timeNum: { fontFamily: 'Oswald_700Bold', fontSize: 42, color: C.text, lineHeight: 55 },
   timeLbl: { fontSize: 10, color: C.muted, letterSpacing: 1, marginTop: 1 },
   skipBtn: {
     width: '100%', marginTop: 14,

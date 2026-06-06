@@ -149,8 +149,8 @@ const s = StyleSheet.create({
   quickBtn: { flex: 1, borderWidth: 1, borderRadius: 7, padding: 8, alignItems: 'center' },
   quickBtnText: { fontSize: 9, fontWeight: '700', letterSpacing: 1 },
   statsTiles: { flexDirection: 'row', gap: 10, marginHorizontal: 14, marginBottom: 14 },
-  statsTile: { flex: 1, backgroundColor: C.card, borderWidth: 1, borderColor: C.border, borderRadius: 12, padding: 13 },
-  statsTileNum: { fontFamily: 'Oswald_700Bold', fontSize: 26 },
+  statsTile: { flex: 1, backgroundColor: C.card, borderWidth: 1, borderColor: C.border, borderRadius: 12, paddingTop: 14, paddingBottom: 13, paddingHorizontal: 13, overflow: 'visible' },
+  statsTileNum: { fontFamily: 'Oswald_700Bold', fontSize: 26, lineHeight: 34 },
   statsTileTitle: { fontSize: 11, color: C.text, marginTop: 3 },
   statsTileSub: { fontSize: 10, color: C.muted },
 });
