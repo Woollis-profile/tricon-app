@@ -1,7 +1,7 @@
 import 'react-native-url-polyfill/auto';
 import React, { useState, useEffect } from 'react';
 import * as Updates from 'expo-updates';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -38,19 +38,6 @@ const TABS = [
   { id: 'Settings', icon: 'settings-outline', iconActive: 'settings', label: 'SETTINGS', component: SettingsScreen },
 ];
 
-function TabIcon({ icon, iconActive, focused }) {
-  return (
-    <View style={tb.iconWrap}>
-      <Ionicons
-        name={focused ? iconActive : icon}
-        size={22}
-        color={focused ? C.accent : C.muted}
-      />
-      {focused && <View style={tb.indicator} />}
-    </View>
-  );
-}
-
 function MainTabs() {
   const insets = useSafeAreaInsets();
   return (
@@ -65,12 +52,12 @@ function MainTabs() {
         tabBarHideOnKeyboard: true,
       }}
     >
-      {TABS.map(({ id, icon, label, component }) => (
+      {TABS.map(({ id, icon, iconActive, label, component }) => (
         <Tab.Screen key={id} name={id} component={component}
           options={{
             tabBarLabel: label,
-            tabBarIcon: ({ focused }) => (
-              <TabIcon icon={icon} iconActive={iconActive} focused={focused} />
+            tabBarIcon: ({ focused, color }) => (
+              <Ionicons name={focused ? iconActive : icon} size={22} color={color} />
             ),
           }}
         />
@@ -186,7 +173,4 @@ const tb = StyleSheet.create({
     paddingTop: 4,
     paddingHorizontal: 0,
   },
-  iconWrap: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 0 },
-  icon: { fontSize: 26, lineHeight: 28, color: C.muted },
-  indicator: { width: 16, height: 2, backgroundColor: C.accent, borderRadius: 1, marginTop: 1 },
 });
