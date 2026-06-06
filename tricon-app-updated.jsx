@@ -918,16 +918,16 @@ function StatsScreen({sessions,unit}){
 // ── HomeHero ──────────────────────────────────────────────────────────────────
 function HomeHero({sessions}){
   const tw=sessions.filter(s=>new Date(s.date)>=getWeekStart(0));
-  return(<div style={{position:"relative",background:C.bg}}>
-    <svg style={{position:"absolute",top:0,left:0,width:"100%",height:"100%",opacity:0.04,pointerEvents:"none"}} viewBox="0 0 375 240" preserveAspectRatio="none">
+  return(<div style={{position:"relative",background:C.bg,minHeight:240}}>
+    <svg style={{position:"absolute",top:0,left:0,width:"100%",height:240,opacity:0.04,pointerEvents:"none"}} viewBox="0 0 375 240" preserveAspectRatio="none">
       {Array.from({length:20},(_,i)=><line key={`v${i}`} x1={i*20} y1="0" x2={i*20} y2="240" stroke={C.accent} strokeWidth="0.5"/>)}
       {Array.from({length:13},(_,i)=><line key={`h${i}`} x1="0" y1={i*20} x2="375" y2={i*20} stroke={C.accent} strokeWidth="0.5"/>)}
     </svg>
-    <div style={{position:"absolute",left:0,top:0,right:0,height:3,background:`linear-gradient(90deg,${C.accent} 0%,${C.orange} 50%,transparent 100%)`}}/>
-    <div style={{padding:"32px 18px 28px",position:"relative",zIndex:1,textAlign:"center"}}>
-      <div style={{fontSize:10,color:C.dim,letterSpacing:"0.18em",marginBottom:10,fontFamily:"'Oswald',sans-serif"}}>TRAINING METHOD FOR THE OLDER AND WISER ATHLETE</div>
-      <div style={{fontFamily:"'Oswald',sans-serif",fontSize:52,fontWeight:700,color:C.text,lineHeight:1.05,letterSpacing:"0.02em"}}>TRICON</div>
-      <div style={{fontFamily:"'Oswald',sans-serif",fontSize:52,fontWeight:700,lineHeight:1.05,letterSpacing:"0.02em",marginBottom:24}}><span style={{color:C.accent}}>WORKOUT</span></div>
+    <div style={{position:"absolute",left:0,top:0,right:0,height:3,background:`linear-gradient(90deg,${C.accent} 0%,${C.orange} 50%,transparent 100%)`,zIndex:2}}/>
+    <div style={{padding:"36px 18px 30px",position:"relative",zIndex:1,textAlign:"center"}}>
+      <div style={{fontSize:10,color:C.dim,letterSpacing:"0.18em",marginBottom:12,fontFamily:"'Oswald',sans-serif"}}>TRAINING METHOD FOR THE OLDER AND WISER ATHLETE</div>
+      <div style={{fontFamily:"'Oswald',sans-serif",fontSize:52,fontWeight:700,color:C.text,lineHeight:1.1,letterSpacing:"0.02em",display:"block"}}>TRICON</div>
+      <div style={{fontFamily:"'Oswald',sans-serif",fontSize:52,fontWeight:700,lineHeight:1.1,letterSpacing:"0.02em",marginBottom:26,display:"block"}}><span style={{color:C.accent}}>WORKOUT</span></div>
       <div style={{display:"flex",justifyContent:"center",alignItems:"center"}}>
         {[[sessions.length,"SESSIONS",C.accent],[tw.length,"THIS WEEK",C.text],[9,"REPS/SET",C.text]].map(([v,l,col],i)=>(<div key={l} style={{display:"flex",alignItems:"center"}}>
           {i>0&&<div style={{width:1,height:36,background:C.border,margin:"0 20px"}}/>}
