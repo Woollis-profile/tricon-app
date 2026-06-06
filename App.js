@@ -37,11 +37,10 @@ const TABS = [
   { id: 'Settings', icon: '⚙', label: 'SETTINGS', component: SettingsScreen },
 ];
 
-function TabIcon({ icon, label, focused }) {
+function TabIcon({ icon, focused }) {
   return (
     <View style={tb.iconWrap}>
       <Text style={[tb.icon, focused && { color: C.accent }]}>{icon}</Text>
-      <Text style={[tb.label, focused && { color: C.accent }]} numberOfLines={1}>{label}</Text>
       {focused && <View style={tb.indicator} />}
     </View>
   );
@@ -62,7 +61,7 @@ function MainTabs() {
         <Tab.Screen key={id} name={id} component={component}
           options={{
             tabBarIcon: ({ focused }) => (
-              <TabIcon icon={icon} label={label} focused={focused} />
+              <TabIcon icon={icon} focused={focused} />
             ),
           }}
         />
@@ -179,7 +178,6 @@ const tb = StyleSheet.create({
     paddingHorizontal: 0,
   },
   iconWrap: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 0 },
-  icon: { fontSize: 22, lineHeight: 24, color: C.muted },
-  label: { fontSize: 9, fontFamily: 'Oswald_700Bold', letterSpacing: 0, color: C.muted },
+  icon: { fontSize: 26, lineHeight: 28, color: C.muted },
   indicator: { width: 16, height: 2, backgroundColor: C.accent, borderRadius: 1, marginTop: 1 },
 });
