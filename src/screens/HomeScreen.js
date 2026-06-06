@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { C, WORKOUT_DEFS, FRIDAY_WORKOUTS, SCHEDULE, DN, getWeekDates, getWeekStart, PROG } from '../constants';
@@ -115,7 +115,7 @@ export default function HomeScreen() {
 
 const s = StyleSheet.create({
   scroll: { flex: 1, backgroundColor: C.bg },
-  content: { paddingBottom: 20 },
+  content: { paddingBottom: 20, minHeight: Dimensions.get('window').height },
   weekStrip: { flexDirection: 'row', gap: 4, paddingHorizontal: 14, paddingVertical: 10 },
   dayCell: { flex: 1, borderRadius: 7, paddingVertical: 7, alignItems: 'center' },
   dayCellToday: { backgroundColor: 'rgba(200,169,110,0.13)', borderWidth: 1, borderColor: 'rgba(200,169,110,0.42)' },

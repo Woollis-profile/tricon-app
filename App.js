@@ -55,6 +55,7 @@ function MainTabs() {
         headerShown: false,
         tabBarStyle: [tb.bar, { position: 'absolute', paddingBottom: insets.bottom }],
         tabBarShowLabel: false,
+        tabBarLabelStyle: { fontSize: 9, letterSpacing: 0.5 },
       }}
     >
       {TABS.map(({ id, icon, label, component }) => (
