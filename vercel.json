@@ -1,17 +1,13 @@
 {
   "version": 2,
+  "root": "web",
   "builds": [
     {
-      "src": "landing/index.html",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "assets/**",
+      "src": "web/**",
       "use": "@vercel/static"
     }
   ],
   "routes": [
-    { "src": "/assets/(.*)", "dest": "/assets/$1" },
-    { "src": "/(.*)", "dest": "/landing/index.html" }
+    { "src": "/(.*)", "dest": "/web/$1" }
   ]
 }
