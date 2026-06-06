@@ -19,8 +19,8 @@ export default function HomeScreen() {
   const startWorkout = (type) => navigation.navigate('Workout', { type });
 
   return (
-    <SafeAreaView style={s.scroll} edges={[]}>
-    <ScrollView contentContainerStyle={s.content}>
+    <SafeAreaView style={s.safe} edges={['top']}>
+    <ScrollView style={s.scroll} contentContainerStyle={s.content}>
       <HomeHero sessions={sessions} />
 
       {/* Mini week strip */}
@@ -114,6 +114,7 @@ export default function HomeScreen() {
 }
 
 const s = StyleSheet.create({
+  safe: { flex: 1, backgroundColor: '#0a0c0f' },
   scroll: { flex: 1, backgroundColor: C.bg },
   content: { paddingBottom: 20, minHeight: Dimensions.get('window').height },
   weekStrip: { flexDirection: 'row', gap: 4, paddingHorizontal: 14, paddingVertical: 10 },
