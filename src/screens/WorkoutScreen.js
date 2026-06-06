@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Linking, Dimensions, Modal, TextInput } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { C, WORKOUT_DEFS, PROG, getList, fmt, AMRAP_TOTAL } from '../constants';
 import { useAppContext } from '../context';
 import { beepDone } from '../audio';
@@ -145,7 +146,7 @@ export default function WorkoutScreen() {
 
   // ── DONE ──
   if (phase === 'done') return (
-    <View style={s.screen}>
+    <SafeAreaView style={s.screen} edges={['top']}>
       <TopBar title="Session Complete" onBack={() => navigation.navigate('Main')} />
       <ScrollView contentContainerStyle={s.doneContent}>
         <Text style={[s.doneIcon, { color: isAMRAP ? C.purple : C.green }]}>{isAMRAP ? '⏱' : '✓'}</Text>
@@ -192,12 +193,12 @@ export default function WorkoutScreen() {
           <Text style={s.saveBtnText}>SAVE SESSION</Text>
         </TouchableOpacity>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 
   // ── WARMUP ──
   if (phase === 'warmup') return (
-    <View style={s.screen}>
+    <SafeAreaView style={s.screen} edges={['top']}>
       <TopBar title={`${wkDef.name} — Warm Up`} onBack={() => navigation.goBack()} />
       <ScrollView contentContainerStyle={s.warmupContent}>
         <View style={s.warmupCard}>
@@ -302,12 +303,12 @@ export default function WorkoutScreen() {
           </Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   );
 
   // ── ACTIVE ──
   return (
-    <View style={s.screen}>
+    <SafeAreaView style={s.screen} edges={['top']}>
       <TopBar
         title={isAMRAP ? `${fmt(AMRAP_TOTAL - elapsed)} LEFT` : fmt(elapsed)}
         onBack={() => navigation.goBack()}
@@ -428,7 +429,7 @@ export default function WorkoutScreen() {
           </View>
         </Modal>
       )}
-    </View>
+    </SafeAreaView>
   );
 }
 

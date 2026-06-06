@@ -63,7 +63,7 @@ export default function StatsScreen() {
     const chgCol = absChg === null ? C.muted : absChg > 0 ? C.green : absChg < 0 ? C.red : C.muted;
 
     return (
-      <View style={s.screen}>
+      <SafeAreaView style={s.screen} edges={['top']}>
         <TopBar title={ex.name} onBack={() => setDrillEx(null)}
           right={<View style={[s.catBadge, { backgroundColor: col + '18' }]}><Text style={[s.catBadgeText, { color: col }]}>{CAT_LABEL[ex.cat]}</Text></View>} />
         <ScrollView style={s.scroll} contentContainerStyle={{ paddingBottom: 100 }}>
@@ -92,7 +92,7 @@ export default function StatsScreen() {
             ))}
           </View>
         </ScrollView>
-      </View>
+      </SafeAreaView>
     );
   }
 

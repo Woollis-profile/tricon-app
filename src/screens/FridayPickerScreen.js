@@ -2,16 +2,16 @@ import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { C } from '../constants';
 
 export default function FridayPickerScreen() {
   const navigation = useNavigation();
-  const insets = useSafeAreaInsets();
   const onSelect = (type) => navigation.navigate('Workout', { type });
 
   return (
-    <ScrollView style={s.scroll} contentContainerStyle={[s.content, { paddingTop: insets.top + 16 }]}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: C.bg }} edges={['top']}>
+    <ScrollView style={s.scroll} contentContainerStyle={s.content}>
       <Text style={s.hint}>Choose your session for today</Text>
 
       {/* AMRAP card */}
@@ -66,6 +66,7 @@ export default function FridayPickerScreen() {
         </LinearGradient>
       </TouchableOpacity>
     </ScrollView>
+    </SafeAreaView>
   );
 }
 

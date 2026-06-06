@@ -28,6 +28,7 @@ export default function HomeHero({ sessions }) {
 const s = StyleSheet.create({
   hero: {
     backgroundColor: '#0a0c0f',
+    paddingTop: 0,
     paddingBottom: 32,
     paddingHorizontal: 24,
     alignItems: 'center',

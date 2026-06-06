@@ -1,12 +1,10 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { C } from '../constants';
 
 export default function TopBar({ title, onBack, right }) {
-  const insets = useSafeAreaInsets();
   return (
-    <View style={[s.bar, { paddingTop: insets.top + 10 }]}>
+    <View style={s.bar}>
       {onBack && (
         <TouchableOpacity onPress={onBack} style={s.back}>
           <Text style={s.backText}>←</Text>
@@ -22,6 +20,7 @@ const s = StyleSheet.create({
   bar: {
     flexDirection: 'row',
     alignItems: 'center',
+    paddingTop: 10,
     paddingBottom: 10,
     paddingHorizontal: 18,
     borderBottomWidth: 1,

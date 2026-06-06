@@ -44,7 +44,7 @@ function MainTabs() {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarStyle: [tb.bar, { position: 'absolute', paddingBottom: insets.bottom }],
+        tabBarStyle: [tb.bar, { paddingBottom: insets.bottom }],
         tabBarShowLabel: true,
         tabBarLabelStyle: { fontSize: 9, letterSpacing: 0, marginBottom: 2 },
         tabBarActiveTintColor: C.accent,

@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { C, WORKOUT_DEFS, SCHEDULE, FRIDAY_WORKOUTS, DN, PROG, getWeekDates } from '../constants';
 import { useAppContext } from '../context';
 
 export default function CalendarScreen() {
-  const insets = useSafeAreaInsets();
   const navigation = useNavigation();
   const { sessions, weekIdx } = useAppContext();
   const weekDates = getWeekDates();
@@ -112,7 +111,7 @@ export default function CalendarScreen() {
   };
 
   return (
-    <View style={[s.screen, { paddingTop: insets.top }]}>
+    <SafeAreaView style={s.screen} edges={['top']}>
       <View style={s.headerArea}>
         <Text style={s.pageTitle}>PLAN</Text>
         <Text style={s.pageHint}>Tap a day to preview and start your workout</Text>
@@ -179,7 +178,7 @@ export default function CalendarScreen() {
           })}
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 }
 
