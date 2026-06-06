@@ -53,13 +53,17 @@ function MainTabs() {
       screenOptions={{
         headerShown: false,
         tabBarStyle: [tb.bar, { position: 'absolute', paddingBottom: insets.bottom }],
-        tabBarShowLabel: false,
+        tabBarShowLabel: true,
+        tabBarLabelStyle: { fontSize: 9, letterSpacing: 0, marginBottom: 2 },
+        tabBarActiveTintColor: C.accent,
+        tabBarInactiveTintColor: C.muted,
         tabBarHideOnKeyboard: true,
       }}
     >
       {TABS.map(({ id, icon, label, component }) => (
         <Tab.Screen key={id} name={id} component={component}
           options={{
+            tabBarLabel: label,
             tabBarIcon: ({ focused }) => (
               <TabIcon icon={icon} focused={focused} />
             ),
@@ -172,8 +176,8 @@ const tb = StyleSheet.create({
     backgroundColor: C.surface,
     borderTopWidth: 1,
     borderTopColor: C.border,
-    height: 60,
-    paddingBottom: 8,
+    height: 70,
+    paddingBottom: 12,
     paddingTop: 4,
     paddingHorizontal: 0,
   },
