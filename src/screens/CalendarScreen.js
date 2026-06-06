@@ -130,19 +130,9 @@ export default function CalendarScreen() {
               style={[s.stripCell, isSel && dotColor && { backgroundColor: dotColor + '18' }, isT && !isSel && { backgroundColor: 'rgba(200,169,110,0.06)' }]}>
               <Text style={[s.stripDay, (isT || isSel) && { color: dotColor || C.accent }]}>{DN[i]}</Text>
               <Text style={[s.stripDate, (isT || isSel) && { color: dotColor || C.accent }]}>{d.getDate()}</Text>
-              {isFri ? (
-                <View style={[s.stripBadge, { backgroundColor: done ? C.green + '33' : C.purple + '22' }]}>
-                  <Text style={[s.stripBadgeText, { color: done ? C.green : C.purple }]}>{done ? '✓' : 'KB'}</Text>
-                </View>
-              ) : schedType ? (
-                <View style={[s.stripBadge, { backgroundColor: done ? C.green + '33' : (dotColor || C.accent) + '22' }]}>
-                  <Text style={[s.stripBadgeText, { color: done ? C.green : dotColor }]}>
-                    {done ? '✓' : WORKOUT_DEFS[schedType]?.name.split(' ').map(w => w.slice(0, 3)).join(' ')}
-                  </Text>
-                </View>
-              ) : (
-                <Text style={s.stripRest}>REST</Text>
-              )}
+              {schedType ? (
+                <View style={[s.stripDot, { backgroundColor: done ? C.green : isFri ? C.purple : dotColor }]} />
+              ) : null}
               {isSel && <View style={[s.stripUnderline, { backgroundColor: dotColor || C.accent }]} />}
             </TouchableOpacity>
           );
@@ -200,9 +190,7 @@ const s = StyleSheet.create({
   stripCell: { flex: 1, paddingVertical: 10, paddingHorizontal: 3, alignItems: 'center', minHeight: 80 },
   stripDay: { fontSize: 8, color: C.muted, letterSpacing: 0.7, marginBottom: 3 },
   stripDate: { fontSize: 13, fontWeight: '700', color: C.text, marginBottom: 5 },
-  stripBadge: { borderRadius: 3, paddingHorizontal: 2, paddingVertical: 2 },
-  stripBadgeText: { fontSize: 8, fontWeight: '700', lineHeight: 10 },
-  stripRest: { fontSize: 8, color: C.border, marginTop: 4 },
+  stripDot: { width: 6, height: 6, borderRadius: 3, marginTop: 4 },
   stripUnderline: { width: 14, height: 2, borderRadius: 1, marginTop: 4 },
   scroll: { flex: 1 },
   scrollContent: { paddingVertical: 12, paddingHorizontal: 14, paddingBottom: 80, flexGrow: 1 },
