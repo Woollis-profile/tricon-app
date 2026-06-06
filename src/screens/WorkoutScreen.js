@@ -17,7 +17,7 @@ export default function WorkoutScreen() {
   const navigation = useNavigation();
   const route = useRoute();
   const { type } = route.params;
-  const { weekIdx, unit, pushupMax, kbWeight, setKbWeight, lastWeights, setSessions, setLastWeights } = useAppContext();
+  const { weekIdx, unit, pushupMax, kbWeight, setKbWeight, lastWeights, setSessions, addSession, setLastWeights } = useAppContext();
 
   const prog = { ...PROG[weekIdx], useTricon: WORKOUT_DEFS[type]?.useTricon || false };
   const wkDef = WORKOUT_DEFS[type];
@@ -140,11 +140,11 @@ export default function WorkoutScreen() {
     const newW = { ...lastWeights };
     list.forEach((ex, i) => { if (exData[i]?.weight) newW[ex.id] = exData[i].weight; });
     setLastWeights(newW);
-    setSessions(prev => [...prev, {
+    addSession({
       type, date: new Date().toISOString(), duration: elapsed,
       volume: isAMRAP ? amrapRounds : isFlow ? roundTimes.length : totalVol,
       exData, roundTimes, amrapRounds, amrapPartial, flowPartial,
-    }]);
+    });
     navigation.navigate('Main');
   };
 
