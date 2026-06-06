@@ -161,6 +161,20 @@ export default function WorkoutScreen() {
             <Text style={s.amrapResultDetail}>{kbWeight} {unit} · {halfPushups} push-ups per round (½ of {pushupMax})</Text>
           </View>
         )}
+        {isAMRAP && amrapPartial && amrapPartial.exercises && (
+          <View style={s.partialBreakdown}>
+            <Text style={s.partialBreakdownLabel}>PARTIAL ROUND</Text>
+            {amrapPartial.exercises.filter(ex => ex.completed).map((ex, i) => (
+              <View key={i} style={s.partialBreakdownRow}>
+                <Text style={s.partialBreakdownCheck}>✓</Text>
+                <Text style={s.partialBreakdownItem}>{ex.name} ×{ex.reps}</Text>
+              </View>
+            ))}
+            {amrapPartial.exercises.filter(ex => ex.completed).length === 0 && (
+              <Text style={s.partialBreakdownEmpty}>No exercises logged</Text>
+            )}
+          </View>
+        )}
         {isFlow && roundTimes.length > 0 && (
           <View style={s.splitsCard}>
             <Text style={s.splitsLabel}>ROUND SPLITS</Text>
@@ -377,8 +391,8 @@ export default function WorkoutScreen() {
         <Modal visible={showAmrapModal} transparent animationType="fade" onRequestClose={() => setShowAmrapModal(false)}>
           <View style={s.modalOverlay}>
             <View style={s.modalCard}>
-              <Text style={s.modalTitle}>LOG FINAL ROUND?</Text>
-              <Text style={s.modalSub}>Tick what you completed before time ran out</Text>
+              <Text style={s.modalTitle}>LOG PARTIAL ROUND?</Text>
+              <Text style={s.modalSub}>Tick the exercises you completed in the partial round</Text>
               {list.map((ex, i) => {
                 const isPushup = ex.id === 'amrap_pushup';
                 const checked = finalChecked[i];
@@ -419,10 +433,10 @@ export default function WorkoutScreen() {
               })}
               <View style={s.modalActions}>
                 <TouchableOpacity onPress={handleSavePartial} style={[s.modalBtn, s.modalBtnSave]}>
-                  <Text style={s.modalBtnSaveText}>SAVE</Text>
+                  <Text style={s.modalBtnSaveText}>SAVE PARTIAL ROUND</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={handleSkipPartial} style={[s.modalBtn, s.modalBtnSkip]}>
-                  <Text style={s.modalBtnSkipText}>SKIP</Text>
+                  <Text style={s.modalBtnSkipText}>SKIP — NO PARTIAL</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -444,6 +458,12 @@ const s = StyleSheet.create({
   amrapResultNum: { fontFamily: 'Oswald_700Bold', fontSize: 54, lineHeight: 70 },
   amrapResultLbl: { fontSize: 11, color: C.muted, letterSpacing: 1, marginTop: 4 },
   amrapResultDetail: { fontSize: 10, color: C.sub, marginTop: 8, lineHeight: 16, textAlign: 'center' },
+  partialBreakdown: { width: '100%', backgroundColor: C.purple + '08', borderWidth: 1, borderColor: C.purple + '20', borderRadius: 10, padding: 14, marginTop: 10 },
+  partialBreakdownLabel: { fontSize: 9, color: C.purple, letterSpacing: 1, marginBottom: 8 },
+  partialBreakdownRow: { flexDirection: 'row', alignItems: 'center', gap: 8, paddingVertical: 3 },
+  partialBreakdownCheck: { fontSize: 12, color: C.green },
+  partialBreakdownItem: { fontSize: 12, color: C.text },
+  partialBreakdownEmpty: { fontSize: 11, color: C.muted },
   splitsCard: { backgroundColor: C.card, borderWidth: 1, borderColor: C.border, borderRadius: 12, padding: 14, marginTop: 14, width: '100%' },
   splitsLabel: { fontSize: 10, color: C.green, letterSpacing: 1, marginBottom: 8 },
   splitsRow: { flexDirection: 'row', gap: 8 },
