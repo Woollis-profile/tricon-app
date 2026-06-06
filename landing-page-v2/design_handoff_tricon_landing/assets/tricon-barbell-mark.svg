@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 440" width="440" height="440" role="img" aria-label="TRICON barbell triangle">
+  
+  <g transform="translate(220 220) scale(1.2) translate(-220 -220)">
+    
+    <g transform="translate(220 305) rotate(0)" fill="#1b1a18">
+      <rect x="-147.224" y="-3.5" width="294.448" height="7" rx="3.5"></rect>
+      <rect x="77" y="-9" width="5" height="18" rx="2"></rect>
+      <rect x="88" y="-27" width="9.5" height="54" rx="3"></rect>
+      <rect x="101" y="-22" width="9" height="44" rx="3"></rect>
+      <rect x="114" y="-17" width="8.5" height="34" rx="2.5"></rect>
+      <rect x="-82" y="-9" width="5" height="18" rx="2"></rect>
+      <rect x="-97.5" y="-27" width="9.5" height="54" rx="3"></rect>
+      <rect x="-110" y="-22" width="9" height="44" rx="3"></rect>
+      <rect x="-122.5" y="-17" width="8.5" height="34" rx="2.5"></rect>
+    </g>
+    
+    <g transform="translate(146.388 177.5) rotate(-60)" fill="#1b1a18">
+      <rect x="-147.224" y="-3.5" width="294.448" height="7" rx="3.5"></rect>
+      <rect x="77" y="-9" width="5" height="18" rx="2"></rect>
+      <rect x="88" y="-27" width="9.5" height="54" rx="3"></rect>
+      <rect x="101" y="-22" width="9" height="44" rx="3"></rect>
+      <rect x="114" y="-17" width="8.5" height="34" rx="2.5"></rect>
+      <rect x="-82" y="-9" width="5" height="18" rx="2"></rect>
+      <rect x="-97.5" y="-27" width="9.5" height="54" rx="3"></rect>
+      <rect x="-110" y="-22" width="9" height="44" rx="3"></rect>
+      <rect x="-122.5" y="-17" width="8.5" height="34" rx="2.5"></rect>
+    </g>
+    
+    <g transform="translate(293.612 177.5) rotate(60)" fill="#1b1a18">
+      <rect x="-147.224" y="-3.5" width="294.448" height="7" rx="3.5"></rect>
+      <rect x="77" y="-9" width="5" height="18" rx="2"></rect>
+      <rect x="88" y="-27" width="9.5" height="54" rx="3"></rect>
+      <rect x="101" y="-22" width="9" height="44" rx="3"></rect>
+      <rect x="114" y="-17" width="8.5" height="34" rx="2.5"></rect>
+      <rect x="-82" y="-9" width="5" height="18" rx="2"></rect>
+      <rect x="-97.5" y="-27" width="9.5" height="54" rx="3"></rect>
+      <rect x="-110" y="-22" width="9" height="44" rx="3"></rect>
+      <rect x="-122.5" y="-17" width="8.5" height="34" rx="2.5"></rect>
+    </g>
+  </g>
+</svg>
