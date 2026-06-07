@@ -320,27 +320,31 @@ const s = StyleSheet.create({
     elevation:       20,
   },
 
-  // cream band — narrow strip, shows barbells above and below
+  // cream band — tight strip behind TRICON/TRAINING text only
   cut: {
     position:        'absolute',
-    top:             '30%',
-    bottom:          '24%',
+    top:             '41%',
+    bottom:          '37%',
     left:            0,
     right:           0,
     backgroundColor: '#f2eee3',
     alignItems:      'center',
     justifyContent:  'center',
+    paddingHorizontal: 8,
+    paddingVertical:  4,
+    overflow:         'visible',
   },
 
   // .wordlock .tricon — 66px weight-700 letter-spacing:0.01em (0.01×66=0.66)
   // paddingTop:6 + paddingLeft:4 + lineHeight:80 prevent glyph clipping
   tricon: {
     fontFamily:    'Oswald_700Bold',
-    fontSize:      Math.round(BADGE * 0.2),
+    fontSize:      Math.round(BADGE * 0.18),
     color:         GOLD,
-    lineHeight:    Math.round(BADGE * 0.22),
+    lineHeight:    Math.round(BADGE * 0.20),
     letterSpacing: 0.5,
     includeFontPadding: false,
+    textAlignVertical: 'center',
   },
 
   // .wordlock .workout — 20px weight-500 letter-spacing:0.46em (0.46×20=9.2)
@@ -356,10 +360,10 @@ const s = StyleSheet.create({
 
   // .tagline — 16px weight-400 letter-spacing:0.16em (0.16×16=2.56) line-height:1.55 (24.8)
   tagline: {
-    maxWidth:      280,
-    fontSize:      13,
+    maxWidth:      320,
+    fontSize:      15,
     letterSpacing: 1.8,
-    lineHeight:    22,
+    lineHeight:    24,
     textTransform: 'uppercase',
     color:         'rgba(255,255,255,0.72)',
     textAlign:     'center',
