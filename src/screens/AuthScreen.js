@@ -270,14 +270,14 @@ const s = StyleSheet.create({
     fontSize:      38,
     color:         GOLD,
     letterSpacing: 0.5,
-    marginTop:     4,
+    marginTop:     12,
   },
   training: {
     fontFamily:    'Oswald_600SemiBold',
     fontSize:      12,
     letterSpacing: 5,
     color:         DARK,
-    marginTop:     2,
+    marginTop:     4,
   },
 
   // ── Tagline ───────────────────────────────────────────────────────
@@ -303,7 +303,7 @@ const s = StyleSheet.create({
   },
   btnCream: {
     backgroundColor: CREAM,
-    borderRadius:    4,
+    borderRadius:    12,
     paddingVertical: 16,
     alignItems:      'center',
   },
@@ -315,7 +315,7 @@ const s = StyleSheet.create({
   },
   btnGold: {
     backgroundColor: GOLD,
-    borderRadius:    4,
+    borderRadius:    12,
     paddingVertical: 16,
     alignItems:      'center',
     marginTop:       12,
