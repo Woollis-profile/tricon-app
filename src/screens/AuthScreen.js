@@ -11,7 +11,7 @@ import { supabase } from '../../lib/supabase';
 // ── Design tokens (exact from web/index.html :root) ──────────────────────────
 const GOLD      = '#e3b23f';
 const GOLD_DEEP = '#cf9a2b';
-const BADGE     = 240; // web .logo { width: 240px; height: 240px }
+const BADGE     = 200; // sized to match Vercel visual
 
 export default function AuthScreen() {
   const insets = useSafeAreaInsets();
@@ -294,14 +294,14 @@ const s = StyleSheet.create({
     color:         GOLD,
   },
 
-  // .hero — flex:1, logo positioned via translateY to sit at 2/3 screen
+  // .hero — flex:1, badge anchored at 2/3 via flex-end + translateY
   hero: {
     flex:           1,
     alignItems:     'center',
-    justifyContent: 'center',
-    gap:            22,
+    justifyContent: 'flex-end',
+    gap:            18,
     paddingHorizontal: 24,
-    paddingBottom:  0,
+    paddingBottom:  80,
   },
 
   // .logo — 340px circle, 4px gold border, cream bg, translateY(-38px)
@@ -316,7 +316,7 @@ const s = StyleSheet.create({
     alignItems:      'center',
     justifyContent:  'center',
     overflow:        'visible',
-    transform:       [{ translateY: -80 }],
+    transform:       [{ translateY: -33 }],
     shadowColor:     '#000',
     shadowOffset:    { width: 0, height: 22 },
     shadowOpacity:   0.55,
@@ -324,13 +324,13 @@ const s = StyleSheet.create({
     elevation:       20,
   },
 
-  // .cut — clip-path: inset(31% 5% 49% 5%) on 240px badge
+  // .cut — clip-path: inset(31% 5% 49% 5%) on 200px badge
   cut: {
     position:        'absolute',
-    top:             74,
-    bottom:          118,
-    left:            12,
-    right:           12,
+    top:             62,
+    bottom:          98,
+    left:            10,
+    right:           10,
     backgroundColor: '#f2eee3',
   },
 
@@ -338,29 +338,29 @@ const s = StyleSheet.create({
   wordlock: {
     alignItems: 'center',
     overflow:   'visible',
-    transform:  [{ translateY: -22 }],
+    transform:  [{ translateY: -18 }],
   },
 
   // .wordlock .tricon — 66px weight-700 letter-spacing:0.01em (0.01×66=0.66)
   // paddingTop:6 + paddingLeft:4 + lineHeight:80 prevent glyph clipping
   tricon: {
     fontFamily:    'Oswald_700Bold',
-    fontSize:      46,
+    fontSize:      38,
     color:         GOLD,
-    lineHeight:    50,
-    paddingTop:    4,
-    paddingLeft:   4,
-    letterSpacing: 0.5,
+    lineHeight:    42,
+    paddingTop:    2,
+    paddingLeft:   3,
+    letterSpacing: 0.4,
   },
 
   // .wordlock .workout — 20px weight-500 letter-spacing:0.46em (0.46×20=9.2)
   // Oswald_600SemiBold used as closest to web's weight-500
   training: {
     fontFamily:    'Oswald_600SemiBold',
-    fontSize:      14,
-    letterSpacing: 9,
+    fontSize:      11,
+    letterSpacing: 7,
     color:         '#1b1a18',
-    marginTop:     3,
+    marginTop:     2,
   },
 
   // .tagline — 16px weight-400 letter-spacing:0.16em (0.16×16=2.56) line-height:1.55 (24.8)
