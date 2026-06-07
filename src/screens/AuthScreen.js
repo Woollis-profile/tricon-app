@@ -294,14 +294,14 @@ const s = StyleSheet.create({
     color:         GOLD,
   },
 
-  // .hero — flex:1, badge anchored at 2/3 via flex-end + translateY
+  // .hero — badge at centre with slight upward shift via logo translateY
   hero: {
     flex:           1,
     alignItems:     'center',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     gap:            18,
     paddingHorizontal: 24,
-    paddingBottom:  80,
+    paddingBottom:  0,
   },
 
   // .logo — 340px circle, 4px gold border, cream bg, translateY(-38px)
@@ -316,7 +316,7 @@ const s = StyleSheet.create({
     alignItems:      'center',
     justifyContent:  'center',
     overflow:        'visible',
-    transform:       [{ translateY: -33 }],
+    transform:       [{ translateY: -5 }],
     shadowColor:     '#000',
     shadowOffset:    { width: 0, height: 22 },
     shadowOpacity:   0.55,
@@ -324,11 +324,11 @@ const s = StyleSheet.create({
     elevation:       20,
   },
 
-  // .cut — clip-path: inset(31% 5% 49% 5%) on 200px badge
+  // .cut — covers barbell break zone, 54px window for wordlock
   cut: {
     position:        'absolute',
-    top:             62,
-    bottom:          98,
+    top:             58,
+    bottom:          88,
     left:            10,
     right:           10,
     backgroundColor: '#f2eee3',
@@ -338,7 +338,7 @@ const s = StyleSheet.create({
   wordlock: {
     alignItems: 'center',
     overflow:   'visible',
-    transform:  [{ translateY: -18 }],
+    transform:  [{ translateY: -19 }],
   },
 
   // .wordlock .tricon — 66px weight-700 letter-spacing:0.01em (0.01×66=0.66)
@@ -365,10 +365,10 @@ const s = StyleSheet.create({
 
   // .tagline — 16px weight-400 letter-spacing:0.16em (0.16×16=2.56) line-height:1.55 (24.8)
   tagline: {
-    maxWidth:      320,
-    fontSize:      16,
-    letterSpacing: 2.5,
-    lineHeight:    25,
+    maxWidth:      300,
+    fontSize:      13,
+    letterSpacing: 2.0,
+    lineHeight:    20,
     textTransform: 'uppercase',
     color:         'rgba(255,255,255,0.72)',
     textAlign:     'center',
