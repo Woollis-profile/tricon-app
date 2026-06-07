@@ -320,50 +320,45 @@ const s = StyleSheet.create({
     elevation:       20,
   },
 
-  // cream band — tight strip behind TRICON/TRAINING text only
-  cut: {
-    position:        'absolute',
-    top:             '41%',
-    bottom:          '37%',
-    left:            0,
-    right:           0,
-    backgroundColor: '#f2eee3',
-    alignItems:      'center',
-    justifyContent:  'center',
-    paddingHorizontal: 8,
-    paddingVertical:  4,
-    overflow:         'visible',
+  // wordlock — centred absolutely on badge, no background rectangle
+  wordlock: {
+    position:   'absolute',
+    top:        '36%',
+    left:       0,
+    right:      0,
+    alignItems: 'center',
   },
+  cut: { display: 'none' },
 
   // .wordlock .tricon — 66px weight-700 letter-spacing:0.01em (0.01×66=0.66)
   // paddingTop:6 + paddingLeft:4 + lineHeight:80 prevent glyph clipping
   tricon: {
-    fontFamily:    'Oswald_700Bold',
-    fontSize:      Math.round(BADGE * 0.18),
-    color:         GOLD,
-    lineHeight:    Math.round(BADGE * 0.20),
-    letterSpacing: 0.5,
+    fontFamily:      'Oswald_700Bold',
+    fontSize:        Math.round(BADGE * 0.20),
+    color:           GOLD,
+    letterSpacing:   0.5,
     includeFontPadding: false,
-    textAlignVertical: 'center',
+    textAlign:       'center',
   },
 
   // .wordlock .workout — 20px weight-500 letter-spacing:0.46em (0.46×20=9.2)
   // Oswald_600SemiBold used as closest to web's weight-500
   training: {
-    fontFamily:    'Oswald_600SemiBold',
-    fontSize:      Math.round(BADGE * 0.055),
-    letterSpacing: Math.round(BADGE * 0.03),
-    color:         '#1b1a18',
-    marginTop:     2,
+    fontFamily:      'Oswald_600SemiBold',
+    fontSize:        Math.round(BADGE * 0.055),
+    letterSpacing:   Math.round(BADGE * 0.028),
+    color:           '#1b1a18',
+    marginTop:       3,
     includeFontPadding: false,
+    textAlign:       'center',
   },
 
   // .tagline — 16px weight-400 letter-spacing:0.16em (0.16×16=2.56) line-height:1.55 (24.8)
   tagline: {
-    maxWidth:      320,
-    fontSize:      15,
-    letterSpacing: 1.8,
-    lineHeight:    24,
+    maxWidth:      300,
+    fontSize:      13,
+    letterSpacing: 1.6,
+    lineHeight:    22,
     textTransform: 'uppercase',
     color:         'rgba(255,255,255,0.72)',
     textAlign:     'center',
