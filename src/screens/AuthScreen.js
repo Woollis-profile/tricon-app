@@ -141,15 +141,15 @@ export default function AuthScreen() {
             </Svg>
             </View>
 
-            {/* wordlock — TRICON + TRAINING text on badge */}
-            <View style={s.wordlock}>
-              <Text style={[s.tricon, { fontSize: Math.round(BADGE * 0.20), lineHeight: Math.round(BADGE * 0.22) }]}>TRICON</Text>
-              <Text style={[s.training, { fontSize: Math.round(BADGE * 0.055), letterSpacing: Math.round(BADGE * 0.028) }]}>TRAINING</Text>
-            </View>
-
           </View>{/* /.logo */}
 
-          {/* .tagline — 16px weight-400 letter-spacing:0.16em line-height:1.55 */}
+          {/* wordlock — rendered outside badge so never clipped by circle */}
+          <View style={[s.wordlock, { marginTop: -Math.round(BADGE * 0.58) }]} pointerEvents="none">
+            <Text style={[s.tricon, { fontSize: Math.round(BADGE * 0.20), lineHeight: Math.round(BADGE * 0.21) }]}>TRICON</Text>
+            <Text style={[s.training, { fontSize: Math.round(BADGE * 0.055), letterSpacing: Math.round(BADGE * 0.028) }]}>TRAINING</Text>
+          </View>
+
+          {/* tagline */}
           <Text style={s.tagline}>{'TRAINING METHOD FOR THE\nOLDER AND WISER ATHLETE'}</Text>
 
         </View>{/* /.hero */}
@@ -300,6 +300,7 @@ const s = StyleSheet.create({
     flex:           1,
     alignItems:     'center',
     justifyContent: 'flex-end',
+    position:       'relative',
     gap:            20,
     paddingHorizontal: 24,
     paddingBottom:  0, // set inline
@@ -319,15 +320,14 @@ const s = StyleSheet.create({
     elevation:       20,
   },
 
-  // wordlock — absolutely centred in horizontal barbell zone
+  // wordlock — outside badge on hero, never clipped
   wordlock: {
     position:        'absolute',
-    top:             '34%',
     left:            0,
     right:           0,
     alignItems:      'center',
     backgroundColor: 'transparent',
-    overflow:        'visible',
+    zIndex:          10,
   },
 
 
@@ -339,8 +339,6 @@ const s = StyleSheet.create({
     letterSpacing:   0.5,
     includeFontPadding: false,
     textAlign:       'center',
-    paddingTop:      6,
-    paddingHorizontal: 4,
   },
 
   // .wordlock .workout — 20px weight-500 letter-spacing:0.46em (0.46×20=9.2)
@@ -348,7 +346,7 @@ const s = StyleSheet.create({
   training: {
     fontFamily:      'Oswald_600SemiBold',
     color:           '#1b1a18',
-    marginTop:       8,
+    marginTop:       2,
     includeFontPadding: false,
     textAlign:       'center',
   },
