@@ -304,7 +304,7 @@ const s = StyleSheet.create({
   },
 
   // .logo — 340px circle, 4px gold border, cream bg, translateY(-38px)
-  // box-shadow approximated to single layer (RN doesn't support multi-shadow)
+  // overflow:'visible' so the circular borderRadius does not clip Oswald glyph tops
   logo: {
     width:           BADGE,
     height:          BADGE,
@@ -314,7 +314,7 @@ const s = StyleSheet.create({
     backgroundColor: '#f2eee3', // mid-stop of web radial-gradient
     alignItems:      'center',
     justifyContent:  'center',
-    overflow:        'hidden',
+    overflow:        'visible',
     transform:       [{ translateY: -38 }],
     shadowColor:     '#000',
     shadowOffset:    { width: 0, height: 22 },
@@ -323,29 +323,30 @@ const s = StyleSheet.create({
     elevation:       20,
   },
 
-  // .cut — clip-path: inset(31% 5% 49% 5%)
-  // top/bottom/left/right percentages mirror the inset values exactly
+  // .cut — clip-path: inset(31% 5% 49% 5%) — top raised to 38% so it clears TRICON text
   cut: {
     position:        'absolute',
-    top:             '31%',
+    top:             '38%',
     bottom:          '49%',
     left:            '5%',
     right:           '5%',
     backgroundColor: '#f2eee3',
   },
 
-  // .wordlock — translateY(-19px)
+  // .wordlock — reduced translateY to keep text away from circle top edge
   wordlock: {
     alignItems: 'center',
-    transform:  [{ translateY: -19 }],
+    transform:  [{ translateY: -8 }],
   },
 
   // .wordlock .tricon — 66px weight-700 letter-spacing:0.01em (0.01×66=0.66)
+  // lineHeight:80 + paddingTop:8 give Oswald ascenders room so they aren't clipped
   tricon: {
     fontFamily:    'Oswald_700Bold',
     fontSize:      66,
     color:         GOLD,
-    lineHeight:    66,
+    lineHeight:    80,
+    paddingTop:    8,
     letterSpacing: 0.7,
   },
 
