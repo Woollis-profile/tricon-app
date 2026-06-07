@@ -79,13 +79,14 @@ export default function AuthScreen() {
       {badgePageY > 0 && (
         <View pointerEvents="none" style={{
           position: 'absolute',
-          top: badgePageY + Math.round(BADGE * 0.36),
+          top: badgePageY + Math.round(BADGE * 0.38),
           width: screenWidth,
           left: 0,
           alignItems: 'center',
           justifyContent: 'center',
           zIndex: 999,
           overflow: 'visible',
+          paddingTop: 8,
         }}>
           <Text style={[s.tricon, { fontSize: Math.round(BADGE * 0.20), lineHeight: Math.round(BADGE * 0.24), textAlign: 'center', width: BADGE }]}>TRICON</Text>
           <Text style={[s.training, { fontSize: Math.round(BADGE * 0.055), letterSpacing: Math.round(BADGE * 0.028), textAlign: 'center', width: BADGE }]}>TRAINING</Text>
