@@ -11,7 +11,7 @@ import { supabase } from '../../lib/supabase';
 // ── Design tokens (exact from web/index.html :root) ──────────────────────────
 const GOLD      = '#e3b23f';
 const GOLD_DEEP = '#cf9a2b';
-const BADGE     = 340; // web .logo { width: 340px; height: 340px }
+const BADGE     = 240; // web .logo { width: 240px; height: 240px }
 
 export default function AuthScreen() {
   const insets = useSafeAreaInsets();
@@ -74,7 +74,7 @@ export default function AuthScreen() {
       <View style={s.content}>
 
         {/* .topmark — gap:11 padding:60px 30px 0 (uses insets for safe area) */}
-        <View style={[s.topmark, { paddingTop: Math.max(insets.top + 16, 52) }]}>
+        <View style={[s.topmark, { paddingTop: Math.max(insets.top + 8, 36) }]}>
           {/* .topglyph — 26×26 white-stroke triangle SVG */}
           <Svg width={26} height={26} viewBox="0 0 300 300">
             <Polygon
@@ -298,9 +298,10 @@ const s = StyleSheet.create({
   hero: {
     flex:           1,
     alignItems:     'center',
-    justifyContent: 'center',
-    gap:            30,
+    justifyContent: 'flex-end',
+    gap:            22,
     paddingHorizontal: 24,
+    paddingBottom:  36,
   },
 
   // .logo — 340px circle, 4px gold border, cream bg, translateY(-38px)
@@ -315,7 +316,7 @@ const s = StyleSheet.create({
     alignItems:      'center',
     justifyContent:  'center',
     overflow:        'visible',
-    transform:       [{ translateY: -38 }],
+    transform:       [{ translateY: 0 }],
     shadowColor:     '#000',
     shadowOffset:    { width: 0, height: 22 },
     shadowOpacity:   0.55,
@@ -337,16 +338,16 @@ const s = StyleSheet.create({
   wordlock: {
     alignItems: 'center',
     overflow:   'visible',
-    transform:  [{ translateY: -6 }],
+    transform:  [{ translateY: -13 }],
   },
 
   // .wordlock .tricon — 66px weight-700 letter-spacing:0.01em (0.01×66=0.66)
   // paddingTop:6 + paddingLeft:4 + lineHeight:80 prevent glyph clipping
   tricon: {
     fontFamily:    'Oswald_700Bold',
-    fontSize:      66,
+    fontSize:      46,
     color:         GOLD,
-    lineHeight:    80,
+    lineHeight:    56,
     paddingTop:    6,
     paddingLeft:   4,
     letterSpacing: 0.7,
@@ -356,7 +357,7 @@ const s = StyleSheet.create({
   // Oswald_600SemiBold used as closest to web's weight-500
   training: {
     fontFamily:    'Oswald_600SemiBold',
-    fontSize:      20,
+    fontSize:      14,
     letterSpacing: 9,
     color:         '#1b1a18',
     marginTop:     3,
