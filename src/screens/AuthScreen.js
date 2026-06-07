@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import { useWindowDimensions } from 'react-native';
 import {
   View, Text, TouchableOpacity, ImageBackground, StyleSheet,
-  Modal, TextInput, ActivityIndicator, KeyboardAvoidingView, Platform, Dimensions,
+  Modal, TextInput, ActivityIndicator, KeyboardAvoidingView, Platform,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Svg, Polygon, G, Rect } from 'react-native-svg';
@@ -11,10 +12,12 @@ import { supabase } from '../../lib/supabase';
 // ── Design tokens (exact from web/index.html :root) ──────────────────────────
 const GOLD      = '#e3b23f';
 const GOLD_DEEP = '#cf9a2b';
-const BADGE     = Math.round(Dimensions.get('window').width * 0.66);
+// BADGE is now computed inside component via useWindowDimensions
 
 export default function AuthScreen() {
   const insets = useSafeAreaInsets();
+  const { width: screenWidth, height: screenHeight } = useWindowDimensions();
+  const BADGE = Math.round(screenWidth * 0.68);
   const [modalMode, setModalMode] = useState(null); // null | 'login' | 'signup'
   const [email,     setEmail]     = useState('');
   const [password,  setPassword]  = useState('');
@@ -296,7 +299,7 @@ const s = StyleSheet.create({
     justifyContent: 'flex-end',
     gap:            20,
     paddingHorizontal: 24,
-    paddingBottom:  Math.round(Dimensions.get('window').height * 0.18),
+    paddingBottom:  Math.round(screenHeight * 0.16),
   },
 
   // .logo — 340px circle, 4px gold border, cream bg, translateY(-38px)
@@ -309,7 +312,7 @@ const s = StyleSheet.create({
     borderColor:     GOLD,
     backgroundColor: '#f2eee3',
     overflow:        'hidden',
-    transform:       [{ translateY: -Math.round(BADGE * 0.15) }],
+    transform:       [{ translateY: -Math.round(BADGE * 0.08) }],
     shadowColor:     '#000',
     shadowOffset:    { width: 0, height: 22 },
     shadowOpacity:   0.55,
@@ -317,11 +320,11 @@ const s = StyleSheet.create({
     elevation:       20,
   },
 
-  // cream band — covers horizontal barbell zone, contains text
+  // cream band — narrow strip, shows barbells above and below
   cut: {
     position:        'absolute',
-    top:             '35%',
-    bottom:          '28%',
+    top:             '30%',
+    bottom:          '24%',
     left:            0,
     right:           0,
     backgroundColor: '#f2eee3',
