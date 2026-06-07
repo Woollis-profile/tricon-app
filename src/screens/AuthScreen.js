@@ -99,6 +99,8 @@ export default function AuthScreen() {
           {/* logo badge — 2/3 screen width, positioned at 2/3 up page */}
           <View style={[s.logo, { width: BADGE, height: BADGE, borderRadius: BADGE/2, transform: [{ translateY: -Math.round(BADGE * 0.08) }] }]}>
 
+            {/* circular clip for SVG only — text sits outside this */}
+            <View style={StyleSheet.absoluteFill} pointerEvents="none">
             {/* barbell triangle SVG — fills entire badge */}
             <Svg style={StyleSheet.absoluteFill} viewBox="0 0 440 440">
               <G transform="translate(220 220) scale(1.2) translate(-220 -220)">
@@ -137,6 +139,7 @@ export default function AuthScreen() {
                 </G>
               </G>
             </Svg>
+            </View>
 
             {/* wordlock — TRICON + TRAINING text on badge */}
             <View style={s.wordlock}>
@@ -308,7 +311,7 @@ const s = StyleSheet.create({
     borderWidth:     4,
     borderColor:     GOLD,
     backgroundColor: '#f2eee3',
-    overflow:        'hidden',
+    overflow:        'visible',
     shadowColor:     '#000',
     shadowOffset:    { width: 0, height: 22 },
     shadowOpacity:   0.55,
@@ -345,7 +348,7 @@ const s = StyleSheet.create({
   training: {
     fontFamily:      'Oswald_600SemiBold',
     color:           '#1b1a18',
-    marginTop:       3,
+    marginTop:       8,
     includeFontPadding: false,
     textAlign:       'center',
   },
