@@ -11,7 +11,7 @@ import { supabase } from '../../lib/supabase';
 // ── Design tokens (exact from web/index.html :root) ──────────────────────────
 const GOLD      = '#e3b23f';
 const GOLD_DEEP = '#cf9a2b';
-const BADGE     = 200; // sized to match Vercel visual
+const BADGE     = 210; // template match
 
 export default function AuthScreen() {
   const insets = useSafeAreaInsets();
@@ -299,7 +299,7 @@ const s = StyleSheet.create({
     flex:           1,
     alignItems:     'center',
     justifyContent: 'center',
-    gap:            18,
+    gap:            14,
     paddingHorizontal: 24,
     paddingBottom:  0,
   },
@@ -316,7 +316,7 @@ const s = StyleSheet.create({
     alignItems:      'center',
     justifyContent:  'center',
     overflow:        'visible',
-    transform:       [{ translateY: -5 }],
+    transform:       [{ translateY: 15 }],
     shadowColor:     '#000',
     shadowOffset:    { width: 0, height: 22 },
     shadowOpacity:   0.55,
@@ -324,11 +324,11 @@ const s = StyleSheet.create({
     elevation:       20,
   },
 
-  // .cut — covers barbell break zone, 54px window for wordlock
+  // .cut — SVG-geometry derived, covers all 3 barbell arms
   cut: {
     position:        'absolute',
-    top:             58,
-    bottom:          88,
+    top:             57,
+    bottom:          74,
     left:            10,
     right:           10,
     backgroundColor: '#f2eee3',
@@ -338,16 +338,16 @@ const s = StyleSheet.create({
   wordlock: {
     alignItems: 'center',
     overflow:   'visible',
-    transform:  [{ translateY: -19 }],
+    transform:  [{ translateY: -8 }],
   },
 
   // .wordlock .tricon — 66px weight-700 letter-spacing:0.01em (0.01×66=0.66)
   // paddingTop:6 + paddingLeft:4 + lineHeight:80 prevent glyph clipping
   tricon: {
     fontFamily:    'Oswald_700Bold',
-    fontSize:      38,
+    fontSize:      42,
     color:         GOLD,
-    lineHeight:    42,
+    lineHeight:    46,
     paddingTop:    2,
     paddingLeft:   3,
     letterSpacing: 0.4,
@@ -357,8 +357,8 @@ const s = StyleSheet.create({
   // Oswald_600SemiBold used as closest to web's weight-500
   training: {
     fontFamily:    'Oswald_600SemiBold',
-    fontSize:      11,
-    letterSpacing: 7,
+    fontSize:      12,
+    letterSpacing: 5.5,
     color:         '#1b1a18',
     marginTop:     2,
   },
