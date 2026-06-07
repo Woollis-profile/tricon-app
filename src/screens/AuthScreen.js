@@ -323,13 +323,13 @@ const s = StyleSheet.create({
     elevation:       20,
   },
 
-  // .cut — clip-path: inset(31% 5% 49% 5%) — top raised to 38% so it clears TRICON text
+  // .cut — covers barbell bars behind TRICON/TRAINING wordlock
   cut: {
     position:        'absolute',
-    top:             '38%',
-    bottom:          '49%',
-    left:            '5%',
-    right:           '5%',
+    top:             '42%',
+    bottom:          '32%',
+    left:            '8%',
+    right:           '8%',
     backgroundColor: '#f2eee3',
   },
 
