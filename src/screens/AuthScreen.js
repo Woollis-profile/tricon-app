@@ -323,13 +323,14 @@ const s = StyleSheet.create({
     elevation:       20,
   },
 
-  // .cut — covers barbell bars behind TRICON/TRAINING wordlock
+  // .cut — mathematically aligned to TRICON text bounds (badge=340, wordlock translateY=-8 within centred layout)
+  // TRICON top ~y=132 (38% of 340), bottom ~y=214 (37% from bottom of 340)
   cut: {
     position:        'absolute',
-    top:             '42%',
-    bottom:          '32%',
-    left:            '8%',
-    right:           '8%',
+    top:             '38%',
+    bottom:          '37%',
+    left:            '4%',
+    right:           '4%',
     backgroundColor: '#f2eee3',
   },
 
