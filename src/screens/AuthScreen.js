@@ -4,13 +4,13 @@ import {
   ActivityIndicator, Modal, ImageBackground,
   KeyboardAvoidingView, Platform,
 } from 'react-native';
-import Svg, { G, Rect, Polygon } from 'react-native-svg';
+import Svg, { G, Rect } from 'react-native-svg';
 import { supabase } from '../../lib/supabase';
 
 const GOLD  = '#c8a96e';
 const CREAM = '#f5f0e8';
 const DARK  = '#1b1a18';
-const BADGE = 260;
+const BADGE = 300;
 
 export default function AuthScreen() {
   const [modal,      setModal]      = useState(null); // null | 'signup' | 'login'
@@ -55,32 +55,20 @@ export default function AuthScreen() {
       source={require('../../assets/gym-bg.png')}
       style={{ flex: 1 }}
       resizeMode="cover"
+      imageStyle={{ transform: [{ translateY: -60 }] }}
     >
       {/* Dark overlay */}
       <View style={s.overlay} />
 
-      {/* ── Top nav — triangle glyph + TRICON ───────────────────────── */}
+      {/* ── Top nav — triangle + TRICON ─────────────────────────────── */}
       <View style={s.topnav}>
-        <Svg width={20} height={20} viewBox="0 0 300 300" fill="none">
-          <Polygon
-            points="150,52 248,222 52,222"
-            stroke="#ffffff"
-            strokeWidth={22}
-            strokeLinejoin="round"
-            strokeLinecap="round"
-          />
-        </Svg>
+        <Text style={s.topnavGlyph}>△</Text>
         <Text style={s.topnavText}>TRICON</Text>
       </View>
 
       {/* ── Badge ───────────────────────────────────────────────────── */}
       <View style={s.badge}>
-        <Svg
-          viewBox="0 0 440 440"
-          width={BADGE}
-          height={BADGE}
-          style={{ position: 'absolute' }}
-        >
+        <Svg viewBox="0 0 440 440" width={200} height={200}>
           <G transform="translate(220 220) scale(1.2) translate(-220 -220)">
             <G transform="translate(220 305) rotate(0)" fill={DARK}>
               <Rect x="-147.224" y="-3.5" width="294.448" height="7" rx="3.5"/>
@@ -118,14 +106,8 @@ export default function AuthScreen() {
           </G>
         </Svg>
 
-        {/* Cream cut — hides barbell bars behind TRICON wordmark */}
-        <View style={s.cut} />
-
-        {/* Wordlock */}
-        <View style={s.wordlock}>
-          <Text style={s.tricon}>TRICON</Text>
-          <Text style={s.training}>TRAINING</Text>
-        </View>
+        <Text style={s.tricon}>TRICON</Text>
+        <Text style={s.training}>TRAINING</Text>
       </View>
 
       {/* ── Tagline ─────────────────────────────────────────────────── */}
@@ -254,13 +236,18 @@ const s = StyleSheet.create({
     left:          20,
     flexDirection: 'row',
     alignItems:    'center',
-    gap:           10,
+    gap:           8,
+  },
+  topnavGlyph: {
+    fontSize: 16,
+    color:    GOLD,
+    lineHeight: 20,
   },
   topnavText: {
-    fontFamily:    'Oswald_600SemiBold',
-    fontSize:      16,
+    fontFamily:    'Oswald_700Bold',
+    fontSize:      13,
     color:         GOLD,
-    letterSpacing: 6,
+    letterSpacing: 3,
   },
 
   // ── Badge ─────────────────────────────────────────────────────────
@@ -278,31 +265,19 @@ const s = StyleSheet.create({
     alignItems:      'center',
     justifyContent:  'center',
   },
-  cut: {
-    position:        'absolute',
-    top:             Math.round(BADGE * 0.31),
-    left:            Math.round(BADGE * 0.05),
-    width:           Math.round(BADGE * 0.90),
-    height:          Math.round(BADGE * 0.20),
-    backgroundColor: CREAM,
-  },
-  wordlock: {
-    alignItems: 'center',
-    transform:  [{ translateY: -14 }],
-  },
   tricon: {
     fontFamily:    'Oswald_700Bold',
-    fontSize:      48,
+    fontSize:      38,
     color:         GOLD,
-    lineHeight:    48,
     letterSpacing: 0.5,
+    marginTop:     4,
   },
   training: {
     fontFamily:    'Oswald_600SemiBold',
-    fontSize:      14,
-    letterSpacing: 6,
+    fontSize:      12,
+    letterSpacing: 5,
     color:         DARK,
-    marginTop:     3,
+    marginTop:     2,
   },
 
   // ── Tagline ───────────────────────────────────────────────────────
@@ -323,8 +298,8 @@ const s = StyleSheet.create({
   actions: {
     position: 'absolute',
     bottom:   60,
-    left:     24,
-    right:    24,
+    left:     20,
+    right:    20,
   },
   btnCream: {
     backgroundColor: CREAM,
