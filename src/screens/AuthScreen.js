@@ -80,14 +80,15 @@ export default function AuthScreen() {
         <View pointerEvents="none" style={{
           position: 'absolute',
           top: badgeY + Math.round(BADGE * 0.32),
+          width: screenWidth,
           left: 0,
-          right: 0,
           alignItems: 'center',
+          justifyContent: 'center',
           zIndex: 999,
           overflow: 'visible',
         }}>
-          <Text style={[s.tricon, { fontSize: Math.round(BADGE * 0.20), lineHeight: Math.round(BADGE * 0.24) }]}>TRICON</Text>
-          <Text style={[s.training, { fontSize: Math.round(BADGE * 0.055), letterSpacing: Math.round(BADGE * 0.028) }]}>TRAINING</Text>
+          <Text style={[s.tricon, { fontSize: Math.round(BADGE * 0.20), lineHeight: Math.round(BADGE * 0.24), textAlign: 'center', width: BADGE }]}>TRICON</Text>
+          <Text style={[s.training, { fontSize: Math.round(BADGE * 0.055), letterSpacing: Math.round(BADGE * 0.028), textAlign: 'center', width: BADGE }]}>TRAINING</Text>
         </View>
       )}
 
