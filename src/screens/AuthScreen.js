@@ -294,14 +294,14 @@ const s = StyleSheet.create({
     color:         GOLD,
   },
 
-  // .hero — flex:1 centre column gap:30
+  // .hero — flex:1, logo positioned via translateY to sit at 2/3 screen
   hero: {
     flex:           1,
     alignItems:     'center',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     gap:            22,
     paddingHorizontal: 24,
-    paddingBottom:  36,
+    paddingBottom:  0,
   },
 
   // .logo — 340px circle, 4px gold border, cream bg, translateY(-38px)
@@ -316,7 +316,7 @@ const s = StyleSheet.create({
     alignItems:      'center',
     justifyContent:  'center',
     overflow:        'visible',
-    transform:       [{ translateY: 0 }],
+    transform:       [{ translateY: -80 }],
     shadowColor:     '#000',
     shadowOffset:    { width: 0, height: 22 },
     shadowOpacity:   0.55,
@@ -324,13 +324,13 @@ const s = StyleSheet.create({
     elevation:       20,
   },
 
-  // .cut — aligned to barbell break zone at centre of badge
+  // .cut — clip-path: inset(31% 5% 49% 5%) on 240px badge
   cut: {
     position:        'absolute',
-    top:             140,
-    bottom:          140,
-    left:            17,
-    right:           17,
+    top:             74,
+    bottom:          118,
+    left:            12,
+    right:           12,
     backgroundColor: '#f2eee3',
   },
 
@@ -338,7 +338,7 @@ const s = StyleSheet.create({
   wordlock: {
     alignItems: 'center',
     overflow:   'visible',
-    transform:  [{ translateY: -13 }],
+    transform:  [{ translateY: -22 }],
   },
 
   // .wordlock .tricon — 66px weight-700 letter-spacing:0.01em (0.01×66=0.66)
@@ -347,10 +347,10 @@ const s = StyleSheet.create({
     fontFamily:    'Oswald_700Bold',
     fontSize:      46,
     color:         GOLD,
-    lineHeight:    56,
-    paddingTop:    6,
+    lineHeight:    50,
+    paddingTop:    4,
     paddingLeft:   4,
-    letterSpacing: 0.7,
+    letterSpacing: 0.5,
   },
 
   // .wordlock .workout — 20px weight-500 letter-spacing:0.46em (0.46×20=9.2)
