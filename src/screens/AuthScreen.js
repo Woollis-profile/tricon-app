@@ -316,7 +316,7 @@ const s = StyleSheet.create({
     alignItems:      'center',
     justifyContent:  'center',
     overflow:        'visible',
-    transform:       [{ translateY: 15 }],
+    transform:       [{ translateY: 45 }],
     shadowColor:     '#000',
     shadowOffset:    { width: 0, height: 22 },
     shadowOpacity:   0.55,
@@ -324,13 +324,13 @@ const s = StyleSheet.create({
     elevation:       20,
   },
 
-  // .cut — SVG-geometry derived, covers all 3 barbell arms
+  // .cut — covers all barbell arms including side stubs
   cut: {
     position:        'absolute',
-    top:             57,
-    bottom:          74,
-    left:            10,
-    right:           10,
+    top:             62,
+    bottom:          82,
+    left:            14,
+    right:           14,
     backgroundColor: '#f2eee3',
   },
 
@@ -338,7 +338,7 @@ const s = StyleSheet.create({
   wordlock: {
     alignItems: 'center',
     overflow:   'visible',
-    transform:  [{ translateY: -8 }],
+    transform:  [{ translateY: -10 }],
   },
 
   // .wordlock .tricon — 66px weight-700 letter-spacing:0.01em (0.01×66=0.66)
