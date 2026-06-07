@@ -60,11 +60,11 @@ export default function AuthScreen() {
             rgba(0,0,0,0.92) 100%) */}
       <LinearGradient
         colors={[
-          'rgba(0,0,0,0.55)',
-          'rgba(0,0,0,0.10)',
+          'rgba(0,0,0,0.72)',
+          'rgba(0,0,0,0.15)',
           'rgba(0,0,0,0.00)',
-          'rgba(0,0,0,0.45)',
-          'rgba(0,0,0,0.92)',
+          'rgba(0,0,0,0.55)',
+          'rgba(0,0,0,0.94)',
         ]}
         locations={[0, 0.22, 0.42, 0.70, 1.0]}
         style={StyleSheet.absoluteFill}
@@ -267,7 +267,7 @@ const s = StyleSheet.create({
   screen: { flex: 1 },
 
   // .scrim-dim
-  scrimDim: { ...StyleSheet.absoluteFillObject, backgroundColor: '#000', opacity: 0.28 },
+  scrimDim: { ...StyleSheet.absoluteFillObject, backgroundColor: '#000', opacity: 0.35 },
 
   // .content
   content: { flex: 1, flexDirection: 'column' },
@@ -317,11 +317,11 @@ const s = StyleSheet.create({
     elevation:       20,
   },
 
-  // cream band — flex container holding TRICON + TRAINING text
+  // cream band — covers horizontal barbell zone, contains text
   cut: {
     position:        'absolute',
-    top:             '31%',
-    bottom:          '22%',
+    top:             '35%',
+    bottom:          '28%',
     left:            0,
     right:           0,
     backgroundColor: '#f2eee3',
