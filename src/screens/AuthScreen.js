@@ -55,6 +55,7 @@ export default function AuthScreen() {
       source={require('../../assets/gym-bg.png')}
       style={s.bg}
       resizeMode="cover"
+      imageStyle={{ transform: [{ scale: 0.85 }] }}
     >
       <View style={s.overlay} />
 
@@ -64,9 +65,9 @@ export default function AuthScreen() {
           {/* Barbell triangle mark */}
           <Svg
             viewBox="0 0 440 440"
-            width={BADGE}
-            height={BADGE}
-            style={{ position: 'absolute' }}
+            width={120}
+            height={120}
+            style={{ marginTop: 20 }}
           >
             <G transform="translate(220 220) scale(1.2) translate(-220 -220)">
               <G transform="translate(220 305) rotate(0)" fill={DARK}>
@@ -105,14 +106,8 @@ export default function AuthScreen() {
             </G>
           </Svg>
 
-          {/* Cream cut — hides barbell bars behind TRICON wordmark */}
-          <View style={s.cut} />
-
-          {/* Wordlock */}
-          <View style={s.wordlock}>
-            <Text style={s.tricon}>TRICON</Text>
-            <Text style={s.training}>TRAINING</Text>
-          </View>
+          <Text style={s.tricon}>TRICON</Text>
+          <Text style={s.training}>TRAINING</Text>
         </View>
 
         <Text style={s.tagline}>TRAINING METHOD FOR THE OLDER AND WISER ATHLETE</Text>
@@ -232,7 +227,7 @@ export default function AuthScreen() {
 }
 
 const s = StyleSheet.create({
-  bg:      { flex: 1 },
+  bg:      { flex: 1, backgroundColor: '#0a0a0b' },
   overlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0,0,0,0.55)' },
 
   // ── Badge area ────────────────────────────────────────────────────
@@ -252,33 +247,19 @@ const s = StyleSheet.create({
     alignItems:      'center',
     justifyContent:  'center',
   },
-  // Cream rectangle that hides barbell bars sitting behind TRICON text
-  // Mirrors web clip-path: inset(31% 5% 49% 5%) on a 280px circle
-  cut: {
-    position:        'absolute',
-    top:             Math.round(BADGE * 0.31),
-    left:            Math.round(BADGE * 0.05),
-    width:           Math.round(BADGE * 0.90),
-    height:          Math.round(BADGE * 0.20),
-    backgroundColor: CREAM,
-  },
-  wordlock: {
-    alignItems: 'center',
-    transform:  [{ translateY: -16 }],
-  },
   tricon: {
     fontFamily:    'Oswald_700Bold',
-    fontSize:      48,
+    fontSize:      42,
     color:         GOLD,
-    lineHeight:    48,
     letterSpacing: 0.5,
+    marginTop:     -8,
   },
   training: {
     fontFamily:    'Oswald_600SemiBold',
-    fontSize:      14,
+    fontSize:      13,
     letterSpacing: 6,
     color:         DARK,
-    marginTop:     3,
+    marginTop:     2,
   },
   tagline: {
     marginTop:     24,
