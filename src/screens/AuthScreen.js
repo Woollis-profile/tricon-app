@@ -323,21 +323,21 @@ const s = StyleSheet.create({
     elevation:       20,
   },
 
-  // .cut — mathematically aligned to TRICON text bounds (badge=340, wordlock translateY=-8 within centred layout)
-  // TRICON top ~y=132 (38% of 340), bottom ~y=214 (37% from bottom of 340)
+  // .cut — exact translation of web clip-path: inset(31% 5% 49% 5%)
+  // RN absolute top/bottom/left/right percentages map 1:1 to clip-path inset values
   cut: {
     position:        'absolute',
-    top:             '38%',
-    bottom:          '37%',
-    left:            '4%',
-    right:           '4%',
+    top:             '31%',
+    bottom:          '49%',
+    left:            '5%',
+    right:           '5%',
     backgroundColor: '#f2eee3',
   },
 
-  // .wordlock — reduced translateY to keep text away from circle top edge
+  // .wordlock — translateY(-19px) matches web source exactly; overflow:'visible' on logo prevents clipping
   wordlock: {
     alignItems: 'center',
-    transform:  [{ translateY: -8 }],
+    transform:  [{ translateY: -19 }],
   },
 
   // .wordlock .tricon — 66px weight-700 letter-spacing:0.01em (0.01×66=0.66)
