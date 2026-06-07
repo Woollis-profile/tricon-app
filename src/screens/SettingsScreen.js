@@ -5,6 +5,7 @@ import { C, PROG } from '../constants';
 import { useAppContext } from '../context';
 import { save } from '../storage';
 import { KEYS } from '../constants';
+import { supabase } from '../../lib/supabase';
 
 export default function SettingsScreen() {
   const { sessions, setSessions, unit, setUnit, weekIdx, setWeekIdx, pushupMax, setPushupMax, kbWeight, setKbWeight, setLastWeights } = useAppContext();
@@ -124,6 +125,14 @@ export default function SettingsScreen() {
               <Text style={s.clearBtnText}>CLEAR ALL DATA</Text>
             </TouchableOpacity>
           )}
+        </View>
+
+        {/* Account */}
+        <View style={[s.section, s.sectionPad]}>
+          <Text style={[s.sectionHeaderText, { color: C.accent, marginBottom: 8 }]}>ACCOUNT</Text>
+          <TouchableOpacity onPress={() => supabase.auth.signOut()} style={s.clearBtn}>
+            <Text style={s.clearBtnText}>SIGN OUT</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
