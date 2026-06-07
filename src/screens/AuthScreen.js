@@ -4,13 +4,13 @@ import {
   ActivityIndicator, Modal, ImageBackground,
   KeyboardAvoidingView, Platform,
 } from 'react-native';
-import Svg, { G, Rect } from 'react-native-svg';
+import Svg, { G, Rect, Polygon } from 'react-native-svg';
 import { supabase } from '../../lib/supabase';
 
 const GOLD  = '#c8a96e';
 const CREAM = '#f5f0e8';
 const DARK  = '#1b1a18';
-const BADGE = 280;
+const BADGE = 260;
 
 export default function AuthScreen() {
   const [modal,      setModal]      = useState(null); // null | 'signup' | 'login'
@@ -53,76 +53,83 @@ export default function AuthScreen() {
   return (
     <ImageBackground
       source={require('../../assets/gym-bg.png')}
-      style={{ flex: 1, width: '100%', height: '100%' }}
+      style={{ flex: 1 }}
       resizeMode="cover"
-      imageStyle={{
-        width: '100%',
-        height: '100%',
-        resizeMode: 'cover',
-        transform: [{ scale: 1.0 }],
-      }}
     >
+      {/* Dark overlay */}
       <View style={s.overlay} />
 
-      {/* ── Badge + tagline ─────────────────────────────────────────── */}
-      <View style={s.center}>
-        <View style={s.badge}>
-          {/* Barbell triangle mark */}
-          <Svg
-            viewBox="0 0 440 440"
-            width={BADGE}
-            height={BADGE}
-            style={{ position: 'absolute' }}
-          >
-            <G transform="translate(220 220) scale(1.2) translate(-220 -220)">
-              <G transform="translate(220 305) rotate(0)" fill={DARK}>
-                <Rect x="-147.224" y="-3.5" width="294.448" height="7" rx="3.5"/>
-                <Rect x="77"      y="-9"  width="5"   height="18" rx="2"/>
-                <Rect x="88"      y="-27" width="9.5" height="54" rx="3"/>
-                <Rect x="101"     y="-22" width="9"   height="44" rx="3"/>
-                <Rect x="114"     y="-17" width="8.5" height="34" rx="2.5"/>
-                <Rect x="-82"     y="-9"  width="5"   height="18" rx="2"/>
-                <Rect x="-97.5"   y="-27" width="9.5" height="54" rx="3"/>
-                <Rect x="-110"    y="-22" width="9"   height="44" rx="3"/>
-                <Rect x="-122.5"  y="-17" width="8.5" height="34" rx="2.5"/>
-              </G>
-              <G transform="translate(146.388 177.5) rotate(-60)" fill={DARK}>
-                <Rect x="-147.224" y="-3.5" width="294.448" height="7" rx="3.5"/>
-                <Rect x="77"      y="-9"  width="5"   height="18" rx="2"/>
-                <Rect x="88"      y="-27" width="9.5" height="54" rx="3"/>
-                <Rect x="101"     y="-22" width="9"   height="44" rx="3"/>
-                <Rect x="114"     y="-17" width="8.5" height="34" rx="2.5"/>
-                <Rect x="-82"     y="-9"  width="5"   height="18" rx="2"/>
-                <Rect x="-97.5"   y="-27" width="9.5" height="54" rx="3"/>
-                <Rect x="-110"    y="-22" width="9"   height="44" rx="3"/>
-                <Rect x="-122.5"  y="-17" width="8.5" height="34" rx="2.5"/>
-              </G>
-              <G transform="translate(293.612 177.5) rotate(60)" fill={DARK}>
-                <Rect x="-147.224" y="-3.5" width="294.448" height="7" rx="3.5"/>
-                <Rect x="77"      y="-9"  width="5"   height="18" rx="2"/>
-                <Rect x="88"      y="-27" width="9.5" height="54" rx="3"/>
-                <Rect x="101"     y="-22" width="9"   height="44" rx="3"/>
-                <Rect x="114"     y="-17" width="8.5" height="34" rx="2.5"/>
-                <Rect x="-82"     y="-9"  width="5"   height="18" rx="2"/>
-                <Rect x="-97.5"   y="-27" width="9.5" height="54" rx="3"/>
-                <Rect x="-110"    y="-22" width="9"   height="44" rx="3"/>
-                <Rect x="-122.5"  y="-17" width="8.5" height="34" rx="2.5"/>
-              </G>
-            </G>
-          </Svg>
-
-          {/* Cream cut — hides barbell bars behind TRICON wordmark */}
-          <View style={s.cut} />
-
-          {/* Wordlock */}
-          <View style={s.wordlock}>
-            <Text style={s.tricon}>TRICON</Text>
-            <Text style={s.training}>TRAINING</Text>
-          </View>
-        </View>
-
-        <Text style={s.tagline}>TRAINING METHOD FOR THE OLDER AND WISER ATHLETE</Text>
+      {/* ── Top nav — triangle glyph + TRICON ───────────────────────── */}
+      <View style={s.topnav}>
+        <Svg width={20} height={20} viewBox="0 0 300 300" fill="none">
+          <Polygon
+            points="150,52 248,222 52,222"
+            stroke="#ffffff"
+            strokeWidth={22}
+            strokeLinejoin="round"
+            strokeLinecap="round"
+          />
+        </Svg>
+        <Text style={s.topnavText}>TRICON</Text>
       </View>
+
+      {/* ── Badge ───────────────────────────────────────────────────── */}
+      <View style={s.badge}>
+        <Svg
+          viewBox="0 0 440 440"
+          width={BADGE}
+          height={BADGE}
+          style={{ position: 'absolute' }}
+        >
+          <G transform="translate(220 220) scale(1.2) translate(-220 -220)">
+            <G transform="translate(220 305) rotate(0)" fill={DARK}>
+              <Rect x="-147.224" y="-3.5" width="294.448" height="7" rx="3.5"/>
+              <Rect x="77"      y="-9"  width="5"   height="18" rx="2"/>
+              <Rect x="88"      y="-27" width="9.5" height="54" rx="3"/>
+              <Rect x="101"     y="-22" width="9"   height="44" rx="3"/>
+              <Rect x="114"     y="-17" width="8.5" height="34" rx="2.5"/>
+              <Rect x="-82"     y="-9"  width="5"   height="18" rx="2"/>
+              <Rect x="-97.5"   y="-27" width="9.5" height="54" rx="3"/>
+              <Rect x="-110"    y="-22" width="9"   height="44" rx="3"/>
+              <Rect x="-122.5"  y="-17" width="8.5" height="34" rx="2.5"/>
+            </G>
+            <G transform="translate(146.388 177.5) rotate(-60)" fill={DARK}>
+              <Rect x="-147.224" y="-3.5" width="294.448" height="7" rx="3.5"/>
+              <Rect x="77"      y="-9"  width="5"   height="18" rx="2"/>
+              <Rect x="88"      y="-27" width="9.5" height="54" rx="3"/>
+              <Rect x="101"     y="-22" width="9"   height="44" rx="3"/>
+              <Rect x="114"     y="-17" width="8.5" height="34" rx="2.5"/>
+              <Rect x="-82"     y="-9"  width="5"   height="18" rx="2"/>
+              <Rect x="-97.5"   y="-27" width="9.5" height="54" rx="3"/>
+              <Rect x="-110"    y="-22" width="9"   height="44" rx="3"/>
+              <Rect x="-122.5"  y="-17" width="8.5" height="34" rx="2.5"/>
+            </G>
+            <G transform="translate(293.612 177.5) rotate(60)" fill={DARK}>
+              <Rect x="-147.224" y="-3.5" width="294.448" height="7" rx="3.5"/>
+              <Rect x="77"      y="-9"  width="5"   height="18" rx="2"/>
+              <Rect x="88"      y="-27" width="9.5" height="54" rx="3"/>
+              <Rect x="101"     y="-22" width="9"   height="44" rx="3"/>
+              <Rect x="114"     y="-17" width="8.5" height="34" rx="2.5"/>
+              <Rect x="-82"     y="-9"  width="5"   height="18" rx="2"/>
+              <Rect x="-97.5"   y="-27" width="9.5" height="54" rx="3"/>
+              <Rect x="-110"    y="-22" width="9"   height="44" rx="3"/>
+              <Rect x="-122.5"  y="-17" width="8.5" height="34" rx="2.5"/>
+            </G>
+          </G>
+        </Svg>
+
+        {/* Cream cut — hides barbell bars behind TRICON wordmark */}
+        <View style={s.cut} />
+
+        {/* Wordlock */}
+        <View style={s.wordlock}>
+          <Text style={s.tricon}>TRICON</Text>
+          <Text style={s.training}>TRAINING</Text>
+        </View>
+      </View>
+
+      {/* ── Tagline ─────────────────────────────────────────────────── */}
+      <Text style={s.tagline}>TRAINING METHOD FOR THE OLDER AND WISER ATHLETE</Text>
 
       {/* ── Buttons ─────────────────────────────────────────────────── */}
       <View style={s.actions}>
@@ -238,16 +245,29 @@ export default function AuthScreen() {
 }
 
 const s = StyleSheet.create({
-  bg:      { flex: 1 },
-  overlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0,0,0,0.55)' },
+  overlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0,0,0,0.45)' },
 
-  // ── Badge area ────────────────────────────────────────────────────
-  center: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+  // ── Top nav ───────────────────────────────────────────────────────
+  topnav: {
+    position:      'absolute',
+    top:           52,
+    left:          20,
+    flexDirection: 'row',
+    alignItems:    'center',
+    gap:           10,
   },
+  topnavText: {
+    fontFamily:    'Oswald_600SemiBold',
+    fontSize:      16,
+    color:         GOLD,
+    letterSpacing: 6,
+  },
+
+  // ── Badge ─────────────────────────────────────────────────────────
   badge: {
+    position:        'absolute',
+    top:             '15%',
+    alignSelf:       'center',
     width:           BADGE,
     height:          BADGE,
     borderRadius:    BADGE / 2,
@@ -258,8 +278,6 @@ const s = StyleSheet.create({
     alignItems:      'center',
     justifyContent:  'center',
   },
-  // Cream rectangle that hides barbell bars sitting behind TRICON text
-  // Mirrors web clip-path: inset(31% 5% 49% 5%) on a 280px circle
   cut: {
     position:        'absolute',
     top:             Math.round(BADGE * 0.31),
@@ -270,7 +288,7 @@ const s = StyleSheet.create({
   },
   wordlock: {
     alignItems: 'center',
-    transform:  [{ translateY: -16 }],
+    transform:  [{ translateY: -14 }],
   },
   tricon: {
     fontFamily:    'Oswald_700Bold',
@@ -286,20 +304,27 @@ const s = StyleSheet.create({
     color:         DARK,
     marginTop:     3,
   },
+
+  // ── Tagline ───────────────────────────────────────────────────────
   tagline: {
-    marginTop:     24,
-    fontSize:      10,
-    color:         'rgba(255,255,255,0.7)',
-    letterSpacing: 2,
-    textAlign:     'center',
+    position:          'absolute',
+    top:               '62%',
+    left:              0,
+    right:             0,
+    fontSize:          10,
+    color:             'rgba(255,255,255,0.7)',
+    letterSpacing:     2,
+    textAlign:         'center',
     paddingHorizontal: 40,
-    lineHeight:    16,
+    lineHeight:        16,
   },
 
   // ── Buttons ───────────────────────────────────────────────────────
   actions: {
-    paddingHorizontal: 32,
-    paddingBottom:     48,
+    position: 'absolute',
+    bottom:   60,
+    left:     24,
+    right:    24,
   },
   btnCream: {
     backgroundColor: CREAM,
@@ -400,15 +425,15 @@ const s = StyleSheet.create({
     marginBottom:  6,
   },
   input: {
-    backgroundColor: '#161b22',
-    borderWidth:     1,
-    borderColor:     'rgba(255,255,255,0.1)',
-    borderRadius:    8,
-    color:           '#fff',
+    backgroundColor:   '#161b22',
+    borderWidth:       1,
+    borderColor:       'rgba(255,255,255,0.1)',
+    borderRadius:      8,
+    color:             '#fff',
     paddingVertical:   13,
     paddingHorizontal: 14,
-    fontSize:        15,
-    marginBottom:    16,
+    fontSize:          15,
+    marginBottom:      16,
   },
   submitBtn: {
     backgroundColor: GOLD,
