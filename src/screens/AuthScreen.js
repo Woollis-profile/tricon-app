@@ -53,8 +53,14 @@ export default function AuthScreen() {
   return (
     <ImageBackground
       source={require('../../assets/gym-bg.png')}
-      style={s.bg}
+      style={{ flex: 1 }}
       resizeMode="cover"
+      imageStyle={{
+        resizeMode: 'cover',
+        width: '100%',
+        height: '100%',
+        transform: [{ scale: 0.7 }],
+      }}
     >
       <View style={s.overlay} />
 
