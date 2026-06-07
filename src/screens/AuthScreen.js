@@ -138,8 +138,8 @@ export default function AuthScreen() {
               </G>
             </Svg>
 
-            {/* cream band — covers horizontal barbell, contains wordlock */}
-            <View style={s.cut}>
+            {/* wordlock — TRICON + TRAINING text on badge */}
+            <View style={s.wordlock}>
               <Text style={[s.tricon, { fontSize: Math.round(BADGE * 0.20), lineHeight: Math.round(BADGE * 0.22) }]}>TRICON</Text>
               <Text style={[s.training, { fontSize: Math.round(BADGE * 0.055), letterSpacing: Math.round(BADGE * 0.028) }]}>TRAINING</Text>
             </View>
@@ -316,15 +316,16 @@ const s = StyleSheet.create({
     elevation:       20,
   },
 
-  // wordlock — centred absolutely on badge, no background rectangle
+  // wordlock — absolutely centred in horizontal barbell zone
   wordlock: {
-    position:   'absolute',
-    top:        '36%',
-    left:       0,
-    right:      0,
-    alignItems: 'center',
+    position:        'absolute',
+    top:             '38%',
+    left:            0,
+    right:           0,
+    alignItems:      'center',
+    backgroundColor: 'transparent',
   },
-  cut: { display: 'none' },
+
 
   // .wordlock .tricon — 66px weight-700 letter-spacing:0.01em (0.01×66=0.66)
   // paddingTop:6 + paddingLeft:4 + lineHeight:80 prevent glyph clipping
@@ -349,9 +350,9 @@ const s = StyleSheet.create({
   // .tagline — 16px weight-400 letter-spacing:0.16em (0.16×16=2.56) line-height:1.55 (24.8)
   tagline: {
     maxWidth:      300,
-    fontSize:      13,
-    letterSpacing: 1.6,
-    lineHeight:    22,
+    fontSize:      16,
+    letterSpacing: 1.8,
+    lineHeight:    26,
     textTransform: 'uppercase',
     color:         'rgba(255,255,255,0.72)',
     textAlign:     'center',
