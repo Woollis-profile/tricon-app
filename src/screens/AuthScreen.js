@@ -346,7 +346,7 @@ const s = StyleSheet.create({
   training: {
     fontFamily:      'Oswald_600SemiBold',
     color:           '#1b1a18',
-    marginTop:       2,
+    marginTop:       -4,
     includeFontPadding: false,
     textAlign:       'center',
   },
