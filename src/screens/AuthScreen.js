@@ -94,10 +94,10 @@ export default function AuthScreen() {
         </View>
 
         {/* .hero — flex:1 centre column gap:30 */}
-        <View style={s.hero}>
+        <View style={[s.hero, { paddingBottom: Math.round(screenHeight * 0.16) }]}>
 
           {/* logo badge — 2/3 screen width, positioned at 2/3 up page */}
-          <View style={s.logo}>
+          <View style={[s.logo, { width: BADGE, height: BADGE, borderRadius: BADGE/2, transform: [{ translateY: -Math.round(BADGE * 0.08) }] }]}>
 
             {/* barbell triangle SVG — fills entire badge */}
             <Svg style={StyleSheet.absoluteFill} viewBox="0 0 440 440">
@@ -140,8 +140,8 @@ export default function AuthScreen() {
 
             {/* cream band — covers horizontal barbell, contains wordlock */}
             <View style={s.cut}>
-              <Text style={s.tricon}>TRICON</Text>
-              <Text style={s.training}>TRAINING</Text>
+              <Text style={[s.tricon, { fontSize: Math.round(BADGE * 0.20), lineHeight: Math.round(BADGE * 0.22) }]}>TRICON</Text>
+              <Text style={[s.training, { fontSize: Math.round(BADGE * 0.055), letterSpacing: Math.round(BADGE * 0.028) }]}>TRAINING</Text>
             </View>
 
           </View>{/* /.logo */}
@@ -299,20 +299,16 @@ const s = StyleSheet.create({
     justifyContent: 'flex-end',
     gap:            20,
     paddingHorizontal: 24,
-    paddingBottom:  Math.round(screenHeight * 0.16),
+    paddingBottom:  0, // set inline
   },
 
   // .logo — 340px circle, 4px gold border, cream bg, translateY(-38px)
   // overflow:'visible' so the circular borderRadius does not clip Oswald glyph tops
   logo: {
-    width:           BADGE,
-    height:          BADGE,
-    borderRadius:    BADGE / 2,
     borderWidth:     4,
     borderColor:     GOLD,
     backgroundColor: '#f2eee3',
     overflow:        'hidden',
-    transform:       [{ translateY: -Math.round(BADGE * 0.08) }],
     shadowColor:     '#000',
     shadowOffset:    { width: 0, height: 22 },
     shadowOpacity:   0.55,
@@ -334,7 +330,6 @@ const s = StyleSheet.create({
   // paddingTop:6 + paddingLeft:4 + lineHeight:80 prevent glyph clipping
   tricon: {
     fontFamily:      'Oswald_700Bold',
-    fontSize:        Math.round(BADGE * 0.20),
     color:           GOLD,
     letterSpacing:   0.5,
     includeFontPadding: false,
@@ -345,8 +340,6 @@ const s = StyleSheet.create({
   // Oswald_600SemiBold used as closest to web's weight-500
   training: {
     fontFamily:      'Oswald_600SemiBold',
-    fontSize:        Math.round(BADGE * 0.055),
-    letterSpacing:   Math.round(BADGE * 0.028),
     color:           '#1b1a18',
     marginTop:       3,
     includeFontPadding: false,
