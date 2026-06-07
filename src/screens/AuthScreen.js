@@ -77,7 +77,7 @@ export default function AuthScreen() {
       <View style={s.content}>
 
         {/* .topmark — gap:11 padding:60px 30px 0 (uses insets for safe area) */}
-        <View style={[s.topmark, { paddingTop: Math.max(insets.top + 8, 36) }]}>
+        <View style={[s.topmark, { paddingTop: Math.max(insets.top + 4, 44) }]}>
           {/* .topglyph — 26×26 white-stroke triangle SVG */}
           <Svg width={26} height={26} viewBox="0 0 300 300">
             <Polygon
@@ -319,11 +319,12 @@ const s = StyleSheet.create({
   // wordlock — absolutely centred in horizontal barbell zone
   wordlock: {
     position:        'absolute',
-    top:             '38%',
+    top:             '34%',
     left:            0,
     right:           0,
     alignItems:      'center',
     backgroundColor: 'transparent',
+    overflow:        'visible',
   },
 
 
@@ -335,6 +336,8 @@ const s = StyleSheet.create({
     letterSpacing:   0.5,
     includeFontPadding: false,
     textAlign:       'center',
+    paddingTop:      6,
+    paddingHorizontal: 4,
   },
 
   // .wordlock .workout — 20px weight-500 letter-spacing:0.46em (0.46×20=9.2)
