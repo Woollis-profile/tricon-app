@@ -323,31 +323,32 @@ const s = StyleSheet.create({
     elevation:       20,
   },
 
-  // .cut — clip-path: inset(31% 5% 49% 5%) on 340px badge converted to absolute px
-  // top: 340×0.31=105  bottom: 340×0.49=166  left: 340×0.05=17  right: 340×0.05=17
+  // .cut — aligned to barbell break zone at centre of badge
   cut: {
     position:        'absolute',
-    top:             105,
-    bottom:          166,
+    top:             140,
+    bottom:          140,
     left:            17,
     right:           17,
     backgroundColor: '#f2eee3',
   },
 
-  // .wordlock — translateY(-19px) matches web source exactly; overflow:'visible' on logo prevents clipping
+  // .wordlock — translateY lowered to align TRICON with cut layer
   wordlock: {
     alignItems: 'center',
-    transform:  [{ translateY: -19 }],
+    overflow:   'visible',
+    transform:  [{ translateY: -6 }],
   },
 
   // .wordlock .tricon — 66px weight-700 letter-spacing:0.01em (0.01×66=0.66)
-  // lineHeight:80 + paddingTop:8 give Oswald ascenders room so they aren't clipped
+  // paddingTop:6 + paddingLeft:4 + lineHeight:80 prevent glyph clipping
   tricon: {
     fontFamily:    'Oswald_700Bold',
     fontSize:      66,
     color:         GOLD,
     lineHeight:    80,
-    paddingTop:    8,
+    paddingTop:    6,
+    paddingLeft:   4,
     letterSpacing: 0.7,
   },
 
