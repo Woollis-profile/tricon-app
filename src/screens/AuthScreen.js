@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   View, Text, TouchableOpacity, ImageBackground, StyleSheet,
-  Modal, TextInput, ActivityIndicator, KeyboardAvoidingView, Platform,
+  Modal, TextInput, ActivityIndicator, KeyboardAvoidingView, Platform, Dimensions,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Svg, Polygon, G, Rect } from 'react-native-svg';
@@ -11,7 +11,7 @@ import { supabase } from '../../lib/supabase';
 // ── Design tokens (exact from web/index.html :root) ──────────────────────────
 const GOLD      = '#e3b23f';
 const GOLD_DEEP = '#cf9a2b';
-const BADGE     = 257; // exactly 2/3 of 390pt screen width
+const BADGE     = Math.round(Dimensions.get('window').width * 0.66);
 
 export default function AuthScreen() {
   const insets = useSafeAreaInsets();
@@ -93,10 +93,10 @@ export default function AuthScreen() {
         {/* .hero — flex:1 centre column gap:30 */}
         <View style={s.hero}>
 
-          {/* .logo — 340px circle, gold border 4px, translateY(-38px) */}
+          {/* logo badge — 2/3 screen width, positioned at 2/3 up page */}
           <View style={s.logo}>
 
-            {/* barbell SVG mark — absoluteFill viewBox 0 0 440 440 */}
+            {/* barbell triangle SVG — fills entire badge */}
             <Svg style={StyleSheet.absoluteFill} viewBox="0 0 440 440">
               <G transform="translate(220 220) scale(1.2) translate(-220 -220)">
                 <G transform="translate(220 305) rotate(0)" fill="#1b1a18">
@@ -135,14 +135,9 @@ export default function AuthScreen() {
               </G>
             </Svg>
 
-            {/* .cut — clip-path: inset(31% 5% 49% 5%) over same cream bg */}
-            <View style={s.cut} />
-
-            {/* .wordlock — translateY(-19px) */}
-            <View style={s.wordlock}>
-              {/* .tricon — 66px bold letter-spacing:0.01em */}
+            {/* cream band — covers horizontal barbell, contains wordlock */}
+            <View style={s.cut}>
               <Text style={s.tricon}>TRICON</Text>
-              {/* .workout — 20px weight-500 letter-spacing:0.46em */}
               <Text style={s.training}>TRAINING</Text>
             </View>
 
@@ -294,14 +289,14 @@ const s = StyleSheet.create({
     color:         GOLD,
   },
 
-  // .hero — badge centred, translateY lifts to 2/3 up page
+  // .hero — badge at 2/3 up page
   hero: {
     flex:           1,
     alignItems:     'center',
-    justifyContent: 'center',
-    gap:            16,
+    justifyContent: 'flex-end',
+    gap:            20,
     paddingHorizontal: 24,
-    paddingBottom:  0,
+    paddingBottom:  Math.round(Dimensions.get('window').height * 0.18),
   },
 
   // .logo — 340px circle, 4px gold border, cream bg, translateY(-38px)
@@ -312,11 +307,9 @@ const s = StyleSheet.create({
     borderRadius:    BADGE / 2,
     borderWidth:     4,
     borderColor:     GOLD,
-    backgroundColor: '#f2eee3', // mid-stop of web radial-gradient
-    alignItems:      'center',
-    justifyContent:  'center',
-    overflow:        'visible',
-    transform:       [{ translateY: -51 }],
+    backgroundColor: '#f2eee3',
+    overflow:        'hidden',
+    transform:       [{ translateY: -Math.round(BADGE * 0.15) }],
     shadowColor:     '#000',
     shadowOffset:    { width: 0, height: 22 },
     shadowOpacity:   0.55,
@@ -324,44 +317,38 @@ const s = StyleSheet.create({
     elevation:       20,
   },
 
-  // .cut — minimal mask, only covers horizontal bar behind TRICON text
+  // cream band — flex container holding TRICON + TRAINING text
   cut: {
     position:        'absolute',
-    top:             126,
-    bottom:          57,
+    top:             '31%',
+    bottom:          '22%',
     left:            0,
     right:           0,
     backgroundColor: '#f2eee3',
-  },
-
-  // .wordlock — translateY lowered to align TRICON with cut layer
-  wordlock: {
-    alignItems: 'center',
-    overflow:   'visible',
-    transform:  [{ translateY: 34 }],
+    alignItems:      'center',
+    justifyContent:  'center',
   },
 
   // .wordlock .tricon — 66px weight-700 letter-spacing:0.01em (0.01×66=0.66)
   // paddingTop:6 + paddingLeft:4 + lineHeight:80 prevent glyph clipping
   tricon: {
     fontFamily:    'Oswald_700Bold',
-    fontSize:      50,
+    fontSize:      Math.round(BADGE * 0.2),
     color:         GOLD,
-    lineHeight:    58,
-    paddingTop:    8,
-    paddingLeft:   6,
-    paddingRight:  6,
+    lineHeight:    Math.round(BADGE * 0.22),
     letterSpacing: 0.5,
+    includeFontPadding: false,
   },
 
   // .wordlock .workout — 20px weight-500 letter-spacing:0.46em (0.46×20=9.2)
   // Oswald_600SemiBold used as closest to web's weight-500
   training: {
     fontFamily:    'Oswald_600SemiBold',
-    fontSize:      14,
-    letterSpacing: 8,
+    fontSize:      Math.round(BADGE * 0.055),
+    letterSpacing: Math.round(BADGE * 0.03),
     color:         '#1b1a18',
-    marginTop:     3,
+    marginTop:     2,
+    includeFontPadding: false,
   },
 
   // .tagline — 16px weight-400 letter-spacing:0.16em (0.16×16=2.56) line-height:1.55 (24.8)
