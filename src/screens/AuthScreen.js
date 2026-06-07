@@ -161,7 +161,7 @@ export default function AuthScreen() {
 
           </View>{/* /.logo */}
 
-          {/* tagline */
+          {/* tagline */}
           <Text style={s.tagline}>{'TRAINING METHOD FOR THE\nOLDER AND WISER ATHLETE'}</Text>
 
         </View>{/* /.hero */}
