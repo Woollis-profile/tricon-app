@@ -11,7 +11,7 @@ import { supabase } from '../../lib/supabase';
 // ── Design tokens (exact from web/index.html :root) ──────────────────────────
 const GOLD      = '#e3b23f';
 const GOLD_DEEP = '#cf9a2b';
-const BADGE     = 320; // 320pt fits iPhone 390pt screen width well
+const BADGE     = 340; // web .logo { width: 340px; height: 340px }
 
 export default function AuthScreen() {
   const insets = useSafeAreaInsets();
@@ -49,7 +49,6 @@ export default function AuthScreen() {
       source={require('../../assets/gym-bg.png')}
       style={s.screen}
       resizeMode="cover"
-      imageStyle={{ top: -80 }}
     >
       {/* .scrim-dim — flat black at opacity 0.28 */}
       <View style={s.scrimDim} />
@@ -324,13 +323,14 @@ const s = StyleSheet.create({
     elevation:       20,
   },
 
-  // .cut — full badge width to prevent barbell bars showing through TRICON text sides
+  // .cut — clip-path: inset(31% 5% 49% 5%) on 340px badge converted to absolute px
+  // top: 340×0.31=105  bottom: 340×0.49=166  left: 340×0.05=17  right: 340×0.05=17
   cut: {
     position:        'absolute',
-    top:             '31%',
-    bottom:          '49%',
-    left:            '0%',
-    right:           '0%',
+    top:             105,
+    bottom:          166,
+    left:            17,
+    right:           17,
     backgroundColor: '#f2eee3',
   },
 
