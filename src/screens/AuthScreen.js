@@ -24,6 +24,8 @@ export default function AuthScreen() {
   const [loading,   setLoading]   = useState(false);
   const [error,     setError]     = useState('');
   const [info,      setInfo]      = useState('');
+  const [badgeY,    setBadgeY]    = useState(0);
+  const [badgeX,    setBadgeX]    = useState(0);
 
   // ── Supabase auth logic (preserved exactly) ───────────────────────────────
   const handleSubmit = async () => {
@@ -73,6 +75,21 @@ export default function AuthScreen() {
         style={StyleSheet.absoluteFill}
       />
 
+      {/* wordlock overlay — absolutely positioned, immune to all overflow:hidden */}
+      {badgeY > 0 && (
+        <View pointerEvents="none" style={{
+          position: 'absolute',
+          top: badgeY + Math.round(BADGE * 0.35),
+          left: 0,
+          right: 0,
+          alignItems: 'center',
+          zIndex: 999,
+        }}>
+          <Text style={[s.tricon, { fontSize: Math.round(BADGE * 0.20), lineHeight: Math.round(BADGE * 0.21) }]}>TRICON</Text>
+          <Text style={[s.training, { fontSize: Math.round(BADGE * 0.055), letterSpacing: Math.round(BADGE * 0.028) }]}>TRAINING</Text>
+        </View>
+      )}
+
       {/* .content — flex column filling screen */}
       <View style={s.content}>
 
@@ -97,7 +114,8 @@ export default function AuthScreen() {
         <View style={[s.hero, { paddingBottom: Math.round(screenHeight * 0.16) }]}>
 
           {/* logo badge — 2/3 screen width, positioned at 2/3 up page */}
-          <View style={[s.logo, { width: BADGE, height: BADGE, borderRadius: BADGE/2, transform: [{ translateY: -Math.round(BADGE * 0.08) }] }]}>
+          <View style={[s.logo, { width: BADGE, height: BADGE, borderRadius: BADGE/2, transform: [{ translateY: -Math.round(BADGE * 0.08) }] }]}
+            onLayout={e => { setBadgeY(e.nativeEvent.layout.y); setBadgeX(e.nativeEvent.layout.x); }}>
 
             {/* circular clip for SVG only — text sits outside this */}
             <View style={StyleSheet.absoluteFill} pointerEvents="none">
@@ -143,13 +161,7 @@ export default function AuthScreen() {
 
           </View>{/* /.logo */}
 
-          {/* wordlock — rendered outside badge so never clipped by circle */}
-          <View style={[s.wordlock, { marginTop: -Math.round(BADGE * 0.62) }]} pointerEvents="none">
-            <Text style={[s.tricon, { fontSize: Math.round(BADGE * 0.20), lineHeight: Math.round(BADGE * 0.21) }]}>TRICON</Text>
-            <Text style={[s.training, { fontSize: Math.round(BADGE * 0.055), letterSpacing: Math.round(BADGE * 0.028) }]}>TRAINING</Text>
-          </View>
-
-          {/* tagline */}
+          {/* tagline */
           <Text style={s.tagline}>{'TRAINING METHOD FOR THE\nOLDER AND WISER ATHLETE'}</Text>
 
         </View>{/* /.hero */}
