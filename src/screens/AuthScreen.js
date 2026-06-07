@@ -144,7 +144,7 @@ export default function AuthScreen() {
           </View>{/* /.logo */}
 
           {/* wordlock — rendered outside badge so never clipped by circle */}
-          <View style={[s.wordlock, { marginTop: -Math.round(BADGE * 0.72) }]} pointerEvents="none">
+          <View style={[s.wordlock, { marginTop: -Math.round(BADGE * 0.62) }]} pointerEvents="none">
             <Text style={[s.tricon, { fontSize: Math.round(BADGE * 0.20), lineHeight: Math.round(BADGE * 0.21) }]}>TRICON</Text>
             <Text style={[s.training, { fontSize: Math.round(BADGE * 0.055), letterSpacing: Math.round(BADGE * 0.028) }]}>TRAINING</Text>
           </View>
