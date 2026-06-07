@@ -11,7 +11,7 @@ import { supabase } from '../../lib/supabase';
 // ── Design tokens (exact from web/index.html :root) ──────────────────────────
 const GOLD      = '#e3b23f';
 const GOLD_DEEP = '#cf9a2b';
-const BADGE     = 210; // template match
+const BADGE     = 257; // exactly 2/3 of 390pt screen width
 
 export default function AuthScreen() {
   const insets = useSafeAreaInsets();
@@ -149,7 +149,7 @@ export default function AuthScreen() {
           </View>{/* /.logo */}
 
           {/* .tagline — 16px weight-400 letter-spacing:0.16em line-height:1.55 */}
-          <Text style={s.tagline}>TRAINING METHOD FOR THE OLDER AND WISER ATHLETE</Text>
+          <Text style={s.tagline}>{'TRAINING METHOD FOR THE\nOLDER AND WISER ATHLETE'}</Text>
 
         </View>{/* /.hero */}
 
@@ -294,12 +294,12 @@ const s = StyleSheet.create({
     color:         GOLD,
   },
 
-  // .hero — badge at centre with slight upward shift via logo translateY
+  // .hero — badge centred, translateY lifts to 2/3 up page
   hero: {
     flex:           1,
     alignItems:     'center',
     justifyContent: 'center',
-    gap:            14,
+    gap:            16,
     paddingHorizontal: 24,
     paddingBottom:  0,
   },
@@ -316,7 +316,7 @@ const s = StyleSheet.create({
     alignItems:      'center',
     justifyContent:  'center',
     overflow:        'visible',
-    transform:       [{ translateY: 45 }],
+    transform:       [{ translateY: -51 }],
     shadowColor:     '#000',
     shadowOffset:    { width: 0, height: 22 },
     shadowOpacity:   0.55,
@@ -324,13 +324,13 @@ const s = StyleSheet.create({
     elevation:       20,
   },
 
-  // .cut — covers all barbell arms including side stubs
+  // .cut — minimal mask, only covers horizontal bar behind TRICON text
   cut: {
     position:        'absolute',
-    top:             62,
-    bottom:          82,
-    left:            14,
-    right:           14,
+    top:             126,
+    bottom:          57,
+    left:            0,
+    right:           0,
     backgroundColor: '#f2eee3',
   },
 
@@ -338,37 +338,38 @@ const s = StyleSheet.create({
   wordlock: {
     alignItems: 'center',
     overflow:   'visible',
-    transform:  [{ translateY: -10 }],
+    transform:  [{ translateY: 34 }],
   },
 
   // .wordlock .tricon — 66px weight-700 letter-spacing:0.01em (0.01×66=0.66)
   // paddingTop:6 + paddingLeft:4 + lineHeight:80 prevent glyph clipping
   tricon: {
     fontFamily:    'Oswald_700Bold',
-    fontSize:      42,
+    fontSize:      50,
     color:         GOLD,
-    lineHeight:    46,
-    paddingTop:    2,
-    paddingLeft:   3,
-    letterSpacing: 0.4,
+    lineHeight:    58,
+    paddingTop:    8,
+    paddingLeft:   6,
+    paddingRight:  6,
+    letterSpacing: 0.5,
   },
 
   // .wordlock .workout — 20px weight-500 letter-spacing:0.46em (0.46×20=9.2)
   // Oswald_600SemiBold used as closest to web's weight-500
   training: {
     fontFamily:    'Oswald_600SemiBold',
-    fontSize:      12,
-    letterSpacing: 5.5,
+    fontSize:      14,
+    letterSpacing: 8,
     color:         '#1b1a18',
-    marginTop:     2,
+    marginTop:     3,
   },
 
   // .tagline — 16px weight-400 letter-spacing:0.16em (0.16×16=2.56) line-height:1.55 (24.8)
   tagline: {
-    maxWidth:      300,
+    maxWidth:      280,
     fontSize:      13,
-    letterSpacing: 2.0,
-    lineHeight:    20,
+    letterSpacing: 1.8,
+    lineHeight:    22,
     textTransform: 'uppercase',
     color:         'rgba(255,255,255,0.72)',
     textAlign:     'center',
