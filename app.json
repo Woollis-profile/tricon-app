@@ -34,6 +34,9 @@
         "projectId": "acb0370f-661a-46db-b2cd-5c32ddac9d08"
       }
     },
-    "owner": "gharvz"
+    "owner": "gharvz",
+    "plugins": [
+      ["react-native-purchases", { "apiKey": "REVENUECAT_API_KEY_PLACEHOLDER" }]
+    ]
   }
 }
