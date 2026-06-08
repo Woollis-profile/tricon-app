@@ -49,7 +49,7 @@ export default function AuthScreen() {
 
   return (
     <ImageBackground
-      source={require('../../assets/gym-bg.png')}
+      source={require('../../assets/gym-bg.jpg')}
       style={s.screen}
       resizeMode="cover"
     >
