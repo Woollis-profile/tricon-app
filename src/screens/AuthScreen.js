@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { useWindowDimensions } from 'react-native';
 import {
   View, Text, TouchableOpacity, ImageBackground, StyleSheet,
-  Modal, TextInput, ActivityIndicator, KeyboardAvoidingView, Platform,
+  Modal, TextInput, ActivityIndicator, KeyboardAvoidingView, Platform, Image,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Svg, Polygon, G, Rect, Text as SvgText } from 'react-native-svg';
+import { Svg, Polygon } from 'react-native-svg';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { supabase } from '../../lib/supabase';
 
@@ -76,93 +76,24 @@ export default function AuthScreen() {
       {/* .content — flex column filling screen */}
       <View style={s.content}>
 
-        {/* .topmark — gap:11 padding:60px 30px 0 (uses insets for safe area) */}
+        {/* topmark — wordmark image */}
         <View style={[s.topmark, { paddingTop: Math.max(insets.top + 4, 44) }]}>
-          {/* .topglyph — 26×26 white-stroke triangle SVG */}
-          <Svg width={26} height={26} viewBox="0 0 300 300">
-            <Polygon
-              points="150,52 248,222 52,222"
-              stroke="#ffffff"
-              strokeWidth={22}
-              strokeLinejoin="round"
-              strokeLinecap="round"
-              fill="none"
-            />
-          </Svg>
-          {/* .tt — 16px weight-600 letter-spacing:0.42em (#e3b23f) */}
-          <Text style={s.tt}>TRICON</Text>
+          <Image
+            source={require('../../assets/tricon-wordmark.png')}
+            style={{ width: 160, height: 32 }}
+            resizeMode="contain"
+          />
         </View>
 
         {/* .hero — flex:1 centre column gap:30 */}
         <View style={[s.hero, { paddingBottom: Math.round(screenHeight * 0.16) }]}>
 
-          {/* logo badge — 2/3 screen width, positioned at 2/3 up page */}
-          <View style={[s.logo, { width: BADGE, height: BADGE, borderRadius: BADGE/2, transform: [{ translateY: -Math.round(BADGE * 0.08) }] }]}>
-
-            {/* circular clip for SVG only — text sits outside this */}
-            <View style={StyleSheet.absoluteFill} pointerEvents="none">
-            {/* barbell triangle SVG — fills entire badge */}
-            <Svg style={StyleSheet.absoluteFill} viewBox="0 0 440 440">
-              <G transform="translate(220 220) scale(1.2) translate(-220 -220)">
-                <G transform="translate(220 305) rotate(0)" fill="#1b1a18">
-                  <Rect x={-147.224} y={-3.5} width={294.448} height={7}  rx={3.5}/>
-                  <Rect x={77}       y={-9}   width={5}       height={18} rx={2}/>
-                  <Rect x={88}       y={-27}  width={9.5}     height={54} rx={3}/>
-                  <Rect x={101}      y={-22}  width={9}       height={44} rx={3}/>
-                  <Rect x={114}      y={-17}  width={8.5}     height={34} rx={2.5}/>
-                  <Rect x={-82}      y={-9}   width={5}       height={18} rx={2}/>
-                  <Rect x={-97.5}    y={-27}  width={9.5}     height={54} rx={3}/>
-                  <Rect x={-110}     y={-22}  width={9}       height={44} rx={3}/>
-                  <Rect x={-122.5}   y={-17}  width={8.5}     height={34} rx={2.5}/>
-                </G>
-                <G transform="translate(146.388 177.5) rotate(-60)" fill="#1b1a18">
-                  <Rect x={-147.224} y={-3.5} width={294.448} height={7}  rx={3.5}/>
-                  <Rect x={77}       y={-9}   width={5}       height={18} rx={2}/>
-                  <Rect x={88}       y={-27}  width={9.5}     height={54} rx={3}/>
-                  <Rect x={101}      y={-22}  width={9}       height={44} rx={3}/>
-                  <Rect x={114}      y={-17}  width={8.5}     height={34} rx={2.5}/>
-                  <Rect x={-82}      y={-9}   width={5}       height={18} rx={2}/>
-                  <Rect x={-97.5}    y={-27}  width={9.5}     height={54} rx={3}/>
-                  <Rect x={-110}     y={-22}  width={9}       height={44} rx={3}/>
-                  <Rect x={-122.5}   y={-17}  width={8.5}     height={34} rx={2.5}/>
-                </G>
-                <G transform="translate(293.612 177.5) rotate(60)" fill="#1b1a18">
-                  <Rect x={-147.224} y={-3.5} width={294.448} height={7}  rx={3.5}/>
-                  <Rect x={77}       y={-9}   width={5}       height={18} rx={2}/>
-                  <Rect x={88}       y={-27}  width={9.5}     height={54} rx={3}/>
-                  <Rect x={101}      y={-22}  width={9}       height={44} rx={3}/>
-                  <Rect x={114}      y={-17}  width={8.5}     height={34} rx={2.5}/>
-                  <Rect x={-82}      y={-9}   width={5}       height={18} rx={2}/>
-                  <Rect x={-97.5}    y={-27}  width={9.5}     height={54} rx={3}/>
-                  <Rect x={-110}     y={-22}  width={9}       height={44} rx={3}/>
-                  <Rect x={-122.5}   y={-17}  width={8.5}     height={34} rx={2.5}/>
-                </G>
-              </G>
-              <Rect x="0" y="242" width="440" height="104" fill="#f2eee3"/>
-              <SvgText
-                x="220" y="308"
-                textAnchor="middle"
-                fontFamily="Oswald_700Bold"
-                fontSize="88"
-                fontWeight="700"
-                fill="#e3b23f"
-                letterSpacing="2"
-              >TRICON</SvgText>
-              <SvgText
-                x="220" y="332"
-                textAnchor="middle"
-                fontFamily="Oswald_600SemiBold"
-                fontSize="26"
-                fontWeight="600"
-                fill="#1b1a18"
-                letterSpacing="12"
-              >TRAINING</SvgText>
-            </Svg>
-            </View>
-
-
-
-          </View>{/* /.logo */}
+          {/* logo — PNG image asset, no SVG complexity */}
+          <Image
+            source={require('../../assets/tricon-logo.png')}
+            style={{ width: BADGE, height: BADGE, transform: [{ translateY: -Math.round(BADGE * 0.08) }] }}
+            resizeMode="contain"
+          />
 
           {/* tagline */}
           <Text style={s.tagline}>{'TRAINING METHOD FOR THE\nOLDER AND WISER ATHLETE'}</Text>
