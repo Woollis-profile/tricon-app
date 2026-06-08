@@ -6,9 +6,24 @@ import { useAppContext } from '../context';
 import { save } from '../storage';
 import { KEYS } from '../constants';
 import { supabase } from '../../lib/supabase';
+import { restorePurchases } from '../lib/purchases';
 
 export default function SettingsScreen() {
-  const { sessions, setSessions, unit, setUnit, weekIdx, setWeekIdx, pushupMax, setPushupMax, kbWeight, setKbWeight, setLastWeights } = useAppContext();
+  const { sessions, setSessions, unit, setUnit, weekIdx, setWeekIdx, pushupMax, setPushupMax, kbWeight, setKbWeight, setLastWeights, setIsUnlocked } = useAppContext();
+
+  const handleRestore = async () => {
+    try {
+      const unlocked = await restorePurchases();
+      if (unlocked) {
+        setIsUnlocked(true);
+        Alert.alert('Restored', 'Your purchase has been restored.');
+      } else {
+        Alert.alert('Not Found', 'No previous purchase found.');
+      }
+    } catch (e) {
+      Alert.alert('Not Found', 'No previous purchase found.');
+    }
+  };
 
   const clearData = () => {
     Alert.alert('Clear All Data', 'Cannot be undone.', [
@@ -116,6 +131,17 @@ export default function SettingsScreen() {
           ))}
         </View>
 
+        {/* Restore Purchase */}
+        <TouchableOpacity style={s.section} onPress={handleRestore} activeOpacity={0.75}>
+          <View style={s.restoreRow}>
+            <View style={s.restoreInfo}>
+              <Text style={s.restoreLabel}>Restore Purchase</Text>
+              <Text style={s.restoreSub}>Already bought TriCon? Tap to restore.</Text>
+            </View>
+            <Text style={s.restoreChevron}>›</Text>
+          </View>
+        </TouchableOpacity>
+
         {/* Data */}
         <View style={[s.section, s.sectionPad]}>
           <Text style={[s.sectionHeaderText, { color: C.accent, marginBottom: 8 }]}>DATA</Text>
@@ -169,6 +195,11 @@ const s = StyleSheet.create({
   schedDay: { fontSize: 14, color: C.text, fontWeight: '600' },
   schedDetail: { fontSize: 14, color: C.muted, marginTop: 2 },
   schedDot: { width: 8, height: 8, borderRadius: 4 },
+  restoreRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 14 },
+  restoreInfo: { flex: 1 },
+  restoreLabel: { fontSize: 14, color: C.text, fontWeight: '600' },
+  restoreSub: { fontSize: 11, color: C.muted, marginTop: 2 },
+  restoreChevron: { fontSize: 22, color: '#c8a96e', marginLeft: 10 },
   dataText: { fontSize: 14, color: C.sub, lineHeight: 22 },
   clearBtn: { marginTop: 10, backgroundColor: 'rgba(224,82,82,0.1)', borderWidth: 1, borderColor: 'rgba(224,82,82,0.25)', borderRadius: 7, paddingVertical: 8, paddingHorizontal: 14, alignSelf: 'flex-start' },
   clearBtnText: { color: C.red, fontSize: 11, fontWeight: '700', fontFamily: 'Oswald_700Bold', letterSpacing: 1 },
