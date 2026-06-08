@@ -76,11 +76,11 @@ export default function AuthScreen() {
       {/* .content — flex column filling screen */}
       <View style={s.content}>
 
-        {/* topmark — wordmark image */}
+        {/* topmark — wordmark image top left */}
         <View style={[s.topmark, { paddingTop: Math.max(insets.top + 4, 44) }]}>
           <Image
             source={require('../../assets/tricon-wordmark.png')}
-            style={{ width: 160, height: 32 }}
+            style={{ width: 120, height: 20 }}
             resizeMode="contain"
           />
         </View>
@@ -88,10 +88,10 @@ export default function AuthScreen() {
         {/* .hero — flex:1 centre column gap:30 */}
         <View style={[s.hero, { paddingBottom: Math.round(screenHeight * 0.16) }]}>
 
-          {/* logo — PNG image asset, no SVG complexity */}
+          {/* logo — PNG asset, 2/3 screen width */}
           <Image
             source={require('../../assets/tricon-logo.png')}
-            style={{ width: BADGE, height: BADGE, transform: [{ translateY: -Math.round(BADGE * 0.08) }] }}
+            style={{ width: BADGE, height: BADGE, transform: [{ translateY: -Math.round(BADGE * 0.05) }] }}
             resizeMode="contain"
           />
 
