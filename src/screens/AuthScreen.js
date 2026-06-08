@@ -17,7 +17,7 @@ const GOLD_DEEP = '#cf9a2b';
 export default function AuthScreen() {
   const insets = useSafeAreaInsets();
   const { width: screenWidth, height: screenHeight } = useWindowDimensions();
-  const BADGE = Math.round(screenWidth * 0.68);
+  const BADGE = Math.round(screenWidth * 0.75);
   const [modalMode, setModalMode] = useState(null); // null | 'login' | 'signup'
   const [email,     setEmail]     = useState('');
   const [password,  setPassword]  = useState('');
@@ -80,18 +80,18 @@ export default function AuthScreen() {
         <View style={[s.topmark, { paddingTop: Math.max(insets.top + 4, 44) }]}>
           <Image
             source={require('../../assets/tricon-wordmark.png')}
-            style={{ width: 120, height: 20 }}
+            style={{ width: 140, height: 24 }}
             resizeMode="contain"
           />
         </View>
 
         {/* .hero — flex:1 centre column gap:30 */}
-        <View style={[s.hero, { paddingBottom: Math.round(screenHeight * 0.16) }]}>
+        <View style={[s.hero, { paddingBottom: Math.round(screenHeight * 0.12) }]}>
 
-          {/* logo — PNG asset, 2/3 screen width */}
+          {/* logo — PNG asset */}
           <Image
             source={require('../../assets/tricon-logo.png')}
-            style={{ width: BADGE, height: BADGE, transform: [{ translateY: -Math.round(BADGE * 0.05) }] }}
+            style={{ width: BADGE, height: BADGE }}
             resizeMode="contain"
           />
 
