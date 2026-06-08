@@ -5,7 +5,7 @@ import {
   Modal, TextInput, ActivityIndicator, KeyboardAvoidingView, Platform,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Svg, Polygon, G, Rect } from 'react-native-svg';
+import { Svg, Polygon, G, Rect, Text as SvgText } from 'react-native-svg';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { supabase } from '../../lib/supabase';
 
@@ -138,15 +138,29 @@ export default function AuthScreen() {
                   <Rect x={-122.5}   y={-17}  width={8.5}     height={34} rx={2.5}/>
                 </G>
               </G>
-              <Rect x="-220" y="268" width="440" height="58" fill="#f2eee3"/>
+              <Rect x="-220" y="262" width="440" height="72" fill="#f2eee3"/>
+              <SvgText
+                x="220" y="303"
+                textAnchor="middle"
+                fontFamily="Oswald_700Bold"
+                fontSize="90"
+                fontWeight="700"
+                fill="#e3b23f"
+                letterSpacing="2"
+              >TRICON</SvgText>
+              <SvgText
+                x="220" y="325"
+                textAnchor="middle"
+                fontFamily="Oswald_600SemiBold"
+                fontSize="26"
+                fontWeight="600"
+                fill="#1b1a18"
+                letterSpacing="12"
+              >TRAINING</SvgText>
             </Svg>
             </View>
 
-            {/* wordlock — sits in flex, SVG cream rect hides barbell behind it */}
-            <View style={{ alignItems: 'center', marginTop: -30 }}>
-              <Text style={[s.tricon, { fontSize: Math.round(BADGE * 0.20), lineHeight: Math.round(BADGE * 0.22) }]}>TRICON</Text>
-              <Text style={[s.training, { fontSize: Math.round(BADGE * 0.055), letterSpacing: Math.round(BADGE * 0.028), marginTop: 4 }]}>TRAINING</Text>
-            </View>
+
 
           </View>{/* /.logo */}
 
