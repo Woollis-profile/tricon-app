@@ -8,12 +8,14 @@ import {
   loadSessions,
   saveSession,
 } from './supabaseService';
+import { initPurchases, getIsUnlocked } from './lib/purchases';
 
 const AppContext = createContext(null);
 
 export function AppProvider({ children }) {
   const [isReady, setIsReady]       = useState(false);
   const [userId, setUserId]         = useState(null);
+  const [isUnlocked, setIsUnlocked] = useState(false);
   const [sessions, setSessions]     = useState([]);
   const [lastWeights, setLastWeights] = useState({});
   const [unit, setUnit]             = useState('kg');
@@ -35,6 +37,10 @@ export function AppProvider({ children }) {
       const { data: { user } } = await supabase.auth.getUser();
       const uid = user?.id ?? null;
       setUserId(uid);
+
+      // Configure RevenueCat and check unlock status
+      if (uid) await initPurchases(uid);
+      setIsUnlocked(await getIsUnlocked());
 
       if (uid) {
         // Try Supabase first, fall back to SecureStore on failure
@@ -134,6 +140,7 @@ export function AppProvider({ children }) {
   return (
     <AppContext.Provider value={{
       isReady,
+      isUnlocked, setIsUnlocked,
       sessions, setSessions, addSession,
       lastWeights, setLastWeights,
       unit, setUnit,

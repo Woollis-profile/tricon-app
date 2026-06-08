@@ -26,14 +26,31 @@ import LibraryScreen from './src/screens/LibraryScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
 import WorkoutScreen from './src/screens/WorkoutScreen';
 import FridayPickerScreen from './src/screens/FridayPickerScreen';
+import PaywallScreen from './src/screens/PaywallScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
+function GatedWorkout(props) {
+  const { isUnlocked, setIsUnlocked } = useAppContext();
+  if (!isUnlocked) {
+    return <PaywallScreen onUnlocked={() => setIsUnlocked(true)} />;
+  }
+  return <WorkoutScreen {...props} />;
+}
+
+function GatedStats(props) {
+  const { isUnlocked, setIsUnlocked } = useAppContext();
+  if (!isUnlocked) {
+    return <PaywallScreen onUnlocked={() => setIsUnlocked(true)} />;
+  }
+  return <StatsScreen {...props} />;
+}
+
 const TABS = [
   { id: 'Home', icon: 'home-outline', iconActive: 'home', label: 'HOME', component: HomeScreen },
   { id: 'Plan', icon: 'calendar-outline', iconActive: 'calendar', label: 'PLAN', component: CalendarScreen },
-  { id: 'Stats', icon: 'bar-chart-outline', iconActive: 'bar-chart', label: 'STATS', component: StatsScreen },
+  { id: 'Stats', icon: 'bar-chart-outline', iconActive: 'bar-chart', label: 'STATS', component: GatedStats },
   { id: 'Library', icon: 'book-outline', iconActive: 'book', label: 'LIBRARY', component: LibraryScreen },
   { id: 'Settings', icon: 'settings-outline', iconActive: 'settings', label: 'SETTINGS', component: SettingsScreen },
 ];
@@ -78,7 +95,7 @@ function RootNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false, animation: 'slide_from_right' }}>
       <Stack.Screen name="Main" component={MainTabs} />
-      <Stack.Screen name="Workout" component={WorkoutScreen} />
+      <Stack.Screen name="Workout" component={GatedWorkout} />
       <Stack.Screen name="FridayPicker" component={FridayPickerScreen}
         options={{ presentation: 'modal', title: 'FRIDAY KETTLEBELL' }} />
     </Stack.Navigator>
