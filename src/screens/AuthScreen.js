@@ -113,7 +113,7 @@ export default function AuthScreen() {
 
           <TouchableOpacity onPress={toggleMode} activeOpacity={0.7}>
             <Text style={s.toggle}>
-              {mode === 'login' ? 'New here? Create Account' : 'Already a member? Log In'}
+              {mode === 'login' ? 'New here? Sign up instead' : 'Already have an account? Sign in'}
             </Text>
           </TouchableOpacity>
 
