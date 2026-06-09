@@ -35,8 +35,6 @@
       }
     },
     "owner": "gharvz",
-    "plugins": [
-      ["react-native-purchases", { "apiKey": "appl_test_INBnRpnMvclGSNNpEpVZnwlDuXo" }]
-    ]
+    "plugins": []
   }
 }
