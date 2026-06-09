@@ -1,6 +1,6 @@
 import Purchases, { LOG_LEVEL } from 'react-native-purchases';
 
-const API_KEY_IOS = 'REVENUECAT_API_KEY_PLACEHOLDER';
+const API_KEY_IOS = 'appl_test_INBnRpnMvclGSNNpEpVZnwlDuXo';
 
 export async function initPurchases(userId) {
   Purchases.setLogLevel(LOG_LEVEL.DEBUG);
