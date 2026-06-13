@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TriCon Training — Privacy Policy</title>
+  <meta name="description" content="Privacy policy for TriCon Training." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0a0c0f;
+      --panel: #11151b;
+      --panel-2: #161c24;
+      --gold: #c8a96e;
+      --gold-2: #d7bd86;
+      --text: #eef2f5;
+      --muted: #c7cfda;
+      --border: rgba(200, 169, 110, 0.18);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        linear-gradient(135deg, rgba(10, 12, 15, 0.98), rgba(10, 12, 15, 1)),
+        radial-gradient(circle at top, rgba(200, 169, 110, 0.08), transparent 32%);
+      color: var(--text);
+      font-family: 'Oswald', Arial, Helvetica, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    .page-shell {
+      min-height: 100vh;
+      background:
+        linear-gradient(to bottom, rgba(0,0,0,0.30), rgba(0,0,0,0.75)),
+        url('assets/gym-bg.png') center/cover no-repeat;
+      background-color: var(--bg);
+    }
+
+    .page-inner {
+      width: min(1160px, calc(100% - 24px));
+      margin: 0 auto;
+      padding-bottom: 48px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 28px 0 18px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--gold);
+      letter-spacing: 0.42em;
+      text-transform: uppercase;
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    .brand-mark {
+      width: 26px;
+      height: 26px;
+      flex: 0 0 26px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.02);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 14px;
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.03);
+      color: #f1efe7;
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+    }
+
+    .nav-link:hover {
+      transform: translateY(-1px);
+      border-color: rgba(200,169,110,0.45);
+      background: rgba(200,169,110,0.08);
+    }
+
+    .nav-link.primary {
+      background: linear-gradient(180deg, rgba(200,169,110,0.92), rgba(184,144,74,0.92));
+      color: #17130a;
+      border-color: rgba(200,169,110,0.9);
+      font-weight: 600;
+    }
+
+    .hero-card {
+      margin-top: 24px;
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(17, 21, 27, 0.96), rgba(10, 12, 15, 0.96));
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.40);
+      overflow: hidden;
+    }
+
+    .hero-strip {
+      padding: 22px 24px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .eyebrow {
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.28em;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    h1 {
+      margin: 10px 0 6px;
+      color: #fff;
+      font-size: clamp(32px, 6vw, 56px);
+      line-height: 1.02;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+
+    .lede {
+      max-width: 780px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.55;
+      letter-spacing: 0.03em;
+      margin-bottom: 10px;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      color: #fff;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      padding-bottom: 18px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(200,169,110,0.18);
+      background: rgba(200,169,110,0.06);
+      color: var(--gold-2);
+    }
+
+    .policy-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+      padding: 18px 18px 24px;
+    }
+
+    .policy-card {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(17, 21, 27, 0.98), rgba(8, 10, 13, 0.98));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+      padding: 18px 18px 16px;
+    }
+
+    .policy-card h2 {
+      margin: 0 0 10px;
+      font-size: 18px;
+      line-height: 1.15;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--gold-2);
+    }
+
+    .policy-card p,
+    .policy-card li {
+      color: #edf3f9;
+      font-size: 15px;
+      line-height: 1.6;
+      letter-spacing: 0.015em;
+      font-weight: 300;
+    }
+
+    .policy-card ul {
+      margin: 0;
+      padding-left: 18px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .policy-card strong {
+      color: #fff;
+      font-weight: 500;
+    }
+
+    .policy-card .note {
+      color: var(--gold-2);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      margin-bottom: 10px;
+    }
+
+    .footer-note {
+      margin-top: 8px;
+      text-align: center;
+      color: rgba(255,255,255,0.62);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    @media (max-width: 760px) {
+      .topbar { align-items: flex-start; flex-direction: column; }
+      .nav-links { width: 100%; justify-content: flex-start; }
+      .nav-link { flex: 1 1 auto; }
+      .policy-card h2 { font-size: 16px; }
+      .policy-card p, .policy-card li { font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page-shell">
+    <div class="page-inner">
+      <header class="topbar">
+        <a class="brand" href="index.html" aria-label="TRICON TRAINING home">
+          <span class="brand-mark" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <polygon points="150,42 248,218 52,218" stroke="#ffffff" stroke-width="18" stroke-linejoin="round" stroke-linecap="round" />
+            </svg>
+          </span>
+          TRICON TRAINING
+        </a>
+        <nav class="nav-links" aria-label="Primary">
+          <a class="nav-link" href="index.html">Home</a>
+          <a class="nav-link primary" href="privacy.html">Privacy Policy</a>
+        </nav>
+      </header>
+
+      <section class="hero-card" aria-labelledby="privacy-title">
+        <div class="hero-strip">
+          <p class="eyebrow">TriCon Training</p>
+          <h1 id="privacy-title">Privacy Policy</h1>
+          <p class="lede">This page outlines how TriCon Training handles personal information, workout data, and account details in line with the Australian Privacy Act 1988 (Cth) and the Australian Privacy Principles.</p>
+          <div class="meta">
+            <span class="chip">Last updated: June 2026</span>
+            <span class="chip">Australian Privacy Act</span>
+            <span class="chip">Supabase + App Store</span>
+          </div>
+        </div>
+
+        <div class="policy-grid">
+          <article class="policy-card">
+            <p class="note">1. Overview</p>
+            <h2>Overview</h2>
+            <p>TriCon Training is operated by Grant Harvey. We are committed to protecting your personal information in accordance with the Australian Privacy Act 1988 (Cth) and the Australian Privacy Principles (APPs).</p>
+          </article>
+
+          <article class="policy-card">
+            <p class="note">2. Data We Collect</p>
+            <h2>Data we collect</h2>
+            <p>We collect the following information to operate the app and support account syncing:</p>
+            <ul>
+              <li>Email address</li>
+              <li>Encrypted password</li>
+              <li>Workout sessions (exercise type, duration, weight, sets, reps, date)</li>
+              <li>App settings (unit preference, training week, kettlebell weight, push-up maximum)</li>
+            </ul>
+            <p>We do not collect your name, phone number, or location.</p>
+          </article>
+
+          <article class="policy-card">
+            <p class="note">3. How We Use Your Data</p>
+            <h2>How we use your data</h2>
+            <p>We use your data to authenticate your account, sync workout history and settings across devices, and display session history and training stats. We do not use your information for advertising or analytics profiling.</p>
+          </article>
+
+          <article class="policy-card">
+            <p class="note">4. Data Storage</p>
+            <h2>Storage and security</h2>
+            <p>Data is stored securely via Supabase (supabase.com), encrypted in transit (TLS) and at rest, and hosted on AWS.</p>
+          </article>
+
+          <article class="policy-card">
+            <p class="note">5. Data Sharing</p>
+            <h2>Sharing</h2>
+            <p>We do not sell or share personal data. Third parties are limited to:</p>
+            <ul>
+              <li>Supabase for database and authentication services</li>
+              <li>RevenueCat for purchase verification only</li>
+              <li>Apple App Store for payment processing</li>
+            </ul>
+          </article>
+
+          <article class="policy-card">
+            <p class="note">6. Data Retention</p>
+            <h2>Retention</h2>
+            <p>We retain your data while your account remains active. If you request deletion, we will fully remove your data within 30 days.</p>
+          </article>
+
+          <article class="policy-card">
+            <p class="note">7. Your Rights</p>
+            <h2>Your rights</h2>
+            <p>Under the Australian Privacy Act 1988 and the Australian Privacy Principles, you may request access to your data, request correction, request deletion, and lodge a complaint with the OAIC at <a href="https://www.oaic.gov.au" target="_blank" rel="noreferrer">oaic.gov.au</a>.</p>
+          </article>
+
+          <article class="policy-card">
+            <p class="note">8. Children</p>
+            <h2>Children</h2>
+            <p>TriCon Training is not directed at children under 13. We do not knowingly collect personal information from anyone under 13.</p>
+          </article>
+
+          <article class="policy-card">
+            <p class="note">9. Changes</p>
+            <h2>Changes to this policy</h2>
+            <p>We may update this Privacy Policy from time to time. Continued use of the app after changes are made constitutes acceptance of the updated policy.</p>
+          </article>
+
+          <article class="policy-card">
+            <p class="note">10. Contact</p>
+            <h2>Contact</h2>
+            <p>Email: <a href="mailto:grant.harvey1@icloud.com" style="color: var(--gold-2);">grant.harvey1@icloud.com</a></p>
+            <p>Developer: Grant Harvey, TriCon Training</p>
+          </article>
+        </div>
+      </section>
+
+      <p class="footer-note">TriCon Training — privacy policy for the app and website</p>
+    </div>
+  </main>
+</body>
+</html>
