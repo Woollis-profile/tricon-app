@@ -56,16 +56,18 @@ export default function AuthScreen() {
       >
         <View style={s.overlay} />
 
+        <View style={s.header}>
+          <Image
+            source={require('../../assets/tricon-wordmark.png')}
+            style={s.wordmark}
+            resizeMode="contain"
+          />
+        </View>
+
         <View style={s.content}>
           <Image
             source={require('../../assets/tricon-logo.png')}
             style={s.logo}
-            resizeMode="contain"
-          />
-
-          <Image
-            source={require('../../assets/tricon-wordmark.png')}
-            style={s.wordmark}
             resizeMode="contain"
           />
 
@@ -111,11 +113,9 @@ export default function AuthScreen() {
             )}
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={toggleMode} activeOpacity={0.7}>
-            <Text style={s.toggle}>
-              {mode === 'login' ? 'New here? Sign up instead' : 'Already have an account? Sign in'}
-            </Text>
-          </TouchableOpacity>
+          <Text style={s.toggle}>
+            {mode === 'login' ? 'New here? Sign up instead' : 'Already have an account? Sign in'}
+          </Text>
 
           <TouchableOpacity
             onPress={() => Alert.alert('Restore Purchase', 'This feature is coming soon.')}
@@ -141,14 +141,19 @@ const s = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 24,
   },
+  header: {
+    position: 'absolute',
+    top: 54,
+    left: 18,
+    zIndex: 10,
+  },
   logo: {
-    width: 140,
-    height: 140,
+    width: 210,
+    height: 210,
   },
   wordmark: {
-    width: 220,
-    height: 48,
-    marginTop: 10,
+    width: 160,
+    height: 36,
   },
   tagline: {
     fontSize: 10,
