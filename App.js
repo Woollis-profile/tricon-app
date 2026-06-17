@@ -1,7 +1,7 @@
 import 'react-native-url-polyfill/auto';
 import React, { useState, useEffect } from 'react';
 import * as Updates from 'expo-updates';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -17,6 +17,7 @@ import {
 import { supabase } from './lib/supabase';
 import { AppProvider, useAppContext } from './src/context';
 import { C } from './src/constants';
+import { purchaseUnlock } from './src/lib/purchases';
 
 import AuthScreen from './src/screens/AuthScreen';
 import HomeScreen from './src/screens/HomeScreen';
@@ -26,23 +27,39 @@ import LibraryScreen from './src/screens/LibraryScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
 import WorkoutScreen from './src/screens/WorkoutScreen';
 import FridayPickerScreen from './src/screens/FridayPickerScreen';
-import PaywallScreen from './src/screens/PaywallScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-function GatedWorkout(props) {
-  const { isUnlocked, setIsUnlocked } = useAppContext();
-  if (!isUnlocked) {
-    return <PaywallScreen onUnlocked={() => setIsUnlocked(true)} />;
-  }
-  return <WorkoutScreen {...props} />;
-}
-
 function GatedStats(props) {
   const { isUnlocked, setIsUnlocked } = useAppContext();
+  const [loading, setLoading] = useState(false);
+
   if (!isUnlocked) {
-    return <PaywallScreen onUnlocked={() => setIsUnlocked(true)} />;
+    return (
+      <View style={sl.container}>
+        <Ionicons name="lock-closed" size={44} color={C.accent} />
+        <Text style={sl.text}>Subscribe to unlock Stats</Text>
+        <TouchableOpacity
+          style={[sl.btn, loading && sl.btnDisabled]}
+          onPress={async () => {
+            setLoading(true);
+            try {
+              const unlocked = await purchaseUnlock();
+              if (unlocked) setIsUnlocked(true);
+            } catch (e) {}
+            setLoading(false);
+          }}
+          disabled={loading}
+          activeOpacity={0.82}
+        >
+          {loading
+            ? <ActivityIndicator color="#0a0c0f" />
+            : <Text style={sl.btnText}>UNLOCK NOW</Text>
+          }
+        </TouchableOpacity>
+      </View>
+    );
   }
   return <StatsScreen {...props} />;
 }
@@ -95,7 +112,7 @@ function RootNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false, animation: 'slide_from_right' }}>
       <Stack.Screen name="Main" component={MainTabs} />
-      <Stack.Screen name="Workout" component={GatedWorkout} />
+      <Stack.Screen name="Workout" component={WorkoutScreen} />
       <Stack.Screen name="FridayPicker" component={FridayPickerScreen}
         options={{ presentation: 'modal', title: 'FRIDAY KETTLEBELL' }} />
     </Stack.Navigator>
@@ -178,6 +195,14 @@ export default function App() {
 const s = StyleSheet.create({
   splash: { flex: 1, backgroundColor: C.bg, alignItems: 'center', justifyContent: 'center' },
   splashText: { fontFamily: 'Oswald_700Bold', fontSize: 28, color: C.accent },
+});
+
+const sl = StyleSheet.create({
+  container: { flex: 1, backgroundColor: C.bg, alignItems: 'center', justifyContent: 'center', padding: 32 },
+  text: { color: C.text, fontFamily: 'Oswald_600SemiBold', fontSize: 16, marginTop: 18, marginBottom: 28, textAlign: 'center', letterSpacing: 1 },
+  btn: { backgroundColor: C.accent, borderRadius: 8, paddingVertical: 14, paddingHorizontal: 40, minWidth: 180, alignItems: 'center' },
+  btnDisabled: { opacity: 0.6 },
+  btnText: { color: '#0a0c0f', fontSize: 14, fontWeight: '700', letterSpacing: 2 },
 });
 
 const tb = StyleSheet.create({

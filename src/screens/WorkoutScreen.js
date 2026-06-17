@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Linking, Dimensions, Modal, TextInput } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Linking, Dimensions, Modal, TextInput, ActivityIndicator } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { C, WORKOUT_DEFS, PROG, getList, fmt, AMRAP_TOTAL } from '../constants';
 import { useAppContext } from '../context';
+import { purchaseUnlock } from '../lib/purchases';
 import { beepDone } from '../audio';
 import TopBar from '../components/TopBar';
 import RestTimer from '../components/RestTimer';
@@ -17,7 +18,7 @@ export default function WorkoutScreen() {
   const navigation = useNavigation();
   const route = useRoute();
   const { type } = route.params;
-  const { weekIdx, unit, pushupMax, kbWeight, setKbWeight, lastWeights, setSessions, addSession, setLastWeights } = useAppContext();
+  const { weekIdx, unit, pushupMax, kbWeight, setKbWeight, lastWeights, setSessions, addSession, setLastWeights, isUnlocked, setIsUnlocked } = useAppContext();
 
   const prog = { ...PROG[weekIdx], useTricon: WORKOUT_DEFS[type]?.useTricon || false };
   const wkDef = WORKOUT_DEFS[type];
@@ -44,6 +45,8 @@ export default function WorkoutScreen() {
   const [showFlowModal, setShowFlowModal] = useState(false);
   const [flowPartial, setFlowPartial] = useState(null);
   const [flowPartialChecked, setFlowPartialChecked] = useState(() => Array(list.length).fill(false));
+  const [showSaveModal, setShowSaveModal] = useState(false);
+  const [saveLoading, setSaveLoading] = useState(false);
   const elRef = useRef(null);
   const currentRound = roundTimes.length;
   const halfPushups = Math.max(1, Math.floor((pushupMax || 10) / 2));
@@ -136,6 +139,27 @@ export default function WorkoutScreen() {
   const totalVol = exData.reduce((acc, ex) =>
     acc + ex.sets.reduce((a, s) => a + (parseFloat(ex.weight) || 0) * (parseInt(s.reps) || 0), 0), 0);
 
+  const handleSavePress = () => {
+    if (isUnlocked) {
+      onComplete();
+    } else {
+      setShowSaveModal(true);
+    }
+  };
+
+  const handleUnlockAndSave = async () => {
+    setSaveLoading(true);
+    try {
+      const unlocked = await purchaseUnlock();
+      if (unlocked) {
+        setIsUnlocked(true);
+        setShowSaveModal(false);
+        onComplete();
+      }
+    } catch (e) {}
+    setSaveLoading(false);
+  };
+
   const onComplete = () => {
     const newW = { ...lastWeights };
     list.forEach((ex, i) => { if (exData[i]?.weight) newW[ex.id] = exData[i].weight; });
@@ -220,11 +244,39 @@ export default function WorkoutScreen() {
             </View>
           </View>
         </View>
-        <TouchableOpacity onPress={onComplete}
+        <TouchableOpacity onPress={handleSavePress}
           style={[s.saveBtn, { backgroundColor: isAMRAP ? C.purple : C.green }]}>
           <Text style={s.saveBtnText}>SAVE SESSION</Text>
         </TouchableOpacity>
       </ScrollView>
+
+      <Modal visible={showSaveModal} transparent animationType="fade" onRequestClose={() => setShowSaveModal(false)}>
+        <View style={s.modalOverlay}>
+          <View style={[s.modalCard, { borderColor: C.accent + '60' }]}>
+            <Text style={[s.modalTitle, { color: C.accent }]}>Save Your Progress</Text>
+            <Text style={s.modalSub}>Subscribe to TriCon to save sessions, track stats and build your history.</Text>
+            <View style={s.modalActions}>
+              <TouchableOpacity
+                onPress={handleUnlockAndSave}
+                style={[s.modalBtn, { backgroundColor: C.accent, borderColor: C.accent + '80' }, saveLoading && { opacity: 0.6 }]}
+                disabled={saveLoading}
+              >
+                {saveLoading
+                  ? <ActivityIndicator color="#0a0c0f" />
+                  : <Text style={[s.modalBtnSaveText, { color: '#0a0c0f' }]}>UNLOCK — $14.99</Text>
+                }
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => { setShowSaveModal(false); navigation.navigate('Main'); }}
+                style={[s.modalBtn, s.modalBtnSkip]}
+                disabled={saveLoading}
+              >
+                <Text style={s.modalBtnSkipText}>Skip for now</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 
