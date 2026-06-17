@@ -65,64 +65,67 @@ export default function AuthScreen() {
         </View>
 
         <View style={s.content}>
-          <Image
-            source={require('../../assets/tricon-logo.png')}
-            style={s.logo}
-            resizeMode="contain"
-          />
+          <View style={s.upper}>
+            <Image
+              source={require('../../assets/tricon-logo.png')}
+              style={s.logo}
+              resizeMode="contain"
+            />
+            <Text style={s.tagline}>
+              TRAINING METHOD FOR THE OLDER AND WISER ATHLETE
+            </Text>
+          </View>
 
-          <Text style={s.tagline}>
-            TRAINING METHOD FOR THE OLDER AND WISER ATHLETE
-          </Text>
+          <View style={s.form}>
+            <TextInput
+              style={s.input}
+              placeholder="Email"
+              placeholderTextColor="#555"
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              autoComplete="email"
+            />
 
-          <TextInput
-            style={s.input}
-            placeholder="Email"
-            placeholderTextColor="#555"
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            autoComplete="email"
-          />
+            <TextInput
+              style={s.input}
+              placeholder="Password"
+              placeholderTextColor="#555"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+              autoComplete={mode === 'login' ? 'password' : 'new-password'}
+            />
 
-          <TextInput
-            style={s.input}
-            placeholder="Password"
-            placeholderTextColor="#555"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-            autoComplete={mode === 'login' ? 'password' : 'new-password'}
-          />
+            {error ? <Text style={s.error}>{error}</Text> : null}
 
-          {error ? <Text style={s.error}>{error}</Text> : null}
+            <TouchableOpacity
+              style={s.btn}
+              onPress={handleSubmit}
+              disabled={loading}
+              activeOpacity={0.82}
+            >
+              {loading ? (
+                <ActivityIndicator color={GOLD} />
+              ) : (
+                <Text style={s.btnText}>
+                  {mode === 'login' ? 'LOG IN' : 'CREATE ACCOUNT'}
+                </Text>
+              )}
+            </TouchableOpacity>
 
-          <TouchableOpacity
-            style={s.btn}
-            onPress={handleSubmit}
-            disabled={loading}
-            activeOpacity={0.82}
-          >
-            {loading ? (
-              <ActivityIndicator color={GOLD} />
-            ) : (
-              <Text style={s.btnText}>
-                {mode === 'login' ? 'LOG IN' : 'CREATE ACCOUNT'}
-              </Text>
-            )}
-          </TouchableOpacity>
+            <Text style={s.toggle} onPress={toggleMode}>
+              {mode === 'login' ? 'New here? Sign up instead' : 'Already have an account? Sign in'}
+            </Text>
 
-          <Text style={s.toggle}>
-            {mode === 'login' ? 'New here? Sign up instead' : 'Already have an account? Sign in'}
-          </Text>
-
-          <TouchableOpacity
-            onPress={() => Alert.alert('Restore Purchase', 'This feature is coming soon.')}
-            activeOpacity={0.7}
-          >
-            <Text style={s.restore}>MEMBER ALREADY? RESTORE PURCHASE</Text>
-          </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => Alert.alert('Restore Purchase', 'This feature is coming soon.')}
+              activeOpacity={0.7}
+            >
+              <Text style={s.restore}>MEMBER ALREADY? RESTORE PURCHASE</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </ImageBackground>
     </KeyboardAvoidingView>
@@ -135,17 +138,27 @@ const s = StyleSheet.create({
     top: 0, left: 0, right: 0, bottom: 0,
     backgroundColor: 'rgba(0,0,0,0.58)',
   },
-  content: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 24,
-  },
   header: {
     position: 'absolute',
     top: 54,
     left: 18,
     zIndex: 10,
+  },
+  content: {
+    flex: 1,
+    paddingHorizontal: 24,
+  },
+  upper: {
+    flex: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  form: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    paddingBottom: 36,
+    width: '100%',
   },
   logo: {
     width: 210,
@@ -156,13 +169,12 @@ const s = StyleSheet.create({
     height: 36,
   },
   tagline: {
-    fontSize: 10,
+    fontSize: 20,
     color: GOLD,
     letterSpacing: 2,
     textAlign: 'center',
-    marginTop: 8,
-    marginBottom: 36,
-    paddingHorizontal: 30,
+    marginTop: 12,
+    paddingHorizontal: 20,
     fontWeight: '600',
   },
   input: {
