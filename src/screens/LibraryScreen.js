@@ -117,6 +117,15 @@ export default function LibraryScreen() {
                   <Text style={s.kbExNote}>{ex.note}</Text>
                 </View>
               ))}
+              <TouchableOpacity
+                onPress={() => Linking.openURL('https://youtube.com/shorts/LP17xxZ1iRs?si=6nTF3eJ4oQqdVu7I')}
+                style={[s.ytBtn, { marginHorizontal: 14, marginBottom: 12 }]}>
+                <Text style={s.ytText}>▶</Text>
+                <View>
+                  <Text style={s.ytText}>Watch KB Flow</Text>
+                  <Text style={[s.ytText, { fontSize: 9, fontWeight: '400', opacity: 0.7 }]}>@trevorsinstinct · Kettlebell Flow</Text>
+                </View>
+              </TouchableOpacity>
             </View>
           </View>
         </ScrollView>
