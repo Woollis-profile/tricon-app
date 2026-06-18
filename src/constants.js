@@ -66,7 +66,7 @@ export const WORKOUT_DEFS = {
     id: 'amrap', name: 'KB Benchmark', label: 'KB BENCHMARK', dayName: 'Friday',
     color: C.purple, method: "Trevor's Instinct · AMRAP 30 min", duration: '30 min',
     useTricon: false, isAMRAP: true, amrapMinutes: 30, equipment: 'One Kettlebell',
-    sourceVideo: 'https://www.youtube.com/shorts/LP17xxZ1iRs',
+    sourceVideo: 'https://youtube.com/shorts/yDLVERq6hCc?si=0NhpY13bySDFO0Gw',
     exercises: [
       { id: 'amrap_swing', name: 'KB Swings', muscle: 'Posterior Chain / Hips', equipment: 'Kettlebell', injury: 'Hip hinge — not a squat. Protect lower back.', reps: 10, note: 'Hike bell back · explosive hip snap · bell to shoulder height · absorb on the way down' },
       { id: 'amrap_press_l', name: 'Shoulder Press (Left)', muscle: 'Shoulder / Tricep / Core', equipment: 'Kettlebell', injury: 'Avoid if shoulder pain present', reps: 5, note: 'Clean to rack · press overhead · lock elbow · lower under control · brace core' },

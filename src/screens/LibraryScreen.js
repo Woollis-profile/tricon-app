@@ -86,6 +86,11 @@ export default function LibraryScreen() {
                   <Text style={s.strategyText}>Move steadily — don't sprint round 1. Rest as needed between rounds. Aim to beat your round count every week. The push-up cap (½ max) prevents failure and keeps you moving for the full 30 minutes.</Text>
                 </View>
               </View>
+              <TouchableOpacity
+                onPress={() => Linking.openURL('https://youtube.com/shorts/yDLVERq6hCc?si=0NhpY13bySDFO0Gw')}
+                style={[s.ytBtn, { marginHorizontal: 14, marginBottom: 12 }]}>
+                <Text style={s.ytText}>▶ Watch KB Benchmark</Text>
+              </TouchableOpacity>
             </View>
           </View>
 
