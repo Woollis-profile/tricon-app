@@ -394,7 +394,7 @@ export default function WorkoutScreen() {
   return (
     <SafeAreaView style={s.screen} edges={['top']}>
       <TopBar
-        title={isAMRAP ? `${fmt(AMRAP_TOTAL - elapsed)} LEFT` : fmt(elapsed)}
+        title={isAMRAP ? (elapsed >= AMRAP_TOTAL ? "TIME'S UP!" : `${fmt(AMRAP_TOTAL - elapsed)} LEFT`) : fmt(elapsed)}
         onBack={() => navigation.goBack()}
         right={
           <TouchableOpacity onPress={() => isAMRAP ? setShowAmrapModal(true) : isFlow ? setShowFlowModal(true) : setPhase('done')}
@@ -415,13 +415,42 @@ export default function WorkoutScreen() {
         </View>
 
         {isAMRAP ? (
-          <AmrapTracker
-            exercises={list} elapsed={elapsed}
-            pushupMax={pushupMax || 10} kbWeight={kbWeight}
-            unit={unit} onRoundComplete={handleAmrapRoundComplete}
-            onKbWeightChange={(v) => setKbWeight(v)}
-            roundCount={amrapRounds}
-          />
+          <>
+            <AmrapTracker
+              exercises={list} elapsed={elapsed}
+              pushupMax={pushupMax || 10} kbWeight={kbWeight}
+              unit={unit} onRoundComplete={handleAmrapRoundComplete}
+              onKbWeightChange={(v) => setKbWeight(v)}
+              roundCount={amrapRounds}
+            />
+            {elapsed >= AMRAP_TOTAL && (
+              <View style={s.timesUpCard}>
+                <Text style={s.timesUpHeading}>⏰ TIME'S UP</Text>
+                <View style={s.timesUpStats}>
+                  <View style={s.timesUpStat}>
+                    <Text style={s.timesUpNum}>{amrapRounds}</Text>
+                    <Text style={s.timesUpLbl}>ROUNDS</Text>
+                  </View>
+                  <View style={s.timesUpStat}>
+                    <Text style={s.timesUpNum}>{fmt(AMRAP_TOTAL)}</Text>
+                    <Text style={s.timesUpLbl}>DURATION</Text>
+                  </View>
+                  <View style={s.timesUpStat}>
+                    <Text style={s.timesUpNum}>{kbWeight || '—'}</Text>
+                    <Text style={s.timesUpLbl}>{unit.toUpperCase()}</Text>
+                  </View>
+                </View>
+                <View style={s.timesUpBtns}>
+                  <TouchableOpacity onPress={() => setShowAmrapModal(true)} style={s.timesUpPartialBtn}>
+                    <Text style={s.timesUpBtnText}>LOG PARTIAL ROUND</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => setPhase('done')} style={s.timesUpDoneBtn}>
+                    <Text style={s.timesUpBtnText}>FINISH &amp; SAVE →</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            )}
+          </>
         ) : isFlow ? (
           <FlowRoundTracker
             exercises={list} roundTimes={roundTimes}
@@ -444,10 +473,12 @@ export default function WorkoutScreen() {
           ))
         )}
 
-        <View style={s.coolDown}>
-          <Text style={s.coolDownTitle}>❄ COOL-DOWN — 5 MIN</Text>
-          <Text style={s.coolDownText}>{coolDownText}</Text>
-        </View>
+        {!(isAMRAP && elapsed >= AMRAP_TOTAL) && (
+          <View style={s.coolDown}>
+            <Text style={s.coolDownTitle}>❄ COOL-DOWN — 5 MIN</Text>
+            <Text style={s.coolDownText}>{coolDownText}</Text>
+          </View>
+        )}
       </ScrollView>
       {rest && (
         <RestTimer
@@ -494,9 +525,10 @@ export default function WorkoutScreen() {
       {isAMRAP && (
         <Modal visible={showAmrapModal} transparent animationType="fade" onRequestClose={() => setShowAmrapModal(false)}>
           <View style={s.modalOverlay}>
-            <View style={s.modalCard}>
+            <View style={[s.modalCard, { maxHeight: '82%' }]}>
               <Text style={s.modalTitle}>LOG PARTIAL ROUND?</Text>
               <Text style={s.modalSub}>Tick the exercises you completed in the partial round</Text>
+              <ScrollView nestedScrollEnabled>
               {list.map((ex, i) => {
                 const isPushup = ex.id === 'amrap_pushup';
                 const checked = finalChecked[i];
@@ -535,10 +567,13 @@ export default function WorkoutScreen() {
                   </TouchableOpacity>
                 );
               })}
+              </ScrollView>
               <View style={s.modalActions}>
-                <TouchableOpacity onPress={handleSavePartial} style={[s.modalBtn, s.modalBtnSave]}>
-                  <Text style={s.modalBtnSaveText}>SAVE PARTIAL ROUND</Text>
-                </TouchableOpacity>
+                {finalChecked.some(Boolean) && (
+                  <TouchableOpacity onPress={handleSavePartial} style={[s.modalBtn, s.modalBtnSave]}>
+                    <Text style={s.modalBtnSaveText}>LOG PARTIAL ROUND</Text>
+                  </TouchableOpacity>
+                )}
                 <TouchableOpacity onPress={handleSkipPartial} style={[s.modalBtn, s.modalBtnSkip]}>
                   <Text style={s.modalBtnSkipText}>SKIP — NO PARTIAL</Text>
                 </TouchableOpacity>
@@ -647,6 +682,17 @@ const s = StyleSheet.create({
   coolDownTitle: { fontSize: 11, color: C.blue, letterSpacing: 1, marginBottom: 5 },
   coolDownText: { fontSize: 11, color: C.sub, lineHeight: 19 },
   amrapPartialSuffix: { fontFamily: 'Oswald_400Regular', fontSize: 28, color: C.purple + 'aa', lineHeight: 36 },
+  // TIMES UP
+  timesUpCard: { marginHorizontal: 14, marginTop: 10, backgroundColor: C.purple + '12', borderWidth: 1, borderColor: C.purple + '40', borderRadius: 12, padding: 16 },
+  timesUpHeading: { fontFamily: 'Oswald_700Bold', fontSize: 22, color: C.purple, textAlign: 'center', letterSpacing: 1, marginBottom: 14 },
+  timesUpStats: { flexDirection: 'row', justifyContent: 'space-around', marginBottom: 16 },
+  timesUpStat: { alignItems: 'center' },
+  timesUpNum: { fontFamily: 'Oswald_700Bold', fontSize: 28, color: C.purple, lineHeight: 34 },
+  timesUpLbl: { fontSize: 9, color: C.muted, letterSpacing: 1, marginTop: 2 },
+  timesUpBtns: { gap: 8 },
+  timesUpPartialBtn: { borderRadius: 8, paddingVertical: 11, alignItems: 'center', borderWidth: 1, borderColor: C.purple + '60', backgroundColor: C.purple + '18' },
+  timesUpDoneBtn: { borderRadius: 8, paddingVertical: 11, alignItems: 'center', backgroundColor: C.purple },
+  timesUpBtnText: { fontFamily: 'Oswald_700Bold', fontSize: 14, color: '#fff', letterSpacing: 1 },
   // MODAL
   modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.75)', justifyContent: 'center', alignItems: 'center', padding: 20 },
   modalCard: { backgroundColor: C.card, borderRadius: 16, borderWidth: 1, borderColor: C.purple + '40', width: '100%' },
