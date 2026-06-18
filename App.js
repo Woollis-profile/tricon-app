@@ -1,7 +1,7 @@
 import 'react-native-url-polyfill/auto';
 import React, { useState, useEffect } from 'react';
 import * as Updates from 'expo-updates';
-import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, AppState } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -169,6 +169,13 @@ export default function App() {
 
   useEffect(() => {
     checkForUpdates();
+  }, []);
+
+  useEffect(() => {
+    const sub = AppState.addEventListener('change', (next) => {
+      if (next === 'active') checkForUpdates();
+    });
+    return () => sub.remove();
   }, []);
 
   if (!fontsLoaded) {
