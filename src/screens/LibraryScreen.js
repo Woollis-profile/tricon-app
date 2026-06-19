@@ -197,7 +197,7 @@ export default function LibraryScreen() {
                             ))}
                         </>
                       )}
-                      {ex.cat !== 'circuit' && (
+                      {!isKB && (
                         <TouchableOpacity
                           onPress={() => Linking.openURL(`https://www.youtube.com/results?search_query=${encodeURIComponent(ex.name + (isKB ? ' kettlebell trevorsinstinct' : ' tricon lifting technique'))}`)}
                           style={s.ytBtn}>
