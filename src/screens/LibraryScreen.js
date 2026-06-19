@@ -197,11 +197,13 @@ export default function LibraryScreen() {
                             ))}
                         </>
                       )}
-                      <TouchableOpacity
-                        onPress={() => Linking.openURL(`https://www.youtube.com/results?search_query=${encodeURIComponent(ex.name + (isKB ? ' kettlebell trevorsinstinct' : ' tricon lifting technique'))}`)}
-                        style={s.ytBtn}>
-                        <Text style={s.ytText}>▶ Watch on YouTube</Text>
-                      </TouchableOpacity>
+                      {ex.cat !== 'circuit' && (
+                        <TouchableOpacity
+                          onPress={() => Linking.openURL(`https://www.youtube.com/results?search_query=${encodeURIComponent(ex.name + (isKB ? ' kettlebell trevorsinstinct' : ' tricon lifting technique'))}`)}
+                          style={s.ytBtn}>
+                          <Text style={s.ytText}>▶ Watch on YouTube</Text>
+                        </TouchableOpacity>
+                      )}
                     </View>
                   )}
                 </View>
