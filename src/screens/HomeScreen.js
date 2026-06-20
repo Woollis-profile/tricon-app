@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Dimensions, ImageBackground } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { C, WORKOUT_DEFS, FRIDAY_WORKOUTS, SCHEDULE, DN, getWeekDates, getWeekStart, PROG } from '../constants';
@@ -19,8 +19,14 @@ export default function HomeScreen() {
   const startWorkout = (type) => navigation.navigate('Workout', { type });
 
   return (
-    <SafeAreaView style={s.safe} edges={['top']}>
-    <ScrollView style={s.scroll} contentContainerStyle={s.content}>
+    <ImageBackground
+      source={require('../../assets/gym-bg.jpg')}
+      style={{ flex: 1 }}
+      resizeMode="cover"
+    >
+      <View style={s.overlay} />
+      <SafeAreaView style={s.safe} edges={['top']}>
+      <ScrollView style={s.scroll} contentContainerStyle={s.content}>
       <HomeHero sessions={sessions} />
 
       {/* Mini week strip */}
@@ -108,14 +114,16 @@ export default function HomeScreen() {
           <Text style={s.statsTileSub}>sessions</Text>
         </View>
       </View>
-    </ScrollView>
-    </SafeAreaView>
+        <Text style={s.letsTrain}>LET'S TRAIN!</Text>
+      </ScrollView>
+      </SafeAreaView>
+    </ImageBackground>
   );
 }
 
 const s = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: '#0a0c0f' },
-  scroll: { flex: 1, backgroundColor: C.bg },
+  safe: { flex: 1, backgroundColor: 'transparent' },
+  scroll: { flex: 1, backgroundColor: 'transparent' },
   content: { paddingBottom: 20, minHeight: Dimensions.get('window').height, flexGrow: 1 },
   weekStrip: { flexDirection: 'row', gap: 4, paddingHorizontal: 14, paddingVertical: 10 },
   dayCell: { flex: 1, borderRadius: 7, paddingVertical: 7, alignItems: 'center' },
@@ -153,4 +161,6 @@ const s = StyleSheet.create({
   statsTileNum: { fontFamily: 'Oswald_700Bold', fontSize: 26, lineHeight: 34 },
   statsTileTitle: { fontSize: 11, color: C.text, marginTop: 3 },
   statsTileSub: { fontSize: 10, color: C.muted },
+  overlay: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.65)' },
+  letsTrain: { fontFamily: 'Oswald_700Bold', fontSize: 32, color: C.accent, textAlign: 'center', letterSpacing: 4, marginTop: 8, marginBottom: 20 },
 });

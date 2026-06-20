@@ -8,8 +8,10 @@ export default function HomeHero({ sessions }) {
   return (
     <View style={s.hero}>
       <Text style={s.tagline}>TRAINING METHOD FOR THE OLDER AND WISER ATHLETE</Text>
-      <Text style={s.title1}>△ TRICON</Text>
-      <Text style={s.title2}>TRAINING</Text>
+      <View style={s.title1Row}>
+        <Text style={s.triangle}>△ </Text>
+        <Text style={s.title1}>TRICON</Text>
+      </View>
       <View style={s.statsRow}>
         {[[sessions.length, 'SESSIONS', C.accent], [tw.length, 'THIS WEEK', C.text], [9, 'REPS/SET', C.text]].map(([v, l, col], i) => (
           <View key={l} style={s.statItem}>
@@ -27,7 +29,7 @@ export default function HomeHero({ sessions }) {
 
 const s = StyleSheet.create({
   hero: {
-    backgroundColor: '#0a0c0f',
+    backgroundColor: 'transparent',
     paddingTop: 14,
     paddingBottom: 32,
     paddingHorizontal: 24,
@@ -42,24 +44,27 @@ const s = StyleSheet.create({
     marginBottom: 24,
     fontFamily: 'Oswald_400Regular',
   },
+  title1Row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 6,
+  },
+  triangle: {
+    fontFamily: 'Oswald_700Bold',
+    fontSize: 48,
+    color: '#ffffff',
+    lineHeight: 62,
+    textShadowColor: '#ffffff',
+    textShadowOffset: { width: 0.8, height: 0 },
+    textShadowRadius: 1.5,
+  },
   title1: {
     fontFamily: 'Oswald_700Bold',
     fontSize: 48,
     color: C.accent,
     letterSpacing: 4,
-    textAlign: 'center',
     lineHeight: 62,
-    marginBottom: 6,
-  },
-  title2: {
-    fontFamily: 'Oswald_700Bold',
-    fontSize: 29,
-    color: '#c8a96e',
-    letterSpacing: 4,
-    textAlign: 'center',
-    lineHeight: 38,
-    marginTop: 6,
-    marginBottom: 0,
   },
   statsRow: {
     flexDirection: 'row',
