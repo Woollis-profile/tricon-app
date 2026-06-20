@@ -121,6 +121,7 @@ export default function HomeScreen() {
         <Text style={s.letsTrain}>LET'S TRAIN!</Text>
         <Text style={s.bottomTagline}>TRAINING METHOD FOR THE OLDER AND WISER ATHLETE</Text>
       </View>
+      </View>
       </SafeAreaView>
     </ImageBackground>
   );
