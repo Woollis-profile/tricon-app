@@ -27,6 +27,7 @@ export default function HomeScreen() {
       <View style={s.overlay} />
       <SafeAreaView style={s.safe} edges={['top']}>
       <ScrollView style={s.scroll} contentContainerStyle={s.content}>
+      <View style={{ height: Math.round(Dimensions.get('window').height / 3) }} />
       <HomeHero sessions={sessions} />
 
       {/* Mini week strip */}
@@ -115,6 +116,7 @@ export default function HomeScreen() {
         </View>
       </View>
         <Text style={s.letsTrain}>LET'S TRAIN!</Text>
+        <Text style={s.bottomTagline}>TRAINING METHOD FOR THE OLDER AND WISER ATHLETE</Text>
       </ScrollView>
       </SafeAreaView>
     </ImageBackground>
@@ -162,5 +164,6 @@ const s = StyleSheet.create({
   statsTileTitle: { fontSize: 11, color: C.text, marginTop: 3 },
   statsTileSub: { fontSize: 10, color: C.muted },
   overlay: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.65)' },
-  letsTrain: { fontFamily: 'Oswald_700Bold', fontSize: 32, color: C.accent, textAlign: 'center', letterSpacing: 4, marginTop: 8, marginBottom: 20 },
+  bottomTagline: { fontSize: 10, color: C.muted, letterSpacing: 3, textAlign: 'center', marginTop: 12, marginBottom: 28, paddingHorizontal: 24, fontFamily: 'Oswald_400Regular' },
+  letsTrain: { fontFamily: 'Oswald_700Bold', fontSize: 32, color: C.accent, textAlign: 'center', letterSpacing: 4, marginTop: 46, marginBottom: 8 },
 });

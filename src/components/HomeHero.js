@@ -7,7 +7,6 @@ export default function HomeHero({ sessions }) {
 
   return (
     <View style={s.hero}>
-      <Text style={s.tagline}>TRAINING METHOD FOR THE OLDER AND WISER ATHLETE</Text>
       <View style={s.title1Row}>
         <Text style={s.triangle}>△ </Text>
         <Text style={s.title1}>TRICON</Text>
@@ -30,19 +29,11 @@ export default function HomeHero({ sessions }) {
 const s = StyleSheet.create({
   hero: {
     backgroundColor: 'transparent',
-    paddingTop: 14,
+    paddingTop: 0,
     paddingBottom: 32,
     paddingHorizontal: 24,
     alignItems: 'center',
     overflow: 'visible',
-  },
-  tagline: {
-    fontSize: 11,
-    color: C.muted,
-    letterSpacing: 3,
-    textAlign: 'center',
-    marginBottom: 24,
-    fontFamily: 'Oswald_400Regular',
   },
   title1Row: {
     flexDirection: 'row',
