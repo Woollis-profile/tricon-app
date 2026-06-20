@@ -30,7 +30,7 @@ const s = StyleSheet.create({
   hero: {
     backgroundColor: 'transparent',
     paddingTop: 0,
-    paddingBottom: 32,
+    paddingBottom: 16,
     paddingHorizontal: 24,
     alignItems: 'center',
     overflow: 'visible',

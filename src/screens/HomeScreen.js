@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Dimensions, ImageBackground } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { C, WORKOUT_DEFS, FRIDAY_WORKOUTS, SCHEDULE, DN, getWeekDates, getWeekStart, PROG } from '../constants';
@@ -26,8 +26,7 @@ export default function HomeScreen() {
     >
       <View style={s.overlay} />
       <SafeAreaView style={s.safe} edges={['top']}>
-      <ScrollView style={s.scroll} contentContainerStyle={s.content}>
-      <View style={{ height: Math.round(Dimensions.get('window').height / 3) }} />
+      <View style={s.content}>
       <HomeHero sessions={sessions} />
 
       {/* Mini week strip */}
@@ -117,7 +116,7 @@ export default function HomeScreen() {
       </View>
         <Text style={s.letsTrain}>LET'S TRAIN!</Text>
         <Text style={s.bottomTagline}>TRAINING METHOD FOR THE OLDER AND WISER ATHLETE</Text>
-      </ScrollView>
+      </View>
       </SafeAreaView>
     </ImageBackground>
   );
@@ -126,15 +125,15 @@ export default function HomeScreen() {
 const s = StyleSheet.create({
   safe: { flex: 1, backgroundColor: 'transparent' },
   scroll: { flex: 1, backgroundColor: 'transparent' },
-  content: { paddingBottom: 20, minHeight: Dimensions.get('window').height, flexGrow: 1 },
-  weekStrip: { flexDirection: 'row', gap: 4, paddingHorizontal: 14, paddingVertical: 10 },
+  content: { flex: 1, paddingTop: 16, paddingBottom: 8 },
+  weekStrip: { flexDirection: 'row', gap: 4, paddingHorizontal: 14, paddingVertical: 6 },
   dayCell: { flex: 1, borderRadius: 7, paddingVertical: 7, alignItems: 'center' },
   dayCellToday: { backgroundColor: 'rgba(200,169,110,0.13)', borderWidth: 1, borderColor: 'rgba(200,169,110,0.42)' },
   dayCellNormal: { backgroundColor: C.surface, borderWidth: 1, borderColor: C.border },
   dayName: { fontSize: 7, letterSpacing: 0.5, marginBottom: 2 },
   dayNum: { fontSize: 12, fontWeight: '700' },
   dot: { width: 5, height: 5, borderRadius: 3, marginTop: 3 },
-  section: { marginHorizontal: 14, marginBottom: 12 },
+  section: { marginHorizontal: 14, marginBottom: 8 },
   sectionLabel: { fontSize: 10, color: C.muted, letterSpacing: 1, marginBottom: 8 },
   fridayRow: { flexDirection: 'row', gap: 8 },
   fridayCard: { flex: 1, borderWidth: 1, borderRadius: 12, padding: 12, alignItems: 'center' },
@@ -158,12 +157,12 @@ const s = StyleSheet.create({
   quickRow: { flexDirection: 'row', gap: 7 },
   quickBtn: { flex: 1, borderWidth: 1, borderRadius: 7, padding: 8, alignItems: 'center' },
   quickBtnText: { fontSize: 9, fontWeight: '700', letterSpacing: 1 },
-  statsTiles: { flexDirection: 'row', gap: 10, marginHorizontal: 14, marginBottom: 14 },
+  statsTiles: { flexDirection: 'row', gap: 10, marginHorizontal: 14, marginBottom: 8 },
   statsTile: { flex: 1, backgroundColor: C.card, borderWidth: 1, borderColor: C.border, borderRadius: 12, paddingTop: 14, paddingBottom: 13, paddingHorizontal: 13, overflow: 'visible' },
   statsTileNum: { fontFamily: 'Oswald_700Bold', fontSize: 26, lineHeight: 34 },
   statsTileTitle: { fontSize: 11, color: C.text, marginTop: 3 },
   statsTileSub: { fontSize: 10, color: C.muted },
   overlay: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.65)' },
-  bottomTagline: { fontSize: 10, color: C.muted, letterSpacing: 3, textAlign: 'center', marginTop: 12, marginBottom: 28, paddingHorizontal: 24, fontFamily: 'Oswald_400Regular' },
-  letsTrain: { fontFamily: 'Oswald_700Bold', fontSize: 32, color: C.accent, textAlign: 'center', letterSpacing: 4, marginTop: 46, marginBottom: 8 },
+  bottomTagline: { fontSize: 10, color: C.muted, letterSpacing: 3, textAlign: 'center', marginTop: 12, marginBottom: 14, paddingHorizontal: 24, fontFamily: 'Oswald_400Regular' },
+  letsTrain: { fontFamily: 'Oswald_700Bold', fontSize: 32, color: C.accent, textAlign: 'center', letterSpacing: 4, marginTop: 12, marginBottom: 8 },
 });
