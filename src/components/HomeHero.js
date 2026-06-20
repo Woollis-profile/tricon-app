@@ -8,8 +8,8 @@ export default function HomeHero({ sessions }) {
   return (
     <View style={s.hero}>
       <Text style={s.tagline}>TRAINING METHOD FOR THE OLDER AND WISER ATHLETE</Text>
-      <Text style={s.title1}>TRICON</Text>
-      <Text style={s.title2}>WORKOUT</Text>
+      <Text style={s.title1}>△ TRICON</Text>
+      <Text style={s.title2}>TRAINING</Text>
       <View style={s.statsRow}>
         {[[sessions.length, 'SESSIONS', C.accent], [tw.length, 'THIS WEEK', C.text], [9, 'REPS/SET', C.text]].map(([v, l, col], i) => (
           <View key={l} style={s.statItem}>
@@ -45,7 +45,7 @@ const s = StyleSheet.create({
   title1: {
     fontFamily: 'Oswald_700Bold',
     fontSize: 48,
-    color: '#e8e2d6',
+    color: C.accent,
     letterSpacing: 4,
     textAlign: 'center',
     lineHeight: 62,
@@ -53,11 +53,11 @@ const s = StyleSheet.create({
   },
   title2: {
     fontFamily: 'Oswald_700Bold',
-    fontSize: 48,
+    fontSize: 29,
     color: '#c8a96e',
     letterSpacing: 4,
     textAlign: 'center',
-    lineHeight: 62,
+    lineHeight: 38,
     marginTop: 6,
     marginBottom: 0,
   },
