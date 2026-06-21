@@ -254,7 +254,7 @@ export default function WorkoutScreen() {
         <View style={s.modalOverlay}>
           <View style={[s.modalCard, { borderColor: C.accent + '60' }]}>
             <Text style={[s.modalTitle, { color: C.accent }]}>Save Your Progress</Text>
-            <Text style={s.modalSub}>Subscribe to TriCon to save sessions, track stats and build your history.</Text>
+            <Text style={s.modalSub}>Unlock TriCon to save sessions, track stats and build your history.</Text>
             <View style={s.modalActions}>
               <TouchableOpacity
                 onPress={handleUnlockAndSave}
