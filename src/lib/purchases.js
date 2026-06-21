@@ -7,7 +7,7 @@ try {
 
 export async function initPurchases(userId) {
   if (!Purchases) return;
-  await Purchases.configure({ apiKey: 'appl_test_INBnRpnMvclGSNNpEpVZnwlDuXo', appUserID: userId });
+  await Purchases.configure({ apiKey: 'appl_UpscCSrGfMiWBJmWHnjnbMGxMnb', appUserID: userId });
 }
 
 export async function getIsUnlocked() {
