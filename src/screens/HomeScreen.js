@@ -29,7 +29,7 @@ export default function HomeScreen() {
       <View style={s.content}>
       <View style={{ height: 100 }} />
       <HomeHero sessions={sessions} />
-      <View style={{ height: 8 }} />
+      <View style={{ height: 44 }} />
 
       <View>
       {/* Mini week strip */}
@@ -169,6 +169,6 @@ const s = StyleSheet.create({
   statsTileTitle: { fontSize: 11, color: C.text, marginTop: 3 },
   statsTileSub: { fontSize: 10, color: C.muted },
   overlay: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.65)' },
-  letsTrain: { fontFamily: 'Oswald_700Bold', fontSize: 32, color: C.accent, textAlign: 'center', letterSpacing: 4, marginTop: 10, marginHorizontal: 14 },
+  letsTrain: { fontFamily: 'Oswald_700Bold', fontSize: 32, color: C.accent, textAlign: 'center', letterSpacing: 4, marginTop: 48, marginHorizontal: 14 },
   bottomTagline: { fontSize: 10, color: C.muted, letterSpacing: 3, textAlign: 'center', marginBottom: 16, paddingHorizontal: 24, fontFamily: 'Oswald_400Regular' },
 });
