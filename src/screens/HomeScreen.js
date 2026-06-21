@@ -27,7 +27,9 @@ export default function HomeScreen() {
       <View style={s.overlay} />
       <SafeAreaView style={s.safe} edges={['top']}>
       <View style={s.content}>
+      <View style={{ height: 100 }} />
       <HomeHero sessions={sessions} />
+      <View style={{ height: 8 }} />
 
       <View>
       {/* Mini week strip */}
@@ -115,12 +117,12 @@ export default function HomeScreen() {
           <Text style={s.statsTileSub}>sessions</Text>
         </View>
       </View>
+
+      <Text style={s.letsTrain}>LET’S TRAIN!</Text>
       </View>
 
-      <View style={s.bottomGroup}>
-        <Text style={s.letsTrain}>LET'S TRAIN!</Text>
-        <Text style={s.bottomTagline}>TRAINING METHOD FOR THE OLDER AND WISER ATHLETE</Text>
-      </View>
+      <View style={{ flex: 1 }} />
+      <Text style={s.bottomTagline}>TRAINING METHOD FOR THE OLDER AND WISER ATHLETE</Text>
       </View>
       </SafeAreaView>
     </ImageBackground>
@@ -129,16 +131,15 @@ export default function HomeScreen() {
 
 const s = StyleSheet.create({
   safe: { flex: 1, backgroundColor: 'transparent' },
-  scroll: { flex: 1, backgroundColor: 'transparent' },
-  content: { flex: 1, justifyContent: 'space-between', paddingTop: 8, paddingBottom: 8 },
-  weekStrip: { flexDirection: 'row', gap: 4, paddingHorizontal: 14, paddingVertical: 6 },
+  content: { flex: 1, paddingTop: 0, paddingBottom: 0 },
+  weekStrip: { flexDirection: 'row', gap: 4, paddingHorizontal: 14, paddingVertical: 4 },
   dayCell: { flex: 1, borderRadius: 7, paddingVertical: 7, alignItems: 'center' },
   dayCellToday: { backgroundColor: 'rgba(200,169,110,0.13)', borderWidth: 1, borderColor: 'rgba(200,169,110,0.42)' },
   dayCellNormal: { backgroundColor: C.surface, borderWidth: 1, borderColor: C.border },
   dayName: { fontSize: 7, letterSpacing: 0.5, marginBottom: 2 },
   dayNum: { fontSize: 12, fontWeight: '700' },
   dot: { width: 5, height: 5, borderRadius: 3, marginTop: 3 },
-  section: { marginHorizontal: 14, marginBottom: 8 },
+  section: { marginHorizontal: 14, marginBottom: 4 },
   sectionLabel: { fontSize: 10, color: C.muted, letterSpacing: 1, marginBottom: 8 },
   fridayRow: { flexDirection: 'row', gap: 8 },
   fridayCard: { flex: 1, borderWidth: 1, borderRadius: 12, padding: 12, alignItems: 'center' },
@@ -168,7 +169,6 @@ const s = StyleSheet.create({
   statsTileTitle: { fontSize: 11, color: C.text, marginTop: 3 },
   statsTileSub: { fontSize: 10, color: C.muted },
   overlay: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.65)' },
-  bottomGroup: { alignItems: 'center' },
-  bottomTagline: { fontSize: 10, color: C.muted, letterSpacing: 3, textAlign: 'center', marginTop: 4, marginBottom: 10, paddingHorizontal: 24, fontFamily: 'Oswald_400Regular' },
-  letsTrain: { fontFamily: 'Oswald_700Bold', fontSize: 32, color: C.accent, textAlign: 'center', letterSpacing: 4, marginTop: 0, marginBottom: 6 },
+  letsTrain: { fontFamily: 'Oswald_700Bold', fontSize: 32, color: C.accent, textAlign: 'center', letterSpacing: 4, marginTop: 10, marginHorizontal: 14 },
+  bottomTagline: { fontSize: 10, color: C.muted, letterSpacing: 3, textAlign: 'center', marginBottom: 16, paddingHorizontal: 24, fontFamily: 'Oswald_400Regular' },
 });
