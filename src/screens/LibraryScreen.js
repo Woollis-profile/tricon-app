@@ -222,6 +222,17 @@ export default function LibraryScreen() {
                 </View>
               </TouchableOpacity>
             )}
+            {filtered.some(ex => ex.cat === 'circuit') && (
+              <TouchableOpacity
+                onPress={() => Linking.openURL('https://youtube.com/shorts/LP17xxZ1iRs?si=6nTF3eJ4oQqdVu7I')}
+                style={[s.ytBtn, { marginTop: 12, marginBottom: 4, alignSelf: 'stretch' }]}>
+                <Text style={s.ytText}>▶</Text>
+                <View>
+                  <Text style={s.ytText}>Watch on YouTube</Text>
+                  <Text style={[s.ytText, { fontSize: 9, fontWeight: '400', opacity: 0.7 }]}>KETTLEBELL FLOW · @trevorsinstinct</Text>
+                </View>
+              </TouchableOpacity>
+            )}
           </ScrollView>
         </View>
       )}
