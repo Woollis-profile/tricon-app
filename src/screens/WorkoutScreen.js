@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Linking, Dimensions, Modal, TextInput, ActivityIndicator } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Linking, Dimensions, Modal, TextInput, ActivityIndicator, Alert } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { C, WORKOUT_DEFS, PROG, getList, fmt, AMRAP_TOTAL } from '../constants';
@@ -160,6 +160,7 @@ export default function WorkoutScreen() {
       }
     } catch (e) {
       console.error('[Paywall] purchaseUnlock threw:', e.message, e);
+      Alert.alert('RC Debug', e.message || String(e));
     }
     setSaveLoading(false);
   };
