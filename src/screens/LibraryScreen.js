@@ -199,7 +199,9 @@ export default function LibraryScreen() {
                       )}
                       {!isKB && (
                         <TouchableOpacity
-                          onPress={() => Linking.openURL(`https://www.youtube.com/results?search_query=${encodeURIComponent(ex.name + (isKB ? ' kettlebell trevorsinstinct' : ' tricon lifting technique'))}`)}
+                          onPress={() => Linking.openURL(ex.id === 'chest_press'
+                            ? 'https://youtu.be/Eaa2vo2XXAU?si=vD0yx8sHTmC9rfY8'
+                            : `https://www.youtube.com/results?search_query=${encodeURIComponent(ex.name + ' tricon lifting technique')}`)}
                           style={s.ytBtn}>
                           <Text style={s.ytText}>▶ Watch on YouTube</Text>
                         </TouchableOpacity>
