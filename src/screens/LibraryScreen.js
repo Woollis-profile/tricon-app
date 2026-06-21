@@ -233,6 +233,17 @@ export default function LibraryScreen() {
                 </View>
               </TouchableOpacity>
             )}
+            {filtered.some(ex => ex.cat === 'amrap') && (
+              <TouchableOpacity
+                onPress={() => Linking.openURL('https://youtube.com/shorts/yDLVERq6hCc?si=0NhpY13bySDFO0Gw')}
+                style={[s.ytBtn, { marginTop: 12, marginBottom: 4, alignSelf: 'stretch' }]}>
+                <Text style={s.ytText}>▶</Text>
+                <View>
+                  <Text style={s.ytText}>Watch on YouTube</Text>
+                  <Text style={[s.ytText, { fontSize: 9, fontWeight: '400', opacity: 0.7 }]}>KB BENCHMARK · @trevorsinstinct</Text>
+                </View>
+              </TouchableOpacity>
+            )}
           </ScrollView>
         </View>
       )}
