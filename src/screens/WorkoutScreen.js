@@ -150,13 +150,17 @@ export default function WorkoutScreen() {
   const handleUnlockAndSave = async () => {
     setSaveLoading(true);
     try {
+      console.log('[Paywall] UNLOCK tapped — calling purchaseUnlock()');
       const unlocked = await purchaseUnlock();
+      console.log('[Paywall] purchaseUnlock returned:', unlocked);
       if (unlocked) {
         setIsUnlocked(true);
         setShowSaveModal(false);
         onComplete();
       }
-    } catch (e) {}
+    } catch (e) {
+      console.error('[Paywall] purchaseUnlock threw:', e.message, e);
+    }
     setSaveLoading(false);
   };
 
