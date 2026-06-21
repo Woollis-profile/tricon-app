@@ -211,6 +211,17 @@ export default function LibraryScreen() {
                 </View>
               );
             })}
+            {filtered.some(ex => ex.cat === 'lower') && (
+              <TouchableOpacity
+                onPress={() => Linking.openURL('https://youtu.be/Eu8dDi0QyJA?si=i9rCxfTSvUUbgkne')}
+                style={[s.ytBtn, { marginTop: 12, marginBottom: 4, alignSelf: 'stretch' }]}>
+                <Text style={s.ytText}>▶</Text>
+                <View>
+                  <Text style={s.ytText}>Watch on YouTube</Text>
+                  <Text style={[s.ytText, { fontSize: 9, fontWeight: '400', opacity: 0.7 }]}>TRICON Leg Exercises</Text>
+                </View>
+              </TouchableOpacity>
+            )}
           </ScrollView>
         </View>
       )}
