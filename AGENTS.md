@@ -10,7 +10,7 @@ and never break existing functionality.
 - Supabase (auth + database): https://vjzqpkokdqfewlqwrmqi.supabase.co
 - GitHub: Woollis-profile/tricon-app
 - Vercel: tricon-app.vercel.app (landing page only)
-- EAS Update: auto-deploys to production channel on every push to main
+- EAS Update: OTA auto-deploys to `production` channel on every push to main
 
 ## Rules
 - Never touch `TRICON-workout-app/` or `tricon-app-updated (1).jsx`
@@ -22,6 +22,136 @@ and never break existing functionality.
 - Keep SecureStore as offline fallback — never remove it
 - Handle all Supabase errors gracefully — never let a network
   failure crash the app
+
+---
+
+## Current Status — What Is Actually Built and Live
+
+### Auth (COMPLETE)
+- Supabase email/password auth
+- `AuthGate` in App.js wraps the entire app — checks
+  `supabase.auth.getSession()` on mount, listens to
+  `onAuthStateChange`. Shows `AuthScreen` if no session,
+  renders children if session exists.
+- AuthScreen has gym-background + dark overlay + TRICON
+  logo/wordmark branding
+
+### Supabase Cloud Sync (COMPLETE — Phase 3)
+Verified live against project `vjzqpkokdqfewlqwrmqi`:
+
+**Database tables (both exist, RLS enabled):**
+- `public.user_settings` — 2 rows, PK: user_id (FK → auth.users)
+  Columns: unit, week_idx, pushup_max, kb_weight, last_weights, updated_at
+- `public.sessions` — 0 rows currently, PK: id (UUID)
+  Columns: user_id, type, date, duration, volume, amrap_rounds,
+  round_times (jsonb), ex_data (jsonb), created_at
+- Row-level security policies: SELECT/INSERT/UPDATE for own rows
+- `handle_new_user()` trigger: auto-creates user_settings row on signup
+
+**Service layer (`src/supabaseService.js` — 4 exports):**
+- `loadUserSettings(userId)` — SELECT with .single()
+- `saveUserSettings(userId, settings)` — upsert with updated_at
+- `loadSessions(userId)` — SELECT ordered by date desc,
+  maps snake_case columns → camelCase (amrap_rounds → amrapRounds etc.)
+- `saveSession(userId, session)` — INSERT with all fields mapped
+
+**context.js sync logic (all wired):**
+- On mount: resolves auth user → parallel Supabase load
+  (settings + sessions) → falls back to SecureStore if either fails
+  → syncs Supabase data back to SecureStore as local cache
+- SecureStore persistence: individual useEffect per field for offline
+  fallback (sessions, lastWeights, unit, weekIdx, pushupMax, kbWeight)
+- Debounced settings sync: 2000ms after any change to unit/weekIdx/
+  pushupMax/kbWeight/lastWeights → calls `saveUserSettings`
+- `addSession`: writes to both Supabase + SecureStore simultaneously
+  via `Promise.all`
+
+### Paywall (COMPLETE — Phase 5)
+- RevenueCat SDK (`react-native-purchases`) installed and wired
+- `src/lib/purchases.js` exports: `initPurchases`, `getIsUnlocked`,
+  `purchaseUnlock`, `restorePurchases`
+- Entitlement name: `'pro'`
+- Graceful fallback in Expo Go (SDK not available → `false` returned)
+- Gating in App.js: `GatedStats` component wraps StatsScreen —
+  shows lock UI with UNLOCK NOW button when `!isUnlocked`
+- Save-to-unlock logic lives inside WorkoutScreen
+- Restore purchase available in SettingsScreen
+- ⚠️  IMPORTANT: Currently using TEST API key:
+  `appl_test_INBnRpnMvclGSNNpEpVZnwlDuXo`
+  Must be replaced with production key before App Store submission
+
+### OTA Update Pipeline (COMPLETE — Phase 6)
+- `eas.json` configured: development / preview / production channels
+- `appVersionSource: remote` — version managed by EAS, not app.json
+- OTA check on cold start AND on AppState → 'active' (foreground resume)
+  in App.js — silently fails, never blocks the user
+- Every push to main auto-deploys via EAS Update to production channel
+- Runtime version: `1.0.0`
+
+### Branded UI — Home Screen (COMPLETE)
+- `assets/gym-bg.jpg` as ImageBackground
+- Dark overlay: `rgba(0,0,0,0.65)`
+- △ TRICON hero (white triangle, gold TRICON) in `src/components/HomeHero.js`
+- Fixed viewport (no scroll): flex-start layout with fixed spacers
+  - `height: 100` top spacer → hero center at ~25% screen height
+  - `height: 44` gap between hero and week strip
+  - `flex: 1` fill spacer pushes tagline to bottom edge
+- Content flow: TRICON hero → week strip → CTA card → stat tiles →
+  LET'S TRAIN! (marginTop: 48 from tiles) → TRAINING METHOD tagline
+  (pinned to bottom edge)
+
+### Library Screen — Video Links (COMPLETE)
+**METHOD tab:**
+- KB Benchmark card: Watch KB Benchmark button
+- KB Flow card: Watch KB Flow button
+
+**EXERCISES tab:**
+- Upper exercises: per-exercise YouTube search link (all)
+  - Chest Press: direct link (youtu.be/Eaa2vo2XXAU)
+  - All others: `youtube.com/results?search_query=...`
+- Lower exercises: per-exercise search links + category banner
+  below list (TRICON Leg Exercises → youtu.be/Eu8dDi0QyJA)
+- Flow (circuit) exercises: NO per-exercise links
+  + category banner below list (KETTLEBELL FLOW · @trevorsinstinct
+  → youtube.com/shorts/LP17xxZ1iRs)
+- AMRAP exercises: NO per-exercise links
+  + category banner below list (KB BENCHMARK · @trevorsinstinct
+  → youtube.com/shorts/yDLVERq6hCc)
+- Category banners use `filtered.some(ex => ex.cat === '...')` so
+  they appear on both the specific filter AND the All filter
+
+---
+
+## Remaining Work Before App Store Submission
+
+### 1. RevenueCat Production API Key (BLOCKER)
+`src/lib/purchases.js` line 10 has a test key:
+```
+apiKey: 'appl_test_INBnRpnMvclGSNNpEpVZnwlDuXo'
+```
+Replace with the production iOS key from RevenueCat dashboard
+before submitting to App Store. Test key will not process real
+purchases.
+
+### 2. App Store Connect Listing
+- App name, subtitle, description, keywords
+- Privacy policy URL
+- Support URL
+- Category selection
+- Age rating questionnaire
+- Screenshots (6.7" iPhone, 6.1" iPhone — required)
+- App Preview video (optional)
+
+### 3. App Store Submission
+```
+eas submit --platform ios
+```
+Requires App Store Connect API key configured in EAS.
+
+### 4. App Store Review
+Standard Apple review process (1–3 days).
+Ensure in-app purchase product is approved in App Store Connect
+before submitting the binary.
 
 ---
 
@@ -79,19 +209,6 @@ For precise screen positioning use:
   to the bottom edge
 - Remove `justifyContent: 'space-between'` from the container
 
-Example: hero at 25% mark, content tight below, tagline pinned
-to bottom:
-```jsx
-<View style={{ flex: 1 }}>          {/* content container */}
-  <View style={{ height: 100 }} />  {/* top spacer */}
-  <HomeHero />
-  <View style={{ height: 44 }} />   {/* hero-to-content gap */}
-  <View>{ /* week strip, CTA, stats, LET'S TRAIN */ }</View>
-  <View style={{ flex: 1 }} />      {/* fill spacer */}
-  <Text style={s.bottomTagline} />  {/* pinned to bottom */}
-</View>
-```
-
 ### 6. HomeHero is a Separate Component
 `src/components/HomeHero.js` — not inline in HomeScreen.
 Edit it separately when changing the △ TRICON hero appearance.
@@ -144,225 +261,11 @@ exercises skip these — they show KB-specific notes instead.
 
 ### 10. Supabase MCP Tool
 The project has Supabase MCP available. Use
-`mcp__claude_ai_Supabase__execute_sql` or
-`mcp__claude_ai_Supabase__apply_migration` to run SQL directly
-on the tricon project. Project ID: `vjzqpkokdqfewlqwrmqi`.
+`mcp__claude_ai_Supabase__execute_sql` to run SQL and
+`mcp__claude_ai_Supabase__list_tables` to inspect schema.
+Project ID: `vjzqpkokdqfewlqwrmqi`.
+Always use `mcp__claude_ai_Supabase__apply_migration` (not
+`execute_sql`) for DDL operations (CREATE TABLE, ALTER, etc.).
 
----
-
-## Completed Work (by Phase)
-
-### Phases 1–2 — Core App (complete)
-Auth (Supabase email), workout engine (Upper/Lower/Friday AMRAP+Flow),
-session logging, history, plan screen, library screen, settings.
-
-### Phase 4 — Branded Auth Screen (complete)
-- `assets/tricon-logo.png` + `assets/tricon-wordmark.png`
-- `assets/gym-bg.jpg` as ImageBackground on HomeScreen
-- AuthScreen with full-screen gym background + dark overlay
-
-### Phase 5 — Paywall (complete)
-- RevenueCat SDK wired (`$14.99/lifetime`)
-- Free: workout view + library. Save-to-unlock paywall gate.
-- Restore purchase in Settings screen.
-
-### Phase 6 — EAS Build Config (complete)
-- `eas.json` configured, iOS bundle ID set
-- `appVersionSource: remote` in app.json
-- OTA update check on foreground resume
-
-### UI Polish (complete — no phase number)
-- HomeScreen: gym background + dark overlay, △ TRICON hero
-  (white triangle, gold TRICON), LET'S TRAIN! + tagline
-- HomeScreen: fixed viewport (no scroll), flex-spacer layout
-  with hero at ~25% mark, tagline pinned to bottom
-- LibraryScreen METHODS tab: Watch KB Benchmark + Watch KB Flow
-  video buttons on method cards
-- LibraryScreen EXERCISES tab:
-  - KB Flow (circuit) + AMRAP exercises: no per-exercise YouTube links
-  - Chest Press: direct video link (not search query)
-  - Category banners after exercise lists:
-    - Lower Body → TRICON Leg Exercises
-    - Flow → KETTLEBELL FLOW · @trevorsinstinct
-    - AMRAP → KB BENCHMARK · @trevorsinstinct
-
----
-
-## Phase 3 — Supabase Cloud Sync (NEXT — NOT YET STARTED)
-
-### Step 1 — Create database tables
-Use the Supabase MCP to run this SQL on the tricon project:
-
-```sql
--- User settings table
-CREATE TABLE IF NOT EXISTS user_settings (
-  user_id uuid PRIMARY KEY REFERENCES auth.users(id) 
-    ON DELETE CASCADE,
-  unit text NOT NULL DEFAULT 'kg',
-  week_idx integer NOT NULL DEFAULT 0,
-  pushup_max integer NOT NULL DEFAULT 20,
-  kb_weight text NOT NULL DEFAULT '',
-  last_weights jsonb NOT NULL DEFAULT '{}',
-  updated_at timestamptz NOT NULL DEFAULT now()
-);
-
--- Sessions table
-CREATE TABLE IF NOT EXISTS sessions (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id uuid NOT NULL REFERENCES auth.users(id) 
-    ON DELETE CASCADE,
-  type text NOT NULL,
-  date timestamptz NOT NULL,
-  duration integer NOT NULL DEFAULT 0,
-  volume numeric NOT NULL DEFAULT 0,
-  amrap_rounds integer DEFAULT 0,
-  round_times jsonb DEFAULT '[]',
-  ex_data jsonb DEFAULT '[]',
-  created_at timestamptz NOT NULL DEFAULT now()
-);
-
--- Enable RLS
-ALTER TABLE user_settings ENABLE ROW LEVEL SECURITY;
-ALTER TABLE sessions ENABLE ROW LEVEL SECURITY;
-
--- RLS policies for user_settings
-CREATE POLICY "users can view own settings"
-  ON user_settings FOR SELECT
-  USING (auth.uid() = user_id);
-
-CREATE POLICY "users can insert own settings"
-  ON user_settings FOR INSERT
-  WITH CHECK (auth.uid() = user_id);
-
-CREATE POLICY "users can update own settings"
-  ON user_settings FOR UPDATE
-  USING (auth.uid() = user_id);
-
--- RLS policies for sessions
-CREATE POLICY "users can view own sessions"
-  ON sessions FOR SELECT
-  USING (auth.uid() = user_id);
-
-CREATE POLICY "users can insert own sessions"
-  ON sessions FOR INSERT
-  WITH CHECK (auth.uid() = user_id);
-
--- Auto-create settings row on signup
-CREATE OR REPLACE FUNCTION handle_new_user()
-RETURNS trigger AS $$
-BEGIN
-  INSERT INTO public.user_settings (user_id)
-  VALUES (new.id)
-  ON CONFLICT (user_id) DO NOTHING;
-  RETURN new;
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
-
-CREATE OR REPLACE TRIGGER on_auth_user_created
-  AFTER INSERT ON auth.users
-  FOR EACH ROW EXECUTE FUNCTION handle_new_user();
-```
-
-Commit: 'Feature: Phase 3 Step 1 — Supabase schema and RLS policies'
-
-### Step 2 — Create service layer
-Create `src/supabaseService.js`:
-
-```javascript
-import { supabase } from '../lib/supabase';
-
-export async function loadUserSettings(userId) {
-  try {
-    const { data, error } = await supabase
-      .from('user_settings')
-      .select('*')
-      .eq('user_id', userId)
-      .single();
-    if (error) return null;
-    return data;
-  } catch { return null; }
-}
-
-export async function saveUserSettings(userId, settings) {
-  try {
-    const { error } = await supabase
-      .from('user_settings')
-      .upsert({ user_id: userId, ...settings, 
-        updated_at: new Date().toISOString() });
-    if (error) console.warn('Settings save failed:', error.message);
-  } catch (e) { console.warn('Settings save error:', e); }
-}
-
-export async function loadSessions(userId) {
-  try {
-    const { data, error } = await supabase
-      .from('sessions')
-      .select('*')
-      .eq('user_id', userId)
-      .order('date', { ascending: false });
-    if (error) return null;
-    return data || [];
-  } catch { return null; }
-}
-
-export async function saveSession(userId, session) {
-  try {
-    const { error } = await supabase
-      .from('sessions')
-      .insert({
-        user_id: userId,
-        type: session.type,
-        date: session.date,
-        duration: session.duration || 0,
-        volume: session.volume || 0,
-        amrap_rounds: session.amrapRounds || 0,
-        round_times: session.roundTimes || [],
-        ex_data: session.exData || [],
-      });
-    if (error) console.warn('Session save failed:', error.message);
-  } catch (e) { console.warn('Session save error:', e); }
-}
-```
-
-Commit: 'Feature: Phase 3 Step 2 — Supabase service layer'
-
-### Step 3 — Update context.js
-Read `src/context.js` in full first, then update it to:
-
-1. Import `loadUserSettings`, `saveUserSettings`, 
-   `loadSessions`, `saveSession` from `./supabaseService`
-2. Import `supabase` from `../lib/supabase`
-3. On mount in `AppProvider`:
-   - Get current user: `const { data: { user } } = 
-     await supabase.auth.getUser()`
-   - Store userId in state
-   - Try `loadSessions(user.id)` — if returns data use it,
-     else fall back to SecureStore
-   - Try `loadUserSettings(user.id)` — if returns data use it,
-     else fall back to SecureStore
-   - After loading from Supabase sync back to SecureStore
-4. In `handleComplete` (session saved):
-   - Call `saveSession(userId, session)` and existing 
-     SecureStore save simultaneously with `Promise.all`
-5. Add a `useEffect` watching unit, weekIdx, pushupMax, 
-   kbWeight, lastWeights:
-   - Debounce 2000ms
-   - Call `saveUserSettings(userId, { unit, week_idx: weekIdx,
-     pushup_max: pushupMax, kb_weight: kbWeight, 
-     last_weights: lastWeights })`
-   - Also save to SecureStore as before
-6. Keep all existing SecureStore logic completely intact
-
-Commit: 'Feature: Phase 3 Step 3 — context.js Supabase sync'
-
-### Step 4 — Verify
-After all steps check:
-- No TypeScript/JS syntax errors
-- AuthGate still wraps the app in App.js
-- SecureStore imports still present in context.js
-- supabaseService.js has all 4 exported functions
-
-Commit: 'Feature: Phase 3 complete — cloud sync live'
-
-## After Phase 3
-Wait for further instructions before starting Phase 4.
+## After Remaining Work
+Wait for further instructions before starting any new phase.
