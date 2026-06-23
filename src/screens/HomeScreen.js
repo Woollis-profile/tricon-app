@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ImageBackground, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { C, WORKOUT_DEFS, FRIDAY_WORKOUTS, SCHEDULE, DN, getWeekDates, getWeekStart, PROG } from '../constants';
@@ -21,7 +21,8 @@ export default function HomeScreen() {
   return (
     <ImageBackground
       source={require('../../assets/gym-bg.jpg')}
-      style={{ flex: 1 }}
+      style={[{ flex: 1 }, Platform.OS === 'web' && { height: '100vh', backgroundColor: '#0a0c0f' }]}
+      imageStyle={Platform.OS === 'web' ? { backgroundPosition: '50% 35%' } : undefined}
       resizeMode="cover"
     >
       <View style={s.overlay} />
@@ -121,7 +122,7 @@ export default function HomeScreen() {
       <Text style={s.letsTrain}>LET’S TRAIN!</Text>
       </View>
 
-      <View style={{ flex: 1 }} />
+      <View style={{ flex: 1, backgroundColor: 'transparent' }} />
       <Text style={s.bottomTagline}>TRAINING METHOD FOR THE OLDER AND WISER ATHLETE</Text>
       </View>
       </SafeAreaView>

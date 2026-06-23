@@ -100,7 +100,7 @@ export function AppProvider({ children }) {
       }
 
       setIsReady(true);
-    })();
+    })().catch(() => setIsReady(true));
   }, []);
 
   // ── SecureStore persistence (offline fallback) ────────────────────────────
