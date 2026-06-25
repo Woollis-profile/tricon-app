@@ -216,11 +216,38 @@
   }
   .signin b { color: var(--gold); font-weight: 600; }
 
-  /* ── Responsive ─────────────────────────────────────── */
+  /* ── Responsive (small phones) ───────────────────────── */
   @media (max-width: 400px) {
     .logo { width: 210px; height: 210px; }
     .wordlock .tricon { font-size: 54px; }
     .wordlock .workout { font-size: 16px; }
+  }
+
+  /* ── Desktop (680px+) ──────────────────────────────────── */
+  @media (min-width: 680px) {
+    /* Centre the whole content column horizontally */
+    .content { align-items: center; }
+    .topmark { width: 100%; max-width: 720px; padding-top: 48px; }
+    /* Vertically centre the logo instead of bottom-aligning it */
+    .hero {
+      justify-content: center;
+      gap: 36px;
+      padding: 0 48px;
+      max-width: 720px;
+      width: 100%;
+    }
+    /* Scale logo up proportionally for wider screens */
+    .logo { width: 280px; height: 280px; }
+    .wordlock { transform: translateY(-16px); }
+    .wordlock .tricon { font-size: 54px; }
+    .wordlock .workout { font-size: 16px; }
+    .tagline { font-size: 18px; max-width: 440px; }
+    .actions {
+      max-width: 720px;
+      width: 100%;
+      align-items: center;
+      padding-bottom: 48px;
+    }
   }
 </style>
 </head>
