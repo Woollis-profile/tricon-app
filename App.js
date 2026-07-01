@@ -49,6 +49,10 @@ function GatedStats(props) {
             try {
               const unlocked = await purchaseUnlock();
               if (unlocked) setIsUnlocked(true);
+              else Alert.alert(
+                'Purchase Not Verified',
+                'Your payment was received but the unlock could not be confirmed. Please tap Restore Purchase in Settings, or try again.'
+              );
             } catch (e) {
               Alert.alert('Purchase Unavailable', 'The store is not available right now. Please try again in a few minutes. If the problem persists, restart the app.');
             }

@@ -17,6 +17,23 @@ export default function AuthScreen() {
   const [loading,  setLoading]  = useState(false);
   const [error,    setError]    = useState('');
 
+  function friendlyAuthError(err) {
+    const m = err?.message || '';
+    if (m.includes('Invalid login credentials') || m.includes('invalid_grant'))
+      return 'Incorrect email or password.';
+    if (m.includes('Email not confirmed') || m.includes('email_not_confirmed'))
+      return 'Please confirm your email address before signing in.';
+    if (m.includes('User already registered') || m.includes('already registered'))
+      return 'An account with this email already exists. Try logging in instead.';
+    if (m.includes('Password should be at least') || m.includes('weak_password'))
+      return 'Password must be at least 6 characters.';
+    if (m.includes('Unable to validate email') || m.includes('invalid format'))
+      return 'Please enter a valid email address.';
+    if (m.includes('rate limit') || m.includes('too many'))
+      return 'Too many attempts. Please wait a moment and try again.';
+    return 'Something went wrong. Please try again.';
+  }
+
   const handleSubmit = async () => {
     if (!email.trim() || !password.trim()) {
       setError('Please enter your email and password');
@@ -27,13 +44,13 @@ export default function AuthScreen() {
     try {
       if (mode === 'login') {
         const { error: err } = await supabase.auth.signInWithPassword({ email, password });
-        if (err) setError(err.message);
+        if (err) setError(friendlyAuthError(err));
       } else {
         const { error: err } = await supabase.auth.signUp({ email, password });
-        if (err) setError(err.message);
+        if (err) setError(friendlyAuthError(err));
       }
     } catch (e) {
-      setError(e.message || 'An error occurred');
+      setError('Something went wrong. Please try again.');
     } finally {
       setLoading(false);
     }
