@@ -160,7 +160,7 @@ export default function WorkoutScreen() {
       }
     } catch (e) {
       console.error('[Paywall] purchaseUnlock threw:', e.message, e);
-      Alert.alert('RC Debug', e.message || String(e));
+      Alert.alert('Purchase Failed', e.message || 'Something went wrong. Please try again.');
     }
     setSaveLoading(false);
   };

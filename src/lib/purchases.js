@@ -35,8 +35,13 @@ export async function purchaseUnlock() {
       : null,
     allKeys: Object.keys(offerings.all || {}),
   }));
-  const pkg = offerings.current?.availablePackages[0];
-  if (!pkg) throw new Error('[RC] No package available — offerings.current is null or empty');
+  let pkg = offerings.current?.availablePackages[0];
+  if (!pkg) {
+    for (const o of Object.values(offerings.all || {})) {
+      if (o.availablePackages?.length) { pkg = o.availablePackages[0]; break; }
+    }
+  }
+  if (!pkg) throw new Error('Purchase options are not available right now. Please try again in a few minutes.');
   console.log('[RC] purchasing package:', pkg.identifier, pkg.product?.productIdentifier);
   const { customerInfo } = await Purchases.purchasePackage(pkg);
   const unlocked = customerInfo.entitlements.active['pro'] !== undefined;

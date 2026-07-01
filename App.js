@@ -1,7 +1,7 @@
 import 'react-native-url-polyfill/auto';
 import React, { useState, useEffect } from 'react';
 import * as Updates from 'expo-updates';
-import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, AppState } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, AppState, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -19,6 +19,8 @@ import { AppProvider, useAppContext } from './src/context';
 import { C } from './src/constants';
 import { purchaseUnlock } from './src/lib/purchases';
 
+const SCREENSHOT_MODE = false;
+
 import AuthScreen from './src/screens/AuthScreen';
 import HomeScreen from './src/screens/HomeScreen';
 import CalendarScreen from './src/screens/CalendarScreen';
@@ -35,7 +37,7 @@ function GatedStats(props) {
   const { isUnlocked, setIsUnlocked } = useAppContext();
   const [loading, setLoading] = useState(false);
 
-  if (!isUnlocked) {
+  if (!isUnlocked && !SCREENSHOT_MODE) {
     return (
       <View style={sl.container}>
         <Ionicons name="lock-closed" size={44} color={C.accent} />
@@ -47,7 +49,9 @@ function GatedStats(props) {
             try {
               const unlocked = await purchaseUnlock();
               if (unlocked) setIsUnlocked(true);
-            } catch (e) {}
+            } catch (e) {
+              Alert.alert('Purchase Unavailable', e.message || 'Something went wrong. Please try again.');
+            }
             setLoading(false);
           }}
           disabled={loading}
@@ -120,6 +124,7 @@ function RootNavigator() {
 }
 
 function AuthGate({ children }) {
+  if (SCREENSHOT_MODE) return children;
   const [session, setSession] = useState(undefined); // undefined = still loading
 
   useEffect(() => {
@@ -187,7 +192,7 @@ export default function App() {
   }
 
   return (
-    <SafeAreaProvider>
+    <SafeAreaProvider style={{ flex: 1, backgroundColor: C.bg }}>
       <AuthGate>
         <AppProvider>
           <NavigationContainer>
