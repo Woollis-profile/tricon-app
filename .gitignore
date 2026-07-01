@@ -39,3 +39,8 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+# secrets / credentials — never commit these
+PAT*.txt
+*.pat.txt
+*personal-access-token*
