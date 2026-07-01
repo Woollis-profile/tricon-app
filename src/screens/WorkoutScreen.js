@@ -160,7 +160,7 @@ export default function WorkoutScreen() {
       }
     } catch (e) {
       console.error('[Paywall] purchaseUnlock threw:', e.message, e);
-      Alert.alert('Purchase Failed', e.message || 'Something went wrong. Please try again.');
+      Alert.alert('Purchase Unavailable', 'The store is not available right now. Please try again in a few minutes. If the problem persists, restart the app.');
     }
     setSaveLoading(false);
   };

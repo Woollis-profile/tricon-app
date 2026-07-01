@@ -26,7 +26,7 @@ export default function PaywallScreen({ onUnlocked }) {
       if (unlocked) onUnlocked();
       else setError('Purchase could not be verified. Please try again.');
     } catch (e) {
-      setError(e.message || 'Purchase failed. Please try again.');
+      setError('The store is not available right now. Please try again in a few minutes. If the problem persists, restart the app.');
     } finally {
       setLoading(null);
     }
