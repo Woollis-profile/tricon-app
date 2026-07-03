@@ -60,3 +60,8 @@ export async function saveSession(userId, session) {
     if (error) console.warn('Session save failed:', error.message);
   } catch (e) { console.warn('Session save error:', e); }
 }
+
+export async function deleteAccount() {
+  const { error } = await supabase.functions.invoke('delete-account');
+  if (error) throw error;
+}

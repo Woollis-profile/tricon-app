@@ -7,6 +7,7 @@ import { save } from '../storage';
 import { KEYS } from '../constants';
 import { supabase } from '../../lib/supabase';
 import { restorePurchases } from '../lib/purchases';
+import { deleteAccount } from '../supabaseService';
 
 export default function SettingsScreen() {
   const { sessions, setSessions, unit, setUnit, weekIdx, setWeekIdx, pushupMax, setPushupMax, kbWeight, setKbWeight, setLastWeights, setIsUnlocked } = useAppContext();
@@ -30,6 +31,30 @@ export default function SettingsScreen() {
       { text: 'Cancel', style: 'cancel' },
       { text: 'Clear', style: 'destructive', onPress: () => { setSessions([]); setLastWeights({}); } },
     ]);
+  };
+
+  const handleDeleteAccount = () => {
+    Alert.alert(
+      'Delete Account',
+      'This will permanently delete your account and all workout data. This cannot be undone.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await deleteAccount();
+              setSessions([]);
+              setLastWeights({});
+              await supabase.auth.signOut();
+            } catch (e) {
+              Alert.alert('Error', 'Could not delete account. Please try again or contact support.');
+            }
+          },
+        },
+      ]
+    );
   };
 
   return (
@@ -158,6 +183,9 @@ export default function SettingsScreen() {
           <Text style={[s.sectionHeaderText, { color: C.accent, marginBottom: 8 }]}>ACCOUNT</Text>
           <TouchableOpacity onPress={() => supabase.auth.signOut()} style={s.clearBtn}>
             <Text style={s.clearBtnText}>SIGN OUT</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleDeleteAccount} style={[s.clearBtn, { marginTop: 8 }]}>
+            <Text style={s.clearBtnText}>DELETE ACCOUNT</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
